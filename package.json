@@ -1,0 +1,42 @@
+{
+  "name": "suggestion-bot",
+  "license": "MIT",
+  "author": {
+    "name": "Tommy Nguyen",
+    "email": "tn0502@gmail.com"
+  },
+  "main": "index.js",
+  "bin": "cli.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tido64/suggestion-bot.git"
+  },
+  "version": "0.0.1-dev",
+  "description": "suggestion-bot submits code reviews with suggestions based on your diffs",
+  "keywords": [
+    "code review",
+    "diff",
+    "github",
+    "pull request",
+    "review",
+    "suggestion"
+  ],
+  "homepage": "https://github.com/tido64/suggestion-bot",
+  "scripts": {
+    "format": "prettier --write $(git ls-files '*.js' '*.yml')",
+    "lint": "eslint $(git ls-files '*.js')"
+  },
+  "dependencies": {
+    "@octokit/rest": "^17.0.0",
+    "parse-diff": "^0.7.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.5.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "2.0.5",
+    "semantic-release": "^17.0.0"
+  },
+  "release": {
+    "tagFormat": "${version}"
+  }
+}
