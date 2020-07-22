@@ -5,7 +5,7 @@
     "name": "Tommy Nguyen",
     "email": "tn0502@gmail.com"
   },
-  "main": "index.js",
+  "main": "src/index.js",
   "bin": "cli.js",
   "repository": {
     "type": "git",
@@ -24,7 +24,8 @@
   "homepage": "https://github.com/tido64/suggestion-bot",
   "scripts": {
     "format": "prettier --write $(git ls-files '*.js' '*.yml')",
-    "lint": "eslint $(git ls-files '*.js')"
+    "lint": "eslint $(git ls-files '*.js')",
+    "test": "jest"
   },
   "dependencies": {
     "@octokit/rest": "^17.0.0",
@@ -32,7 +33,9 @@
   },
   "devDependencies": {
     "eslint": "^7.5.0",
+    "eslint-plugin-jest": "^23.18.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "jest": "^26.1.0",
     "prettier": "2.0.5",
     "semantic-release": "^17.0.0"
   },
