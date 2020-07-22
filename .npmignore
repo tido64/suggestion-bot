@@ -3,3 +3,4 @@
 .eslintrc.json
 .gitattributes
 .github/
+tests/
