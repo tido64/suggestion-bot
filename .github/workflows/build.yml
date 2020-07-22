@@ -23,6 +23,8 @@ jobs:
         run: yarn
       - name: Lint
         run: yarn lint
+      - name: Test
+        run: yarn test
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

@@ -8,4 +8,4 @@
 //
 
 const { [2]: diff } = process.argv;
-require("./index")(diff);
+require("./src/index")(diff);
