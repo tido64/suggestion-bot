@@ -110,12 +110,11 @@ function makeReview(diff, options) {
     event: "COMMENT",
     comments,
   };
-  return makeOctokit(options || { auth: GITHUB_TOKEN })
+  return makeOctokit({ auth: GITHUB_TOKEN, ...options })
     .pulls.createReview(review)
     .catch((e) => {
       console.error(e);
       console.dir(review, undefined, { depth: null });
-      return process.exit(1);
     });
 }
 
