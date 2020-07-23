@@ -83,13 +83,24 @@ function makeReview(diff, makeClient = makeGitHubClient) {
   const parse = require("parse-diff");
   const files = parse(diff);
   if (files.length <= 0) {
-    return process.exit(0);
+    return Promise.resolve();
+  }
+
+  const comments = files.reduce((comments, file) => {
+    const { chunks, to } = file;
+    if (chunks.length === 0) {
+      return comments;
+    }
+    return chunks.reduce((comments, chunk) => {
+      comments.push(makeComment(to, chunk));
+      return comments;
+    }, comments);
+  }, []);
+  if (comments.length === 0) {
+    return Promise.resolve();
   }
 
   const { GITHUB_REPOSITORY, GITHUB_TOKEN } = process.env;
-
-  const octokit = makeClient({ auth: GITHUB_TOKEN });
-
   const [owner, repo] = GITHUB_REPOSITORY.split("/");
   const review = {
     accept: "application/vnd.github.comfort-fade-preview+json",
@@ -97,19 +108,15 @@ function makeReview(diff, makeClient = makeGitHubClient) {
     repo,
     pull_number: makeClient === makeGitHubClient ? getPullRequestNumber() : 0,
     event: "COMMENT",
-    comments: files.reduce((comments, file) => {
-      const { chunks, to } = file;
-      return chunks.reduce((comments, chunk) => {
-        comments.push(makeComment(to, chunk));
-        return comments;
-      }, comments);
-    }, []),
+    comments,
   };
-  octokit.pulls.createReview(review).catch((e) => {
-    console.error(e);
-    console.dir(review, undefined, { depth: null });
-    return process.exit(1);
-  });
+  return makeClient({ auth: GITHUB_TOKEN })
+    .pulls.createReview(review)
+    .catch((e) => {
+      console.error(e);
+      console.dir(review, undefined, { depth: null });
+      return process.exit(1);
+    });
 }
 
 module.exports = {
