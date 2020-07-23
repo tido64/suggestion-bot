@@ -144,9 +144,7 @@ describe("suggest", () => {
     const errorSpy = jest.spyOn(global.console, "error").mockImplementation();
 
     await makeReview(FIXTURE_UNIDIFF, {
-      createReview: () => {
-        return Promise.reject("test");
-      },
+      createReview: () => Promise.reject("test"),
     });
 
     expect(errorSpy).toHaveBeenCalledWith("test");

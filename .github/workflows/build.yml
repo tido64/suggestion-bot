@@ -24,7 +24,11 @@ jobs:
       - name: Lint
         run: yarn lint
       - name: Test
-        run: yarn test
+        run: yarn test --coverage
+      - name: Upload coverage report
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: yarn codecov --token="$CODECOV_TOKEN" --disable=gcov
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
