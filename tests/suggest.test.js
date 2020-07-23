@@ -6,6 +6,8 @@
 //
 "use strict";
 
+jest.mock("fs");
+
 const { makeReview } = require("../src/GitHubClient");
 
 /**
@@ -20,18 +22,22 @@ const { makeReview } = require("../src/GitHubClient");
    }} Review
  */
 
-/**
- * Creates a mock client.
- * @param {(review: Review) => Promise<void>} createReview
- */
-function makeMockClient(createReview) {
-  return () => ({ pulls: { createReview } });
-}
-
 describe("suggest", () => {
+  const { GITHUB_EVENT_PATH, GITHUB_REPOSITORY } = process.env;
+
   beforeEach(() => {
     const { env } = process;
-    env.GITHUB_REPOSITORY = env.GITHUB_REPOSITORY || "tido64/suggestion-bot";
+    env.GITHUB_EVENT_PATH = "/github/workflow/event.json";
+    env.GITHUB_REPOSITORY = "tido64/suggestion-bot";
+    require("fs").__setMockFiles({
+      "/github/workflow/event.json": '{ "pull_request": { "number": 0 } }',
+    });
+  });
+
+  afterEach(() => {
+    const { env } = process;
+    env.GITHUB_EVENT_PATH = GITHUB_EVENT_PATH;
+    env.GITHUB_REPOSITORY = GITHUB_REPOSITORY;
   });
 
   test("skips invalid diffs", async () => {
@@ -41,12 +47,12 @@ describe("suggest", () => {
       return Promise.resolve();
     };
 
-    await makeReview("", makeMockClient(createReview));
+    await makeReview("", { createReview });
     expect(payload).toBeUndefined();
 
     await makeReview(
       "diff --git a/src/Graphics/TextureAllocator.gl.h b/src/Graphics/TextureAllocator.gl.h",
-      makeMockClient(createReview)
+      { createReview }
     );
     expect(payload).toBeUndefined();
   });
@@ -87,10 +93,12 @@ describe("suggest", () => {
         "     private:",
         " #ifdef USE_VERTEX_ARRAY_OBJECT",
       ].join("\n"),
-      makeMockClient((review) => {
-        payload = review;
-        return Promise.resolve();
-      })
+      {
+        createReview: (review) => {
+          payload = review;
+          return Promise.resolve();
+        },
+      }
     );
     expect(payload).toEqual({
       accept: "application/vnd.github.comfort-fade-preview+json",

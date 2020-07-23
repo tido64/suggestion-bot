@@ -69,17 +69,17 @@ function makeComment(file, { changes, oldStart, oldLines }) {
  * @param {Options} options
  * @returns {import("@octokit/rest").Octokit}
  */
-function makeGitHubClient(options) {
+function makeOctokit(options) {
   const { Octokit } = require("@octokit/rest");
   return new Octokit(options);
 }
 
 /**
- * Submits a code review with suggestions with specified diff and client.
+ * Submits a code review with suggestions with specified diff and options.
  * @param {string} diff
- * @param {(options: Options) => import("@octokit/rest").Octokit} makeClient
+ * @param {Options?} options
  */
-function makeReview(diff, makeClient = makeGitHubClient) {
+function makeReview(diff, options) {
   const parse = require("parse-diff");
   const files = parse(diff);
   if (files.length <= 0) {
@@ -106,11 +106,11 @@ function makeReview(diff, makeClient = makeGitHubClient) {
     accept: "application/vnd.github.comfort-fade-preview+json",
     owner,
     repo,
-    pull_number: makeClient === makeGitHubClient ? getPullRequestNumber() : 0,
+    pull_number: getPullRequestNumber(),
     event: "COMMENT",
     comments,
   };
-  return makeClient({ auth: GITHUB_TOKEN })
+  return makeOctokit(options || { auth: GITHUB_TOKEN })
     .pulls.createReview(review)
     .catch((e) => {
       console.error(e);
