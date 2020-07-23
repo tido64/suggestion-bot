@@ -34,6 +34,23 @@ describe("suggest", () => {
     env.GITHUB_REPOSITORY = env.GITHUB_REPOSITORY || "tido64/suggestion-bot";
   });
 
+  test("skips invalid diffs", async () => {
+    let payload = undefined;
+    const createReview = (review) => {
+      payload = review;
+      return Promise.resolve();
+    };
+
+    await makeReview("", makeMockClient(createReview));
+    expect(payload).toBeUndefined();
+
+    await makeReview(
+      "diff --git a/src/Graphics/TextureAllocator.gl.h b/src/Graphics/TextureAllocator.gl.h",
+      makeMockClient(createReview)
+    );
+    expect(payload).toBeUndefined();
+  });
+
   test("supports unified diffs", async () => {
     let payload = undefined;
     await makeReview(
