@@ -6,13 +6,37 @@
 
 `suggestion-bot` submits code reviews with suggestions based on your diffs.
 
+![screenshot of code review with suggestions](docs/screenshot.png)
+
+## Usage
+
+```sh
+suggestion-bot <diff>
+```
+
+Example:
+
+```sh
+# Submit current changes as suggestions
+GITHUB_TOKEN=<secret> suggestion-bot $(git diff)
+
+# Alternatively
+git diff | GITHUB_TOKEN=<secret> suggestion-bot
+```
+
 ## Requirements
 
 - Host your code on [GitHub](https://github.com/)
-- Use [GitHub Actions](https://github.com/features/actions) for continuous
-  integration
+- A GitHub
+   [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
 
-## Getting Started
+## Recipes
+
+- [Using `suggestion-bot` with GitHub Actions](#using-suggestion-bot-with-github-actions)
+- [Using `suggestion-bot` with `clang-format`](#using-suggestion-bot-with-clang-format)
+- [Using `suggestion-bot` with Prettier](#using-suggestion-bot-with-prettier)
+
+### Using `suggestion-bot` with GitHub Actions
 
 1. Install `suggestion-bot` in your project
 
@@ -52,7 +76,7 @@
            run: yarn suggestion-bot $(scripts/clang-format-diff.sh)
    ```
 
-## Using `suggestion-bot` with `clang-format`
+### Using `suggestion-bot` with `clang-format`
 
 Use
 [`clang-format-diff`](https://clang.llvm.org/docs/ClangFormat.html#script-for-patch-reformatting)
@@ -63,7 +87,7 @@ curl --silent --show-error --remote-name https://raw.githubusercontent.com/llvm/
 yarn suggestion-bot "$(git diff --unified=0 --no-color @^ | python clang-format-diff.py -p1 -sort-includes)"
 ```
 
-## Using `suggestion-bot` with Prettier
+### Using `suggestion-bot` with Prettier
 
 We must first write a script that pipes [Prettier](https://prettier.io/)'s
 output to `diff` so we can feed it to `suggestion-bot` later.

@@ -5,4 +5,5 @@
 .github/
 __mocks__
 coverage/
+docs/
 tests/
