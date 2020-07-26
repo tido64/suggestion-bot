@@ -37,6 +37,20 @@ const FIXTURE_PIPED = concatStrings(
   "   }, []);"
 );
 
+const FIXTURE_PIPED_WINDOWS = concatStrings(
+  `--- "src\\GitHubClient.js"      2020-07-26 20:24:35.497737700 +0200`,
+  "+++ -   2020-07-26 20:25:43.893994400 +0200",
+  "@@ -92,7 +92,7 @@",
+  "       return comments;",
+  "     }",
+  "     return chunks.reduce((comments, chunk) => {",
+  "-      comments.push(makeComment(to === '-' ? from : to, chunk));",
+  `+      comments.push(makeComment(to === "-" ? from : to, chunk));`,
+  "       return comments;",
+  "     }, comments);",
+  "   }, []);"
+);
+
 const FIXTURE_PIPED_PAYLOAD = {
   accept: "application/vnd.github.comfort-fade-preview+json",
   owner: "tido64",
@@ -174,12 +188,15 @@ describe("suggest", () => {
 
   test("supports piped diffs", async () => {
     let payload = undefined;
-    await makeReview(FIXTURE_PIPED, {
-      createReview: (review) => {
-        payload = review;
-        return Promise.resolve();
-      },
-    });
+    const createReview = (review) => {
+      payload = review;
+      return Promise.resolve();
+    };
+
+    await makeReview(FIXTURE_PIPED, { createReview });
+    expect(payload).toEqual(FIXTURE_PIPED_PAYLOAD);
+
+    await makeReview(FIXTURE_PIPED_WINDOWS, { createReview });
     expect(payload).toEqual(FIXTURE_PIPED_PAYLOAD);
   });
 
