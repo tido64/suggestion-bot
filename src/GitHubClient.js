@@ -5,8 +5,6 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-const { trimQuotes } = require("./Helpers");
-
 /** @typedef {{ auth: string; }} Options */
 
 /**
@@ -44,7 +42,7 @@ function makeComment(file, { changes, oldStart, oldLines }) {
   const line = oldStart + oldLines - context - 1;
   const startLine = oldStart + context;
   return {
-    path: file,
+    path: file.split("\\").join("/"),
     line,
     side: "RIGHT",
     ...(startLine !== line
@@ -88,6 +86,7 @@ function makeReview(diff, options) {
     return Promise.resolve();
   }
 
+  const { trimQuotes } = require("./Helpers");
   const comments = files.reduce((comments, file) => {
     const { chunks, from, to } = file;
     if (chunks.length === 0) {
