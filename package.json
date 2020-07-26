@@ -23,7 +23,7 @@
   ],
   "homepage": "https://github.com/tido64/suggestion-bot",
   "scripts": {
-    "format": "prettier --write $(git ls-files '*.js' '*.yml')",
+    "format": "prettier --end-of-line auto --write $(git ls-files '*.js' '*.yml')",
     "lint": "eslint $(git ls-files '*.js')",
     "test": "jest"
   },

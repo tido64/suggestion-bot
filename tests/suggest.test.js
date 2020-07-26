@@ -9,6 +9,7 @@
 jest.mock("fs");
 
 const { makeReview } = require("../src/GitHubClient");
+const { concatStrings } = require("../src/Helpers");
 
 /**
  * @typedef {{ auth: string; }} Options
@@ -22,7 +23,41 @@ const { makeReview } = require("../src/GitHubClient");
    }} Review
  */
 
-const FIXTURE_UNIDIFF = [
+const FIXTURE_PIPED = concatStrings(
+  `--- "src/GitHubClient.js"      2020-07-26 20:24:35.497737700 +0200`,
+  "+++ -   2020-07-26 20:25:43.893994400 +0200",
+  "@@ -92,7 +92,7 @@",
+  "       return comments;",
+  "     }",
+  "     return chunks.reduce((comments, chunk) => {",
+  "-      comments.push(makeComment(to === '-' ? from : to, chunk));",
+  `+      comments.push(makeComment(to === "-" ? from : to, chunk));`,
+  "       return comments;",
+  "     }, comments);",
+  "   }, []);"
+);
+
+const FIXTURE_PIPED_PAYLOAD = {
+  accept: "application/vnd.github.comfort-fade-preview+json",
+  owner: "tido64",
+  repo: "suggestion-bot",
+  pull_number: 0,
+  event: "COMMENT",
+  comments: [
+    {
+      path: "src/GitHubClient.js",
+      line: 95,
+      side: "RIGHT",
+      body: concatStrings(
+        "```suggestion",
+        `      comments.push(makeComment(to === "-" ? from : to, chunk));`,
+        "```"
+      ),
+    },
+  ],
+};
+
+const FIXTURE_UNIDIFF = concatStrings(
   "diff --git a/src/Graphics/TextureAllocator.gl.h b/src/Graphics/TextureAllocator.gl.h",
   "index 366b30f7..f17e3c88 100644",
   "--- a/src/Graphics/TextureAllocator.gl.h",
@@ -53,8 +88,8 @@ const FIXTURE_UNIDIFF = [
   "+        explicit operator bool() const { return static_cast<bool>(array_); }",
   " ",
   "     private:",
-  " #ifdef USE_VERTEX_ARRAY_OBJECT",
-].join("\n");
+  " #ifdef USE_VERTEX_ARRAY_OBJECT"
+);
 
 const FIXTURE_UNIDIFF_PAYLOAD = {
   accept: "application/vnd.github.comfort-fade-preview+json",
@@ -69,13 +104,12 @@ const FIXTURE_UNIDIFF_PAYLOAD = {
       side: "RIGHT",
       start_line: 21,
       start_side: "RIGHT",
-      body: [
+      body: concatStrings(
         "```suggestion",
         "        [[maybe_unused, nodiscard]] auto max_size() const noexcept",
         "            -> size_t override;",
-        "```",
-        "",
-      ].join("\n"),
+        "```"
+      ),
     },
     {
       path: "src/Graphics/VertexArray.h",
@@ -83,12 +117,11 @@ const FIXTURE_UNIDIFF_PAYLOAD = {
       side: "RIGHT",
       start_line: 53,
       start_side: "RIGHT",
-      body: [
+      body: concatStrings(
         "```suggestion",
         "        explicit operator bool() const { return static_cast<bool>(array_); }",
-        "```",
-        "",
-      ].join("\n"),
+        "```"
+      ),
     },
   ],
 };
@@ -137,6 +170,17 @@ describe("suggest", () => {
       },
     });
     expect(payload).toEqual(FIXTURE_UNIDIFF_PAYLOAD);
+  });
+
+  test("supports piped diffs", async () => {
+    let payload = undefined;
+    await makeReview(FIXTURE_PIPED, {
+      createReview: (review) => {
+        payload = review;
+        return Promise.resolve();
+      },
+    });
+    expect(payload).toEqual(FIXTURE_PIPED_PAYLOAD);
   });
 
   test("dumps the payload on failure", async () => {

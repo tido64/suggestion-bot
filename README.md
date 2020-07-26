@@ -62,3 +62,22 @@ to format only changed files:
 curl --silent --show-error --remote-name https://raw.githubusercontent.com/llvm/llvm-project/release/10.x/clang/tools/clang-format/clang-format-diff.py
 yarn suggestion-bot "$(git diff --unified=0 --no-color @^ | python clang-format-diff.py -p1 -sort-includes)"
 ```
+
+## Using `suggestion-bot` with Prettier
+
+We must first write a script that pipes [Prettier](https://prettier.io/)'s
+output to `diff` so we can feed it to `suggestion-bot` later.
+
+```sh
+#!/bin/sh
+for f in $(yarn --silent prettier --list-different $(git ls-files '*.js')); do
+  yarn --silent prettier "$f" | diff -u "$f" -
+done
+```
+
+Save the script somewhere, e.g. `scripts/prettier-diff.sh`, then use it as
+follows:
+
+```sh
+yarn suggestion-bot $(scripts/prettier-diff.sh)
+```
