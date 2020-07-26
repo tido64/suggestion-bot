@@ -9,8 +9,13 @@
 
 const suggest = require("./src/index");
 if (process.stdin.isTTY) {
-  const { [2]: diff } = process.argv;
-  suggest(diff);
+  const { [1]: command, [2]: diff } = process.argv;
+  if (diff) {
+    suggest(diff);
+  } else {
+    const path = require("path");
+    console.log(`usage: ${path.basename(command)} <diff>`);
+  }
 } else {
   let data = "";
   const stdin = process.openStdin();
