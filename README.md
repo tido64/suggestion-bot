@@ -37,12 +37,12 @@
      lint:
        runs-on: ubuntu-latest
        steps:
-         - name: Checkout
-           uses: actions/checkout@v2
          - name: Set up Node.js
            uses: actions/setup-node@v1
            with:
              node-version: 12
+         - name: Checkout
+           uses: actions/checkout@v2
          - name: Install
            run: yarn
          - name: ClangFormat
@@ -79,5 +79,5 @@ Save the script somewhere, e.g. `scripts/prettier-diff.sh`, then use it as
 follows:
 
 ```sh
-yarn suggestion-bot $(scripts/prettier-diff.sh)
+yarn suggestion-bot "$(scripts/prettier-diff.sh)"
 ```

@@ -7,5 +7,16 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-const { [2]: diff } = process.argv;
-require("./src/index")(diff);
+const suggest = require("./src/index");
+if (process.stdin.isTTY) {
+  const { [2]: diff } = process.argv;
+  suggest(diff);
+} else {
+  let data = "";
+  const stdin = process.openStdin();
+  stdin.setEncoding("utf8");
+  stdin.on("data", (chunk) => {
+    data += chunk;
+  });
+  stdin.on("end", () => suggest(data));
+}
