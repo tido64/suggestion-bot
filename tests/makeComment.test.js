@@ -8,6 +8,7 @@
 
 const parse = require("parse-diff");
 const { makeComment } = require("../src/GitHubClient");
+const { concatStrings } = require("../src/Helpers");
 
 function extractChunk(diff) {
   const { chunks, to } = parse(diff)[0];
@@ -49,7 +50,7 @@ describe("makeComment", () => {
 
   test("single line change with context", () => {
     const [to, chunk] = extractChunk(
-      [
+      concatStrings(
         "diff --git a/src/Common/Algorithm.h b/src/Common/Algorithm.h",
         "index d30d6e11..d138ef04 100644",
         "--- a/src/Common/Algorithm.h",
@@ -62,50 +63,48 @@ describe("makeComment", () => {
         "+    void quick_erase(T& container, typename T::iterator pos)",
         "     {",
         "         std::swap(*pos, container.back());",
-        "         container.pop_back();",
-      ].join("\n")
+        "         container.pop_back();"
+      )
     );
     expect(makeComment(to, chunk)).toEqual({
       path: "src/Common/Algorithm.h",
       line: 136,
       side: "RIGHT",
-      body: [
+      body: concatStrings(
         "```suggestion",
         "    void quick_erase(T& container, typename T::iterator pos)",
-        "```",
-        "",
-      ].join("\n"),
+        "```"
+      ),
     });
   });
 
   test("single line change without context", () => {
     const [to, chunk] = extractChunk(
-      [
+      concatStrings(
         "diff --git a/src/Common/Algorithm.h b/src/Common/Algorithm.h",
         "index d30d6e11..d138ef04 100644",
         "--- a/src/Common/Algorithm.h",
         "+++ b/src/Common/Algorithm.h",
         "@@ -136 +137 @@ namespace rainbow",
         "-    void quick_erase(T &container, typename T::iterator pos)",
-        "+    void quick_erase(T& container, typename T::iterator pos)",
-      ].join("\n")
+        "+    void quick_erase(T& container, typename T::iterator pos)"
+      )
     );
     expect(makeComment(to, chunk)).toEqual({
       path: "src/Common/Algorithm.h",
       line: 136,
       side: "RIGHT",
-      body: [
+      body: concatStrings(
         "```suggestion",
         "    void quick_erase(T& container, typename T::iterator pos)",
-        "```",
-        "",
-      ].join("\n"),
+        "```"
+      ),
     });
   });
 
   test("moved lines", () => {
     const [to, chunk] = extractChunk(
-      [
+      concatStrings(
         "diff --git a/src/Config.cpp b/src/Config.cpp",
         "index d0a84e17..c73dd760 100644",
         "--- a/src/Config.cpp",
@@ -122,8 +121,8 @@ describe("makeComment", () => {
         `-#include "Common/Algorithm.h"`,
         " ",
         " using namespace std::literals::string_view_literals;",
-        " ",
-      ].join("\n")
+        " "
+      )
     );
     expect(makeComment(to, chunk)).toEqual({
       path: "src/Config.cpp",
@@ -131,16 +130,15 @@ describe("makeComment", () => {
       side: "RIGHT",
       start_line: 15,
       start_side: "RIGHT",
-      body: [
+      body: concatStrings(
         "```suggestion",
         `#include "Common/Algorithm.h"`,
         `#include "Common/Data.h"`,
         `#include "Common/Logging.h"`,
         `#include "FileSystem/File.h"`,
         `#include "FileSystem/FileSystem.h"`,
-        "```",
-        "",
-      ].join("\n"),
+        "```"
+      ),
     });
   });
 });
