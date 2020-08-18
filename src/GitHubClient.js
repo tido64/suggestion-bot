@@ -18,53 +18,6 @@ function getPullRequestNumber() {
 }
 
 /**
- * Creates a comment that can be submitted to GitHub.
- * @param {string} file
- * @param {{
-     changes: ({ type: "add" | "del" | "normal"; content: string; })[];
-     oldStart: number;
-     oldLines: number;
-   }} chunk
- * @returns {{
-     path: string;
-     line: number;
-     side: "LEFT" | "RIGHT";
-     start_line?: number;
-     start_side?: "LEFT" | "RIGHT";
-     body: string;
-   }}
- */
-function makeComment(file, { changes, oldStart, oldLines }) {
-  const context = Math.max(
-    changes.findIndex((line) => line.type !== "normal"),
-    0
-  );
-  const line = oldStart + oldLines - context - 1;
-  const startLine = oldStart + context;
-  return {
-    path: file.split("\\").join("/"),
-    line,
-    side: "RIGHT",
-    ...(startLine !== line
-      ? {
-          start_line: startLine,
-          start_side: "RIGHT",
-        }
-      : undefined),
-    body: [
-      "```suggestion",
-      changes
-        .slice(context, changes.length - context)
-        .filter((line) => line.type !== "del")
-        .map((line) => line.content.slice(1))
-        .join("\n"),
-      "```",
-      "",
-    ].join("\n"),
-  };
-}
-
-/**
  * Creates an Octokit instance.
  * @param {Options} options
  * @returns {import("@octokit/rest").Octokit}
@@ -80,23 +33,8 @@ function makeOctokit(options) {
  * @param {Options} [options]
  */
 function makeReview(diff, options) {
-  const parse = require("parse-diff");
-  const files = parse(diff);
-  if (files.length <= 0) {
-    return Promise.resolve();
-  }
-
-  const { trimQuotes } = require("./Helpers");
-  const comments = files.reduce((comments, file) => {
-    const { chunks, from, to } = file;
-    if (chunks.length === 0) {
-      return comments;
-    }
-    return chunks.reduce((comments, chunk) => {
-      comments.push(makeComment(to === "-" ? trimQuotes(from) : to, chunk));
-      return comments;
-    }, comments);
-  }, []);
+  const { makeComments } = require("./makeComments");
+  const comments = makeComments(diff);
   if (comments.length === 0) {
     return Promise.resolve();
   }
@@ -121,7 +59,4 @@ function makeReview(diff, options) {
     });
 }
 
-module.exports = {
-  makeComment,
-  makeReview,
-};
+module.exports["makeReview"] = makeReview;
