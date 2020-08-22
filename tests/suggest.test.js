@@ -209,7 +209,7 @@ describe("suggest", () => {
     });
 
     expect(errorSpy).toHaveBeenCalledWith("test");
-    expect(dirSpy).toHaveBeenCalledWith(FIXTURE_UNIDIFF_PAYLOAD, undefined, {
+    expect(dirSpy).toHaveBeenCalledWith(FIXTURE_UNIDIFF_PAYLOAD, {
       depth: null,
     });
 
