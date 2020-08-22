@@ -102,6 +102,67 @@ describe("makeComment", () => {
     });
   });
 
+  test("break line", () => {
+    const [to, chunk] = extractChunk(
+      concatStrings(
+        "diff --git a/src/Graphics/TextureAllocator.gl.h b/src/Graphics/TextureAllocator.gl.h",
+        "index 25ee722d..f17e3c88 100644",
+        "--- a/src/Graphics/TextureAllocator.gl.h",
+        "+++ b/src/Graphics/TextureAllocator.gl.h",
+        "@@ -21 +21,2 @@ namespace rainbow::graphics::gl",
+        "-        [[maybe_unused, nodiscard]] auto max_size() const noexcept -> size_t override;",
+        "+        [[maybe_unused, nodiscard]] auto max_size() const noexcept",
+        "+            -> size_t override;"
+      )
+    );
+    expect(makeComment(to, chunk)).toEqual({
+      path: "src/Graphics/TextureAllocator.gl.h",
+      line: 21,
+      side: "RIGHT",
+      body: concatStrings(
+        "```suggestion",
+        "        [[maybe_unused, nodiscard]] auto max_size() const noexcept",
+        "            -> size_t override;",
+        "```"
+      ),
+    });
+  });
+
+  test("concatenate lines", () => {
+    const [to, chunk] = extractChunk(
+      concatStrings(
+        "diff --git a/src/Graphics/VertexArray.h b/src/Graphics/VertexArray.h",
+        "index 31e66c01..8bc6fc35 100644",
+        "--- a/src/Graphics/VertexArray.h",
+        "+++ b/src/Graphics/VertexArray.h",
+        "@@ -50,10 +50,7 @@ namespace rainbow::graphics",
+        "         /// <summary>",
+        "         ///   Returns whether this vertex array object is valid.",
+        "         /// </summary>",
+        "-        explicit operator bool() const",
+        "-        {",
+        "-            return static_cast<bool>(array_);",
+        "-        }",
+        "+        explicit operator bool() const { return static_cast<bool>(array_); }",
+        " ",
+        "     private:",
+        " #ifdef USE_VERTEX_ARRAY_OBJECT"
+      )
+    );
+    expect(makeComment(to, chunk)).toEqual({
+      path: "src/Graphics/VertexArray.h",
+      line: 56,
+      side: "RIGHT",
+      start_line: 53,
+      start_side: "RIGHT",
+      body: concatStrings(
+        "```suggestion",
+        "        explicit operator bool() const { return static_cast<bool>(array_); }",
+        "```"
+      ),
+    });
+  });
+
   test("moved lines", () => {
     const [to, chunk] = extractChunk(
       concatStrings(

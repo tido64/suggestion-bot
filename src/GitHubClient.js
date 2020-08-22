@@ -77,7 +77,7 @@ function makeOctokit(options) {
 /**
  * Submits a code review with suggestions with specified diff and options.
  * @param {string} diff
- * @param {Options?} options
+ * @param {Options} [options]
  */
 function makeReview(diff, options) {
   const parse = require("parse-diff");
@@ -101,6 +101,8 @@ function makeReview(diff, options) {
     return Promise.resolve();
   }
 
+  const { c } = require("./Helpers");
+
   const { GITHUB_REPOSITORY, GITHUB_TOKEN } = process.env;
   const [owner, repo] = GITHUB_REPOSITORY.split("/");
   const review = {
@@ -108,14 +110,14 @@ function makeReview(diff, options) {
     owner,
     repo,
     pull_number: getPullRequestNumber(),
-    event: "COMMENT",
+    event: c("COMMENT"),
     comments,
   };
   return makeOctokit({ auth: GITHUB_TOKEN, ...options })
     .pulls.createReview(review)
     .catch((e) => {
       console.error(e);
-      console.dir(review, undefined, { depth: null });
+      console.dir(review, { depth: null });
     });
 }
 
