@@ -7,8 +7,8 @@
 "use strict";
 
 const parse = require("parse-diff");
-const { makeComment } = require("../src/GitHubClient");
 const { concatStrings } = require("../src/Helpers");
+const { makeComment } = require("../src/makeComments");
 
 function extractChunk(diff) {
   const { chunks, to } = parse(diff)[0];

@@ -3,7 +3,9 @@
 .eslintrc.json
 .gitattributes
 .github/
+.vscode/
 __mocks__
 coverage/
 docs/
 tests/
+tsconfig.json

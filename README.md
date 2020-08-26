@@ -24,11 +24,20 @@ GITHUB_TOKEN=<secret> suggestion-bot $(git diff)
 git diff | GITHUB_TOKEN=<secret> suggestion-bot
 ```
 
+If your CI is hosted by Azure DevOps, replace `GITHUB_TOKEN` with
+`AZURE_PERSONAL_ACCESS_TOKEN`.
+
 ## Requirements
 
 - Host your code on [GitHub](https://github.com/)
 - A GitHub
-   [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
+  [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
+
+-- or --
+
+- Host your code on [Azure DevOps](https://dev.azure.com/)
+- An Azure DevOps
+  [personal access token](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page)
 
 ## Recipes
 
