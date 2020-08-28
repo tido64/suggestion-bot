@@ -18,9 +18,10 @@ Example:
 
 ```sh
 # Submit current changes as suggestions
-GITHUB_TOKEN=<secret> suggestion-bot $(git diff)
+GITHUB_TOKEN=<secret> suggestion-bot "$(git diff)"
 
-# Alternatively
+# Alternatively, pipe to suggestion-bot
+# to avoid escape character issues
 git diff | GITHUB_TOKEN=<secret> suggestion-bot
 ```
 
@@ -82,7 +83,7 @@ If your CI is hosted by Azure DevOps, replace `GITHUB_TOKEN` with
            if: ${{ github.event_name == 'pull_request' }}
            env:
              GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-           run: yarn suggestion-bot $(scripts/clang-format-diff.sh)
+           run: scripts/clang-format-diff.sh | yarn suggestion-bot
    ```
 
 ### Using `suggestion-bot` with `clang-format`
@@ -93,7 +94,9 @@ to format only changed files:
 
 ```sh
 curl --silent --show-error --remote-name https://raw.githubusercontent.com/llvm/llvm-project/release/10.x/clang/tools/clang-format/clang-format-diff.py
-yarn suggestion-bot "$(git diff --unified=0 --no-color @^ | python clang-format-diff.py -p1 -sort-includes)"
+git diff --unified=0 --no-color @^ \
+  | python clang-format-diff.py -p1 -regex '.*\.(cpp|cc|c\+\+|cxx|c|cl|h|hh|hpp|m|mm|inc)' -sort-includes \
+  | yarn suggestion-bot
 ```
 
 ### Using `suggestion-bot` with Prettier
@@ -112,5 +115,5 @@ Save the script somewhere, e.g. `scripts/prettier-diff.sh`, then use it as
 follows:
 
 ```sh
-yarn suggestion-bot "$(scripts/prettier-diff.sh)"
+scripts/prettier-diff.sh | yarn suggestion-bot
 ```
