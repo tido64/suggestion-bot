@@ -18,22 +18,37 @@
  */
 
 /**
+ * Trims context from specified changes.
+ * @param {import('parse-diff').Change[]} changes
+ * @returns {[import('parse-diff').Change[], number, number]}
+ */
+function trimContext(changes) {
+  if (changes.length === 0) {
+    return [changes, 0, 0];
+  }
+
+  const start = Math.max(
+    changes.findIndex((c) => c.type !== "normal"),
+    0
+  );
+  const end =
+    changes.reduce(
+      (previous, c, index) => (c.type !== "normal" ? index : previous),
+      0
+    ) + 1;
+  return [changes.slice(start, end), start, changes.length - end];
+}
+
+/**
  * Creates a comment that can be submitted to GitHub.
  * @param {string} file
- * @param {{
-     changes: ({ type: "add" | "del" | "normal"; content: string; })[];
-     oldStart: number;
-     oldLines: number;
-   }} chunk
+ * @param {import('parse-diff').Chunk} chunk
  * @returns {Comment}
  */
 function makeComment(file, { changes, oldStart, oldLines }) {
-  const context = Math.max(
-    changes.findIndex((line) => line.type !== "normal"),
-    0
-  );
-  const line = oldStart + oldLines - context - 1;
-  const startLine = oldStart + context;
+  const [trimmedChanges, startContext, endContext] = trimContext(changes);
+  const line = oldStart + oldLines - endContext - 1;
+  const startLine = oldStart + startContext;
   return {
     path: file.split("\\").join("/"),
     position: undefined,
@@ -47,8 +62,7 @@ function makeComment(file, { changes, oldStart, oldLines }) {
       : undefined),
     body: [
       "```suggestion",
-      changes
-        .slice(context, changes.length - context)
+      trimmedChanges
         .filter((line) => line.type !== "del")
         .map((line) => line.content.slice(1))
         .join("\n"),

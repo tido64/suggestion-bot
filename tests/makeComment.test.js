@@ -128,6 +128,33 @@ describe("makeComment", () => {
     });
   });
 
+  test("change on last line with context", () => {
+    const [to, chunk] = extractChunk(
+      concatStrings(
+        "--- example/windows/ReactTestAppTests/pch.cpp	(before formatting)",
+        "+++ example/windows/ReactTestAppTests/pch.cpp	(after formatting)",
+        "@@ -2,4 +2,5 @@",
+        " ",
+        ` #include "pch.h"`,
+        " ",
+        "-// When you are using pre-compiled headers, this source file is necessary for compilation to succeed.",
+        "+// When you are using pre-compiled headers, this source file is necessary for compilation to",
+        "+// succeed."
+      )
+    );
+    expect(makeComment(to, chunk)).toEqual({
+      path: "example/windows/ReactTestAppTests/pch.cpp",
+      line: 5,
+      side: "RIGHT",
+      body: concatStrings(
+        "```suggestion",
+        "// When you are using pre-compiled headers, this source file is necessary for compilation to",
+        "// succeed.",
+        "```"
+      ),
+    });
+  });
+
   test("concatenate lines", () => {
     const [to, chunk] = extractChunk(
       concatStrings(
