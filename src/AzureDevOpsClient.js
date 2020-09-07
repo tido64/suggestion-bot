@@ -70,13 +70,12 @@ function makeReview(diff, options) {
     return Promise.resolve();
   }
 
-  const authToken = process.env["AZURE_PERSONAL_ACCESS_TOKEN"];
-  const repositoryId = process.env["BUILD_REPOSITORY_ID"];
-  const pullRequestId = parseInt(
-    process.env["SYSTEM_PULLREQUEST_PULLREQUESTID"]
-  );
-  const serverUrl = process.env["SYSTEM_TEAMFOUNDATIONCOLLECTIONURI"];
-  const project = process.env["SYSTEM_TEAMPROJECTID"];
+  const { env } = process;
+  const authToken = env["AZURE_PERSONAL_ACCESS_TOKEN"];
+  const repositoryId = env["BUILD_REPOSITORY_ID"];
+  const pullRequestId = parseInt(env["SYSTEM_PULLREQUEST_PULLREQUESTID"]);
+  const serverUrl = env["SYSTEM_TEAMFOUNDATIONCOLLECTIONURI"];
+  const project = env["SYSTEM_TEAMPROJECTID"];
 
   return connect(serverUrl, authToken, options)
     .then((gitApi) =>

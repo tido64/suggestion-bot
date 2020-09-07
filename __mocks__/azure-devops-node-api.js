@@ -6,8 +6,15 @@
 //
 
 class WebApi {
-  constructor(_, __, { createThread }) {
+  constructor(
+    serverUrl,
+    authHandler,
+    { createThread, getPullRequestIterations, setAuthToken, setServerUrl }
+  ) {
+    this._getPullRequestIterations = getPullRequestIterations;
     this.createThread = createThread;
+    setAuthToken && setAuthToken(authHandler);
+    setServerUrl && setServerUrl(serverUrl);
   }
 
   connect() {
@@ -18,10 +25,22 @@ class WebApi {
     return this;
   }
 
-  getPullRequestIterations() {
-    return Promise.resolve([1]);
+  getPullRequestIterations(
+    repositoryId,
+    pullRequestId,
+    project,
+    includeCommits
+  ) {
+    return this._getPullRequestIterations
+      ? this._getPullRequestIterations(
+          repositoryId,
+          pullRequestId,
+          project,
+          includeCommits
+        )
+      : Promise.resolve([1]);
   }
 }
 
-module.exports.getPersonalAccessTokenHandler = (authToken) => authToken;
-module.exports.WebApi = WebApi;
+module.exports["getPersonalAccessTokenHandler"] = (authToken) => authToken;
+module.exports["WebApi"] = WebApi;
