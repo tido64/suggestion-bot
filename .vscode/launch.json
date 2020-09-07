@@ -12,10 +12,10 @@
       "type": "pwa-node",
       "env": {
         "AZURE_PERSONAL_ACCESS_TOKEN": "azurePersonalAccessToken",
-        "Build.Repository.ID": "suggestion-bot",
-        "System.PullRequest.PullRequestId": "13",
-        "System.TeamFoundationCollectionUri": "https://dev.azure.com/fabrikamfiber",
-        "System.TeamProjectId": "tido64"
+        "BUILD_REPOSITORY_ID": "suggestion-bot",
+        "SYSTEM_PULLREQUEST_PULLREQUESTID": "13",
+        "SYSTEM_TEAMFOUNDATIONCOLLECTIONURI": "https://dev.azure.com/fabrikamfiber",
+        "SYSTEM_TEAMPROJECTID": "tido64"
       }
     },
     {

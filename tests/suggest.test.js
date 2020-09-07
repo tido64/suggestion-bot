@@ -207,27 +207,61 @@ describe("AzureDevOpsClient", () => {
   const { makeReview } = require("../src/AzureDevOpsClient");
 
   const {
-    "Build.Repository.ID": REPOSITORY_ID,
-    "System.PullRequest.PullRequestId": PULL_REQUEST_ID,
-    "System.TeamFoundationCollectionUri": SERVER_URL,
-    "System.TeamProjectId": PROJECT_ID,
+    AZURE_PERSONAL_ACCESS_TOKEN: ACCESS_TOKEN,
+    BUILD_REPOSITORY_ID: REPOSITORY_ID,
+    SYSTEM_PULLREQUEST_PULLREQUESTID: PULL_REQUEST_ID,
+    SYSTEM_TEAMFOUNDATIONCOLLECTIONURI: SERVER_URL,
+    SYSTEM_TEAMPROJECTID: PROJECT_ID,
   } = process.env;
 
-  beforeEach(() => {
+  beforeAll(() => {
     const { env } = process;
-    env["Build.Repository.ID"] = "suggestion-bot";
-    env["System.PullRequest.PullRequestId"] = "13";
-    env["System.TeamFoundationCollectionUri"] =
+    env["AZURE_PERSONAL_ACCESS_TOKEN"] = "access-token";
+    env["BUILD_REPOSITORY_ID"] = "suggestion-bot";
+    env["SYSTEM_PULLREQUEST_PULLREQUESTID"] = "13";
+    env["SYSTEM_TEAMFOUNDATIONCOLLECTIONURI"] =
       "https://dev.azure.com/fabrikamfiber";
-    env["System.TeamProjectId"] = "tido64";
+    env["SYSTEM_TEAMPROJECTID"] = "tido64";
   });
 
-  afterEach(() => {
+  afterAll(() => {
     const { env } = process;
-    env["Build.Repository.ID"] = REPOSITORY_ID;
-    env["System.PullRequest.PullRequestId"] = PULL_REQUEST_ID;
-    env["System.TeamFoundationCollectionUri"] = SERVER_URL;
-    env["System.TeamProjectId"] = PROJECT_ID;
+    env["AZURE_PERSONAL_ACCESS_TOKEN"] = ACCESS_TOKEN;
+    env["BUILD_REPOSITORY_ID"] = REPOSITORY_ID;
+    env["SYSTEM_PULLREQUEST_PULLREQUESTID"] = PULL_REQUEST_ID;
+    env["SYSTEM_TEAMFOUNDATIONCOLLECTIONURI"] = SERVER_URL;
+    env["SYSTEM_TEAMPROJECTID"] = PROJECT_ID;
+  });
+
+  test("fetches environment variables", async () => {
+    let azureAccessToken = "";
+    let buildRepositoryId = "";
+    let prPullRequestId = "";
+    let projectId = "";
+    let tfCollectionUri = "";
+
+    await makeReview(FIXTURE_UNIDIFF, {
+      createThread: () => Promise.resolve(),
+      getPullRequestIterations: (repositoryId, pullRequestId, project) => {
+        buildRepositoryId = repositoryId;
+        prPullRequestId = pullRequestId;
+        projectId = project;
+        return Promise.resolve([1]);
+      },
+      setAuthToken: (authToken) => {
+        azureAccessToken = authToken;
+      },
+      setServerUrl: (serverUrl) => {
+        tfCollectionUri = serverUrl;
+      },
+    });
+
+    const { env } = process;
+    expect(azureAccessToken).toBe(env["AZURE_PERSONAL_ACCESS_TOKEN"]);
+    expect(buildRepositoryId).toBe(env["BUILD_REPOSITORY_ID"]);
+    expect(prPullRequestId).toBe(env["SYSTEM_PULLREQUEST_PULLREQUESTID"] | 0);
+    expect(projectId).toBe(env["SYSTEM_TEAMPROJECTID"]);
+    expect(tfCollectionUri).toBe(env["SYSTEM_TEAMFOUNDATIONCOLLECTIONURI"]);
   });
 
   test("skips invalid diffs", async () => {
@@ -292,19 +326,31 @@ describe("GitHubClient", () => {
 
   const { GITHUB_EVENT_PATH, GITHUB_REPOSITORY } = process.env;
 
-  beforeEach(() => {
+  beforeAll(() => {
     const { env } = process;
-    env.GITHUB_EVENT_PATH = "/github/workflow/event.json";
-    env.GITHUB_REPOSITORY = "tido64/suggestion-bot";
+    env["GITHUB_TOKEN"] = "auth-token";
+    env["GITHUB_EVENT_PATH"] = "/github/workflow/event.json";
+    env["GITHUB_REPOSITORY"] = "tido64/suggestion-bot";
     require("fs").__setMockFiles({
       "/github/workflow/event.json": '{ "pull_request": { "number": 0 } }',
     });
   });
 
-  afterEach(() => {
+  afterAll(() => {
     const { env } = process;
-    env.GITHUB_EVENT_PATH = GITHUB_EVENT_PATH;
-    env.GITHUB_REPOSITORY = GITHUB_REPOSITORY;
+    env["GITHUB_EVENT_PATH"] = GITHUB_EVENT_PATH;
+    env["GITHUB_REPOSITORY"] = GITHUB_REPOSITORY;
+  });
+
+  test("fetches auth token from environment variable", async () => {
+    let auth = "";
+    await makeReview(FIXTURE_UNIDIFF, {
+      createReview: () => Promise.resolve(),
+      setAuth: (token) => {
+        auth = token;
+      },
+    });
+    expect(auth).toBe(process.env["GITHUB_TOKEN"]);
   });
 
   test("skips invalid diffs", async () => {

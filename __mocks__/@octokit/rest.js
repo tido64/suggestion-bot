@@ -6,13 +6,12 @@
 //
 
 class Octokit {
-  constructor({ createReview }) {
+  constructor({ auth, createReview, setAuth }) {
     this.pulls = {
       createReview,
     };
+    setAuth && setAuth(auth);
   }
 }
 
-module.exports = {
-  Octokit,
-};
+module.exports["Octokit"] = Octokit;
