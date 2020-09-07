@@ -18,6 +18,19 @@
  */
 
 /**
+ * @template T
+ * @param {T[]} array
+ * @param {(item: T) => boolean} callback
+ * @returns {number}
+ */
+function findLastIndex(array, callback) {
+  return array.reduce(
+    (previous, c, index) => (callback(c) ? index : previous),
+    -1
+  );
+}
+
+/**
  * Trims context from specified changes.
  * @param {import('parse-diff').Change[]} changes
  * @returns {[import('parse-diff').Change[], number, number]}
@@ -31,11 +44,7 @@ function trimContext(changes) {
     changes.findIndex((c) => c.type !== "normal"),
     0
   );
-  const end =
-    changes.reduce(
-      (previous, c, index) => (c.type !== "normal" ? index : previous),
-      0
-    ) + 1;
+  const end = findLastIndex(changes, (c) => c.type !== "normal") + 1;
   return [changes.slice(start, end), start, changes.length - end];
 }
 

@@ -38,6 +38,15 @@ const FIXTURE_PIPED_WINDOWS = concatStrings(
   "   }, []);"
 );
 
+const FIXTURE_PIPED_ADO_ITERATION_CHANGES = {
+  changeEntries: [
+    {
+      changeTrackingId: 1,
+      item: { path: "/src/GitHubClient.js" },
+    },
+  ],
+};
+
 const FIXTURE_PIPED_ADO_PAYLOAD = [
   {
     comments: [
@@ -121,6 +130,19 @@ const FIXTURE_UNIDIFF = concatStrings(
   " #ifdef USE_VERTEX_ARRAY_OBJECT"
 );
 
+const FIXTURE_UNIDIFF_ADO_ITERATION_CHANGES = {
+  changeEntries: [
+    {
+      changeTrackingId: 1,
+      item: { path: "/src/Graphics/TextureAllocator.gl.h" },
+    },
+    {
+      changeTrackingId: 2,
+      item: { path: "/src/Graphics/VertexArray.h" },
+    },
+  ],
+};
+
 const FIXTURE_UNIDIFF_ADO_PAYLOAD = [
   {
     comments: [
@@ -159,7 +181,7 @@ const FIXTURE_UNIDIFF_ADO_PAYLOAD = [
       rightFileStart: { line: 53 },
     },
     pullRequestThreadContext: {
-      changeTrackingId: 1,
+      changeTrackingId: 2,
       iterationContext: {
         firstComparingIteration: 1,
         secondComparingIteration: 1,
@@ -242,11 +264,13 @@ describe("AzureDevOpsClient", () => {
 
     await makeReview(FIXTURE_UNIDIFF, {
       createThread: () => Promise.resolve(),
+      getPullRequestIterationChanges: () =>
+        Promise.resolve(FIXTURE_UNIDIFF_ADO_ITERATION_CHANGES),
       getPullRequestIterations: (repositoryId, pullRequestId, project) => {
         buildRepositoryId = repositoryId;
         prPullRequestId = pullRequestId;
         projectId = project;
-        return Promise.resolve([1]);
+        return Promise.resolve([{ id: 1 }]);
       },
       setAuthToken: (authToken) => {
         azureAccessToken = authToken;
@@ -288,23 +312,29 @@ describe("AzureDevOpsClient", () => {
         payloads.push(review);
         return Promise.resolve();
       },
+      getPullRequestIterationChanges: () =>
+        Promise.resolve(FIXTURE_UNIDIFF_ADO_ITERATION_CHANGES),
     });
     expect(payloads).toEqual(FIXTURE_UNIDIFF_ADO_PAYLOAD);
   });
 
   test("supports piped diffs", async () => {
     let payload = [];
-    const createThread = (review) => {
-      payload.push(review);
-      return Promise.resolve();
+    const mocks = {
+      createThread: (review) => {
+        payload.push(review);
+        return Promise.resolve();
+      },
+      getPullRequestIterationChanges: () =>
+        Promise.resolve(FIXTURE_PIPED_ADO_ITERATION_CHANGES),
     };
 
-    await makeReview(FIXTURE_PIPED, { createThread });
+    await makeReview(FIXTURE_PIPED, mocks);
     expect(payload).toEqual(FIXTURE_PIPED_ADO_PAYLOAD);
 
     payload = [];
 
-    await makeReview(FIXTURE_PIPED_WINDOWS, { createThread });
+    await makeReview(FIXTURE_PIPED_WINDOWS, mocks);
     expect(payload).toEqual(FIXTURE_PIPED_ADO_PAYLOAD);
   });
 
@@ -313,6 +343,8 @@ describe("AzureDevOpsClient", () => {
 
     await makeReview(FIXTURE_UNIDIFF, {
       createThread: () => Promise.reject("test"),
+      getPullRequestIterationChanges: () =>
+        Promise.resolve(FIXTURE_UNIDIFF_ADO_ITERATION_CHANGES),
     });
 
     expect(errorSpy).toHaveBeenCalledWith("test");

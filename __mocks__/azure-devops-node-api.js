@@ -9,8 +9,15 @@ class WebApi {
   constructor(
     serverUrl,
     authHandler,
-    { createThread, getPullRequestIterations, setAuthToken, setServerUrl }
+    {
+      createThread,
+      getPullRequestIterationChanges,
+      getPullRequestIterations,
+      setAuthToken,
+      setServerUrl,
+    }
   ) {
+    this._getPullRequestIterationChanges = getPullRequestIterationChanges;
     this._getPullRequestIterations = getPullRequestIterations;
     this.createThread = createThread;
     setAuthToken && setAuthToken(authHandler);
@@ -23,6 +30,16 @@ class WebApi {
 
   getGitApi() {
     return this;
+  }
+
+  getPullRequestIterationChanges(repositoryId, pullRequestId, iterationId) {
+    return this._getPullRequestIterationChanges
+      ? this._getPullRequestIterationChanges(
+          repositoryId,
+          pullRequestId,
+          iterationId
+        )
+      : Promise.resolve([1]);
   }
 
   getPullRequestIterations(
@@ -38,7 +55,7 @@ class WebApi {
           project,
           includeCommits
         )
-      : Promise.resolve([1]);
+      : Promise.resolve([{ id: 1 }]);
   }
 }
 
