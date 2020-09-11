@@ -59,12 +59,8 @@ const FIXTURE_PIPED_ADO_PAYLOAD = [
     status: 1,
     threadContext: {
       filePath: "src/GitHubClient.js",
-      rightFileEnd: {
-        line: 95,
-      },
-      rightFileStart: {
-        line: 95,
-      },
+      rightFileEnd: { line: 95, offset: 65 },
+      rightFileStart: { line: 95, offset: 1 },
     },
     pullRequestThreadContext: {
       changeTrackingId: 1,
@@ -86,6 +82,7 @@ const FIXTURE_PIPED_GH_PAYLOAD = {
     {
       path: "src/GitHubClient.js",
       line: 95,
+      line_length: 65,
       side: "RIGHT",
       body: concatStrings(
         "```suggestion",
@@ -155,8 +152,8 @@ const FIXTURE_UNIDIFF_ADO_PAYLOAD = [
     status: 1,
     threadContext: {
       filePath: "src/Graphics/TextureAllocator.gl.h",
-      rightFileEnd: { line: 22 },
-      rightFileStart: { line: 21 },
+      rightFileEnd: { line: 22, offset: 59 },
+      rightFileStart: { line: 21, offset: 1 },
     },
     pullRequestThreadContext: {
       changeTrackingId: 1,
@@ -177,8 +174,8 @@ const FIXTURE_UNIDIFF_ADO_PAYLOAD = [
     status: 1,
     threadContext: {
       filePath: "src/Graphics/VertexArray.h",
-      rightFileEnd: { line: 56 },
-      rightFileStart: { line: 53 },
+      rightFileEnd: { line: 56, offset: 10 },
+      rightFileStart: { line: 53, offset: 1 },
     },
     pullRequestThreadContext: {
       changeTrackingId: 2,
@@ -200,6 +197,7 @@ const FIXTURE_UNIDIFF_GH_PAYLOAD = {
     {
       path: "src/Graphics/TextureAllocator.gl.h",
       line: 22,
+      line_length: 59,
       side: "RIGHT",
       start_line: 21,
       start_side: "RIGHT",
@@ -213,6 +211,7 @@ const FIXTURE_UNIDIFF_GH_PAYLOAD = {
     {
       path: "src/Graphics/VertexArray.h",
       line: 56,
+      line_length: 10,
       side: "RIGHT",
       start_line: 53,
       start_side: "RIGHT",

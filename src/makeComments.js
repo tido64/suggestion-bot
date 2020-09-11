@@ -10,6 +10,7 @@
      path: string;
      position: undefined;
      line: number;
+     line_length: number;
      side: "LEFT" | "RIGHT";
      start_line?: number;
      start_side?: "LEFT" | "RIGHT";
@@ -58,10 +59,13 @@ function makeComment(file, { changes, oldStart, oldLines }) {
   const [trimmedChanges, startContext, endContext] = trimContext(changes);
   const line = oldStart + oldLines - endContext - 1;
   const startLine = oldStart + startContext;
+  const lastMarkedLine = findLastIndex(trimmedChanges, (c) => c.type !== "add");
   return {
     path: file.split("\\").join("/"),
     position: undefined,
     line,
+    line_length:
+      lastMarkedLine >= 0 ? trimmedChanges[lastMarkedLine].content.length : 0,
     side: "RIGHT",
     ...(startLine !== line
       ? {

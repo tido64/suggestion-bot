@@ -9,6 +9,7 @@
  * @typedef {{
      path: string;
      line: number;
+     line_length: number;
      side: "LEFT" | "RIGHT";
      start_line?: number;
      start_side?: "LEFT" | "RIGHT";
@@ -55,7 +56,7 @@ function getItemPath(change) {
  * @returns {GitPullRequestCommentThread}
  */
 function transformComment(
-  { body, path, line, start_line },
+  { body, path, line, line_length, start_line },
   iteration,
   changeTrackingId
 ) {
@@ -66,8 +67,13 @@ function transformComment(
     status: COMMENT_THREAD_STATUS_ACTIVE,
     threadContext: {
       filePath: path,
-      rightFileEnd: { line },
-      rightFileStart: start_line ? { line: start_line } : { line },
+      rightFileEnd: {
+        line,
+        offset: line_length,
+      },
+      rightFileStart: start_line
+        ? { line: start_line, offset: 1 }
+        : { line, offset: 1 },
     },
     pullRequestThreadContext: {
       changeTrackingId,
