@@ -4,10 +4,14 @@
     "allowJs": true,
     "checkJs": true,
     "noEmit": true,
+    "strict": true,
     "moduleResolution": "Node",
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true
   },
-  "include": ["src/*.js"]
+  "include": [
+    "src/*.js",
+    "tests/*.js"
+  ]
 }

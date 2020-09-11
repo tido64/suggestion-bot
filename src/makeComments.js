@@ -4,11 +4,15 @@
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
 //
+// @ts-check
 
 /**
+ * @typedef {import("parse-diff").Change} Change
+ * @typedef {import("parse-diff").Chunk} Chunk
+ * @typedef {import("parse-diff").File} File
  * @typedef {{
      path: string;
-     position: undefined;
+     position: number;
      line: number;
      line_length: number;
      side: "LEFT" | "RIGHT";
@@ -33,8 +37,8 @@ function findLastIndex(array, callback) {
 
 /**
  * Trims context from specified changes.
- * @param {import('parse-diff').Change[]} changes
- * @returns {[import('parse-diff').Change[], number, number]}
+ * @param {Change[]} changes
+ * @returns {[Change[], number, number]}
  */
 function trimContext(changes) {
   if (changes.length === 0) {
@@ -52,7 +56,7 @@ function trimContext(changes) {
 /**
  * Creates a comment that can be submitted to GitHub.
  * @param {string} file
- * @param {import('parse-diff').Chunk} chunk
+ * @param {Chunk} chunk
  * @returns {Comment}
  */
 function makeComment(file, { changes, oldStart, oldLines }) {
@@ -62,7 +66,6 @@ function makeComment(file, { changes, oldStart, oldLines }) {
   const lastMarkedLine = findLastIndex(trimmedChanges, (c) => c.type !== "add");
   return {
     path: file.split("\\").join("/"),
-    position: undefined,
     line,
     line_length:
       lastMarkedLine >= 0 ? trimmedChanges[lastMarkedLine].content.length : 0,
@@ -82,6 +85,8 @@ function makeComment(file, { changes, oldStart, oldLines }) {
       "```",
       "",
     ].join("\n"),
+    // @ts-ignore `position` is not required if using `comfort-fade`
+    position: undefined,
   };
 }
 
@@ -91,17 +96,17 @@ function makeComment(file, { changes, oldStart, oldLines }) {
  * @returns {Comment[]}
  */
 function makeComments(diff) {
-  const parse = require("parse-diff");
-  const files = parse(diff);
+  const files = require("parse-diff")(diff);
   if (files.length <= 0) {
     return [];
   }
 
   const { trimQuotes } = require("./Helpers");
   return files.reduce(
+    /** @type {(comments: Comment[], file: File) => Comment[]} */
     (comments, file) => {
       const { chunks, from, to } = file;
-      if (chunks.length === 0) {
+      if (chunks.length === 0 || !to || !from) {
         return comments;
       }
       return chunks.reduce((comments, chunk) => {
@@ -109,7 +114,7 @@ function makeComments(diff) {
         return comments;
       }, comments);
     },
-    /** @type {Comment} */ []
+    []
   );
 }
 

@@ -6,7 +6,7 @@
 //
 "use strict";
 
-const fs = jest.genMockFromModule("fs");
+const fs = jest.createMockFromModule("fs");
 
 let mockFiles = undefined;
 fs.__setMockFiles = (newMockFiles) => {

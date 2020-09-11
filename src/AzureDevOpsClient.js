@@ -4,20 +4,19 @@
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
 //
+// @ts-check
 
 /**
- * @typedef {{
-     path: string;
-     line: number;
-     line_length: number;
-     side: "LEFT" | "RIGHT";
-     start_line?: number;
-     start_side?: "LEFT" | "RIGHT";
-     body: string;
-   }} Comment
  * @typedef {import("azure-devops-node-api/interfaces/common/VsoBaseInterfaces").IRequestOptions} RequestOptions
  * @typedef {import("azure-devops-node-api/interfaces/GitInterfaces").GitPullRequestChange} GitPullRequestChange
  * @typedef {import("azure-devops-node-api/interfaces/GitInterfaces").GitPullRequestCommentThread} GitPullRequestCommentThread
+ * @typedef {import("./makeComments").Comment} Comment
+ * @typedef {{ [filePath: string]: number }} ChangeTrackingIdMap
+ * @typedef {(changes: ChangeTrackingIdMap, change: GitPullRequestChange) => (ChangeTrackingIdMap)} ChangeTrackingIdMapReducer
+ */
+/**
+ * @template T
+ * @typedef {(previous: Promise<void | T>, current:  T) => Promise<void | T>} PromiseReducer
  */
 
 /**
@@ -91,19 +90,57 @@ function transformComment(
  * @param {RequestOptions} [options]
  */
 function makeReview(diff, options) {
+  const {
+    AZURE_PERSONAL_ACCESS_TOKEN: authToken,
+    BUILD_REPOSITORY_ID: repositoryId,
+    SYSTEM_PULLREQUEST_PULLREQUESTID,
+    SYSTEM_TEAMFOUNDATIONCOLLECTIONURI: serverUrl,
+    SYSTEM_TEAMPROJECTID: project,
+  } = process.env;
+  if (
+    !authToken ||
+    !project ||
+    !repositoryId ||
+    !serverUrl ||
+    !SYSTEM_PULLREQUEST_PULLREQUESTID
+  ) {
+    if (!authToken) {
+      console.error(
+        "`AZURE_PERSONAL_ACCESS_TOKEN` must be set to your Azure DevOps access token"
+      );
+    }
+    if (!repositoryId) {
+      console.error(
+        "`BUILD_REPOSITORY_ID` should've been defined by Azure Pipelines"
+      );
+    }
+    if (!SYSTEM_PULLREQUEST_PULLREQUESTID) {
+      console.error(
+        "`SYSTEM_PULLREQUEST_PULLREQUESTID` should've been defined by Azure Pipelines"
+      );
+    }
+    if (!serverUrl) {
+      console.error(
+        "`SYSTEM_TEAMFOUNDATIONCOLLECTIONURI` should've been defined by Azure Pipelines"
+      );
+    }
+    if (!project) {
+      console.error(
+        "`SYSTEM_TEAMPROJECTID` should've been defined by Azure Pipelines"
+      );
+    }
+    return Promise.reject(
+      new Error("One or several environment variables are missing")
+    );
+  }
+
   const { makeComments } = require("./makeComments");
   const comments = makeComments(diff);
   if (comments.length === 0) {
     return Promise.resolve();
   }
 
-  const { env } = process;
-  const authToken = env["AZURE_PERSONAL_ACCESS_TOKEN"];
-  const repositoryId = env["BUILD_REPOSITORY_ID"];
-  const pullRequestId = parseInt(env["SYSTEM_PULLREQUEST_PULLREQUESTID"]);
-  const serverUrl = env["SYSTEM_TEAMFOUNDATIONCOLLECTIONURI"];
-  const project = env["SYSTEM_TEAMPROJECTID"];
-
+  const pullRequestId = parseInt(SYSTEM_PULLREQUEST_PULLREQUESTID);
   return connect(serverUrl, authToken, options)
     .then((gitApi) =>
       gitApi
@@ -118,21 +155,23 @@ function makeReview(diff, options) {
             )
             .then(({ changeEntries }) => {
               let latestChangeTrackingId = 1;
-              const changes = changeEntries.reduce(
-                /** @type {(changes: { [filePath: string]: number }, change: GitPullRequestChange) => ({ [filePath: string]: number })} */
-                (changes, change) => {
-                  const filePath = getItemPath(change);
-                  if (filePath) {
-                    const changeTrackingId = change.changeTrackingId || 1;
-                    changes[filePath] = changeTrackingId;
-                    if (changeTrackingId > latestChangeTrackingId) {
-                      latestChangeTrackingId = changeTrackingId;
-                    }
-                  }
-                  return changes;
-                },
-                {}
-              );
+              const changes = !changeEntries
+                ? {}
+                : changeEntries.reduce(
+                    /** @type {ChangeTrackingIdMapReducer} */
+                    (changes, change) => {
+                      const filePath = getItemPath(change);
+                      if (filePath) {
+                        const changeTrackingId = change.changeTrackingId || 1;
+                        changes[filePath] = changeTrackingId;
+                        if (changeTrackingId > latestChangeTrackingId) {
+                          latestChangeTrackingId = changeTrackingId;
+                        }
+                      }
+                      return changes;
+                    },
+                    {}
+                  );
               return comments
                 .map((comment) =>
                   transformComment(
@@ -142,6 +181,7 @@ function makeReview(diff, options) {
                   )
                 )
                 .reduce(
+                  /** @type {PromiseReducer<GitPullRequestCommentThread>} */
                   (request, commentThread) =>
                     request.then(() =>
                       gitApi.createThread(
