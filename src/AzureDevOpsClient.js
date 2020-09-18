@@ -15,8 +15,9 @@
  * @typedef {(changes: ChangeTrackingIdMap, change: GitPullRequestChange) => (ChangeTrackingIdMap)} ChangeTrackingIdMapReducer
  */
 /**
+ * @template U
  * @template T
- * @typedef {(previous: Promise<void | T>, current:  T) => Promise<void | T>} PromiseReducer
+ * @typedef {(previous: Promise<void | U>, current: T) => Promise<void | U>} PromiseReducer
  */
 
 /**
@@ -172,27 +173,24 @@ function makeReview(diff, options) {
                     },
                     {}
                   );
-              return comments
-                .map((comment) =>
-                  transformComment(
-                    comment,
-                    iterationId,
-                    changes[comment.path] || latestChangeTrackingId
-                  )
-                )
-                .reduce(
-                  /** @type {PromiseReducer<GitPullRequestCommentThread>} */
-                  (request, commentThread) =>
-                    request.then(() =>
-                      gitApi.createThread(
-                        commentThread,
-                        repositoryId,
-                        pullRequestId,
-                        project
-                      )
-                    ),
-                  Promise.resolve()
-                );
+              return comments.reduce(
+                /** @type {PromiseReducer<GitPullRequestCommentThread, Comment>} */
+                (request, comment) => {
+                  const changeTrackingId = changes[comment.path];
+                  if (changeTrackingId == undefined) {
+                    return request;
+                  }
+                  return request.then(() =>
+                    gitApi.createThread(
+                      transformComment(comment, iterationId, changeTrackingId),
+                      repositoryId,
+                      pullRequestId,
+                      project
+                    )
+                  );
+                },
+                Promise.resolve()
+              );
             });
         })
     )
