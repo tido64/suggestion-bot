@@ -26,6 +26,7 @@ describe("makeComment", () => {
     ).toEqual({
       path: "test",
       line: 0,
+      line_length: 0,
       side: "RIGHT",
       body: "```suggestion\n\n```\n",
     });
@@ -41,6 +42,7 @@ describe("makeComment", () => {
     ).toEqual({
       path: "test",
       line: 1,
+      line_length: 0,
       side: "RIGHT",
       start_line: 0,
       start_side: "RIGHT",
@@ -69,6 +71,7 @@ describe("makeComment", () => {
     expect(makeComment(to, chunk)).toEqual({
       path: "src/Common/Algorithm.h",
       line: 136,
+      line_length: 61,
       side: "RIGHT",
       body: concatStrings(
         "```suggestion",
@@ -93,6 +96,7 @@ describe("makeComment", () => {
     expect(makeComment(to, chunk)).toEqual({
       path: "src/Common/Algorithm.h",
       line: 136,
+      line_length: 61,
       side: "RIGHT",
       body: concatStrings(
         "```suggestion",
@@ -118,6 +122,7 @@ describe("makeComment", () => {
     expect(makeComment(to, chunk)).toEqual({
       path: "src/Graphics/TextureAllocator.gl.h",
       line: 21,
+      line_length: 87,
       side: "RIGHT",
       body: concatStrings(
         "```suggestion",
@@ -145,6 +150,7 @@ describe("makeComment", () => {
     expect(makeComment(to, chunk)).toEqual({
       path: "example/windows/ReactTestAppTests/pch.cpp",
       line: 5,
+      line_length: 102,
       side: "RIGHT",
       body: concatStrings(
         "```suggestion",
@@ -179,6 +185,7 @@ describe("makeComment", () => {
     expect(makeComment(to, chunk)).toEqual({
       path: "src/Graphics/VertexArray.h",
       line: 56,
+      line_length: 10,
       side: "RIGHT",
       start_line: 53,
       start_side: "RIGHT",
@@ -190,7 +197,48 @@ describe("makeComment", () => {
     });
   });
 
-  test("moved lines", () => {
+  test("move lines down", () => {
+    const [to, chunk] = extractChunk(
+      concatStrings(
+        "diff --git a/src/Config.cpp b/src/Config.cpp",
+        "index d0a84e17..c73dd760 100644",
+        "--- a/src/Config.cpp",
+        "+++ b/src/Config.cpp",
+        "@@ -12,11 +12,11 @@",
+        " ",
+        " #include <panini/panini.hpp>",
+        " ",
+        `-#include "FileSystem/FileSystem.h"`,
+        ` #include "Common/Algorithm.h"`,
+        ` #include "Common/Data.h"`,
+        ` #include "Common/Logging.h"`,
+        ` #include "FileSystem/File.h"`,
+        `+#include "FileSystem/FileSystem.h"`,
+        " ",
+        " using namespace std::literals::string_view_literals;",
+        " "
+      )
+    );
+    expect(makeComment(to, chunk)).toEqual({
+      path: "src/Config.cpp",
+      line: 19,
+      line_length: 29,
+      side: "RIGHT",
+      start_line: 15,
+      start_side: "RIGHT",
+      body: concatStrings(
+        "```suggestion",
+        `#include "Common/Algorithm.h"`,
+        `#include "Common/Data.h"`,
+        `#include "Common/Logging.h"`,
+        `#include "FileSystem/File.h"`,
+        `#include "FileSystem/FileSystem.h"`,
+        "```"
+      ),
+    });
+  });
+
+  test("move lines up", () => {
     const [to, chunk] = extractChunk(
       concatStrings(
         "diff --git a/src/Config.cpp b/src/Config.cpp",
@@ -215,6 +263,7 @@ describe("makeComment", () => {
     expect(makeComment(to, chunk)).toEqual({
       path: "src/Config.cpp",
       line: 19,
+      line_length: 30,
       side: "RIGHT",
       start_line: 15,
       start_side: "RIGHT",

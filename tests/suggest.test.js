@@ -38,6 +38,15 @@ const FIXTURE_PIPED_WINDOWS = concatStrings(
   "   }, []);"
 );
 
+const FIXTURE_PIPED_ADO_ITERATION_CHANGES = {
+  changeEntries: [
+    {
+      changeTrackingId: 1,
+      item: { path: "/src/GitHubClient.js" },
+    },
+  ],
+};
+
 const FIXTURE_PIPED_ADO_PAYLOAD = [
   {
     comments: [
@@ -50,12 +59,8 @@ const FIXTURE_PIPED_ADO_PAYLOAD = [
     status: 1,
     threadContext: {
       filePath: "src/GitHubClient.js",
-      rightFileEnd: {
-        line: 95,
-      },
-      rightFileStart: {
-        line: 95,
-      },
+      rightFileEnd: { line: 95, offset: 65 },
+      rightFileStart: { line: 95, offset: 1 },
     },
     pullRequestThreadContext: {
       changeTrackingId: 1,
@@ -77,6 +82,7 @@ const FIXTURE_PIPED_GH_PAYLOAD = {
     {
       path: "src/GitHubClient.js",
       line: 95,
+      line_length: 65,
       side: "RIGHT",
       body: concatStrings(
         "```suggestion",
@@ -121,6 +127,19 @@ const FIXTURE_UNIDIFF = concatStrings(
   " #ifdef USE_VERTEX_ARRAY_OBJECT"
 );
 
+const FIXTURE_UNIDIFF_ADO_ITERATION_CHANGES = {
+  changeEntries: [
+    {
+      changeTrackingId: 1,
+      item: { path: "/src/Graphics/TextureAllocator.gl.h" },
+    },
+    {
+      changeTrackingId: 2,
+      item: { path: "/src/Graphics/VertexArray.h" },
+    },
+  ],
+};
+
 const FIXTURE_UNIDIFF_ADO_PAYLOAD = [
   {
     comments: [
@@ -133,8 +152,8 @@ const FIXTURE_UNIDIFF_ADO_PAYLOAD = [
     status: 1,
     threadContext: {
       filePath: "src/Graphics/TextureAllocator.gl.h",
-      rightFileEnd: { line: 22 },
-      rightFileStart: { line: 21 },
+      rightFileEnd: { line: 22, offset: 59 },
+      rightFileStart: { line: 21, offset: 1 },
     },
     pullRequestThreadContext: {
       changeTrackingId: 1,
@@ -155,11 +174,11 @@ const FIXTURE_UNIDIFF_ADO_PAYLOAD = [
     status: 1,
     threadContext: {
       filePath: "src/Graphics/VertexArray.h",
-      rightFileEnd: { line: 56 },
-      rightFileStart: { line: 53 },
+      rightFileEnd: { line: 56, offset: 10 },
+      rightFileStart: { line: 53, offset: 1 },
     },
     pullRequestThreadContext: {
-      changeTrackingId: 1,
+      changeTrackingId: 2,
       iterationContext: {
         firstComparingIteration: 1,
         secondComparingIteration: 1,
@@ -178,6 +197,7 @@ const FIXTURE_UNIDIFF_GH_PAYLOAD = {
     {
       path: "src/Graphics/TextureAllocator.gl.h",
       line: 22,
+      line_length: 59,
       side: "RIGHT",
       start_line: 21,
       start_side: "RIGHT",
@@ -191,6 +211,7 @@ const FIXTURE_UNIDIFF_GH_PAYLOAD = {
     {
       path: "src/Graphics/VertexArray.h",
       line: 56,
+      line_length: 10,
       side: "RIGHT",
       start_line: 53,
       start_side: "RIGHT",
@@ -242,11 +263,13 @@ describe("AzureDevOpsClient", () => {
 
     await makeReview(FIXTURE_UNIDIFF, {
       createThread: () => Promise.resolve(),
+      getPullRequestIterationChanges: () =>
+        Promise.resolve(FIXTURE_UNIDIFF_ADO_ITERATION_CHANGES),
       getPullRequestIterations: (repositoryId, pullRequestId, project) => {
         buildRepositoryId = repositoryId;
         prPullRequestId = pullRequestId;
         projectId = project;
-        return Promise.resolve([1]);
+        return Promise.resolve([{ id: 1 }]);
       },
       setAuthToken: (authToken) => {
         azureAccessToken = authToken;
@@ -288,23 +311,29 @@ describe("AzureDevOpsClient", () => {
         payloads.push(review);
         return Promise.resolve();
       },
+      getPullRequestIterationChanges: () =>
+        Promise.resolve(FIXTURE_UNIDIFF_ADO_ITERATION_CHANGES),
     });
     expect(payloads).toEqual(FIXTURE_UNIDIFF_ADO_PAYLOAD);
   });
 
   test("supports piped diffs", async () => {
     let payload = [];
-    const createThread = (review) => {
-      payload.push(review);
-      return Promise.resolve();
+    const mocks = {
+      createThread: (review) => {
+        payload.push(review);
+        return Promise.resolve();
+      },
+      getPullRequestIterationChanges: () =>
+        Promise.resolve(FIXTURE_PIPED_ADO_ITERATION_CHANGES),
     };
 
-    await makeReview(FIXTURE_PIPED, { createThread });
+    await makeReview(FIXTURE_PIPED, mocks);
     expect(payload).toEqual(FIXTURE_PIPED_ADO_PAYLOAD);
 
     payload = [];
 
-    await makeReview(FIXTURE_PIPED_WINDOWS, { createThread });
+    await makeReview(FIXTURE_PIPED_WINDOWS, mocks);
     expect(payload).toEqual(FIXTURE_PIPED_ADO_PAYLOAD);
   });
 
@@ -313,6 +342,8 @@ describe("AzureDevOpsClient", () => {
 
     await makeReview(FIXTURE_UNIDIFF, {
       createThread: () => Promise.reject("test"),
+      getPullRequestIterationChanges: () =>
+        Promise.resolve(FIXTURE_UNIDIFF_ADO_ITERATION_CHANGES),
     });
 
     expect(errorSpy).toHaveBeenCalledWith("test");

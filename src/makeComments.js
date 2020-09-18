@@ -10,12 +10,26 @@
      path: string;
      position: undefined;
      line: number;
+     line_length: number;
      side: "LEFT" | "RIGHT";
      start_line?: number;
      start_side?: "LEFT" | "RIGHT";
      body: string;
    }} Comment
  */
+
+/**
+ * @template T
+ * @param {T[]} array
+ * @param {(item: T) => boolean} callback
+ * @returns {number}
+ */
+function findLastIndex(array, callback) {
+  return array.reduce(
+    (previous, c, index) => (callback(c) ? index : previous),
+    -1
+  );
+}
 
 /**
  * Trims context from specified changes.
@@ -31,11 +45,7 @@ function trimContext(changes) {
     changes.findIndex((c) => c.type !== "normal"),
     0
   );
-  const end =
-    changes.reduce(
-      (previous, c, index) => (c.type !== "normal" ? index : previous),
-      0
-    ) + 1;
+  const end = findLastIndex(changes, (c) => c.type !== "normal") + 1;
   return [changes.slice(start, end), start, changes.length - end];
 }
 
@@ -49,10 +59,13 @@ function makeComment(file, { changes, oldStart, oldLines }) {
   const [trimmedChanges, startContext, endContext] = trimContext(changes);
   const line = oldStart + oldLines - endContext - 1;
   const startLine = oldStart + startContext;
+  const lastMarkedLine = findLastIndex(trimmedChanges, (c) => c.type !== "add");
   return {
     path: file.split("\\").join("/"),
     position: undefined,
     line,
+    line_length:
+      lastMarkedLine >= 0 ? trimmedChanges[lastMarkedLine].content.length : 0,
     side: "RIGHT",
     ...(startLine !== line
       ? {
