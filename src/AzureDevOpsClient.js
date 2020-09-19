@@ -155,7 +155,6 @@ function makeReview(diff, options) {
               iterationId
             )
             .then(({ changeEntries }) => {
-              let latestChangeTrackingId = 1;
               const changes = !changeEntries
                 ? {}
                 : changeEntries.reduce(
@@ -163,11 +162,7 @@ function makeReview(diff, options) {
                     (changes, change) => {
                       const filePath = getItemPath(change);
                       if (filePath) {
-                        const changeTrackingId = change.changeTrackingId || 1;
-                        changes[filePath] = changeTrackingId;
-                        if (changeTrackingId > latestChangeTrackingId) {
-                          latestChangeTrackingId = changeTrackingId;
-                        }
+                        changes[filePath] = change.changeTrackingId || 1;
                       }
                       return changes;
                     },
