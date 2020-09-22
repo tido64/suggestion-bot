@@ -262,7 +262,7 @@ describe("AzureDevOpsClient", () => {
     expect(payload).toEqual(FIXTURE_PIPED_ADO_PAYLOAD);
   });
 
-  test("handles zero change entries", async () => {
+  test("ignores files not in latest iteration", async () => {
     /** @type {GitPullRequestCommentThread[]} */
     let payloads = [];
     await makeReview(
@@ -275,15 +275,7 @@ describe("AzureDevOpsClient", () => {
         getPullRequestIterationChanges: () => Promise.resolve({}),
       })
     );
-    expect(payloads).toHaveLength(FIXTURE_UNIDIFF_ADO_PAYLOAD.length);
-    expect(payloads[0]).toEqual(FIXTURE_UNIDIFF_ADO_PAYLOAD[0]);
-    expect(
-      FIXTURE_UNIDIFF_ADO_PAYLOAD[1].pullRequestThreadContext.changeTrackingId
-    ).toBe(2);
-    expect(
-      payloads[1].pullRequestThreadContext &&
-        payloads[1].pullRequestThreadContext.changeTrackingId
-    ).toBe(1);
+    expect(payloads).toHaveLength(0);
   });
 
   test("dumps the exception on failure", async () => {

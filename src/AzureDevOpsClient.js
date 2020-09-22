@@ -15,8 +15,9 @@
  * @typedef {(changes: ChangeTrackingIdMap, change: GitPullRequestChange) => (ChangeTrackingIdMap)} ChangeTrackingIdMapReducer
  */
 /**
+ * @template U
  * @template T
- * @typedef {(previous: Promise<void | T>, current:  T) => Promise<void | T>} PromiseReducer
+ * @typedef {(previous: Promise<void | U>, current: T) => Promise<void | U>} PromiseReducer
  */
 
 /**
@@ -154,7 +155,6 @@ function makeReview(diff, options) {
               iterationId
             )
             .then(({ changeEntries }) => {
-              let latestChangeTrackingId = 1;
               const changes = !changeEntries
                 ? {}
                 : changeEntries.reduce(
@@ -162,37 +162,30 @@ function makeReview(diff, options) {
                     (changes, change) => {
                       const filePath = getItemPath(change);
                       if (filePath) {
-                        const changeTrackingId = change.changeTrackingId || 1;
-                        changes[filePath] = changeTrackingId;
-                        if (changeTrackingId > latestChangeTrackingId) {
-                          latestChangeTrackingId = changeTrackingId;
-                        }
+                        changes[filePath] = change.changeTrackingId || 1;
                       }
                       return changes;
                     },
                     {}
                   );
-              return comments
-                .map((comment) =>
-                  transformComment(
-                    comment,
-                    iterationId,
-                    changes[comment.path] || latestChangeTrackingId
-                  )
-                )
-                .reduce(
-                  /** @type {PromiseReducer<GitPullRequestCommentThread>} */
-                  (request, commentThread) =>
-                    request.then(() =>
-                      gitApi.createThread(
-                        commentThread,
-                        repositoryId,
-                        pullRequestId,
-                        project
-                      )
-                    ),
-                  Promise.resolve()
-                );
+              return comments.reduce(
+                /** @type {PromiseReducer<GitPullRequestCommentThread, Comment>} */
+                (request, comment) => {
+                  const changeTrackingId = changes[comment.path];
+                  if (changeTrackingId == undefined) {
+                    return request;
+                  }
+                  return request.then(() =>
+                    gitApi.createThread(
+                      transformComment(comment, iterationId, changeTrackingId),
+                      repositoryId,
+                      pullRequestId,
+                      project
+                    )
+                  );
+                },
+                Promise.resolve()
+              );
             });
         })
     )
