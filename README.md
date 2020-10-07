@@ -104,16 +104,28 @@ git diff --unified=0 --no-color @^ \
 We must first write a script that pipes [Prettier](https://prettier.io/)'s
 output to `diff` so we can feed it to `suggestion-bot` later.
 
-```sh
-#!/bin/sh
-for f in $(yarn --silent prettier --list-different $(git ls-files '*.js')); do
-  yarn --silent prettier "$f" | diff -u "$f" -
-done
+```js
+#!/usr/bin/env node
+
+const { spawnSync } = require("child_process");
+const fs = require("fs");
+const prettier = require("prettier");
+
+const diff = process.argv.slice(2).reduce((diff, filepath) => {
+  const source = fs.readFileSync(filepath, { encoding: "utf8" });
+  const { stdout } = spawnSync("diff", ["--unified", filepath, "-"], {
+    input: prettier.format(source, { filepath }),
+    encoding: "utf-8",
+  });
+  return diff + stdout;
+}, "");
+
+require("suggestion-bot")(diff);
 ```
 
 Save the script somewhere, e.g. `scripts/prettier-diff.sh`, then use it as
 follows:
 
 ```sh
-scripts/prettier-diff.sh | yarn suggestion-bot
+scripts/prettier-diff.sh $(git ls-files '*.js')
 ```
