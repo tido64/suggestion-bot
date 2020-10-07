@@ -80,7 +80,6 @@ module.exports["FIXTURE_PIPED_GH_PAYLOAD"] = {
     {
       path: "src/GitHubClient.js",
       line: 95,
-      line_length: 65,
       side: "RIGHT",
       body: concatStrings(
         "```suggestion",
@@ -195,7 +194,6 @@ module.exports["FIXTURE_UNIDIFF_GH_PAYLOAD"] = {
     {
       path: "src/Graphics/TextureAllocator.gl.h",
       line: 22,
-      line_length: 59,
       side: "RIGHT",
       start_line: 21,
       start_side: "RIGHT",
@@ -209,7 +207,6 @@ module.exports["FIXTURE_UNIDIFF_GH_PAYLOAD"] = {
     {
       path: "src/Graphics/VertexArray.h",
       line: 56,
-      line_length: 10,
       side: "RIGHT",
       start_line: 53,
       start_side: "RIGHT",
