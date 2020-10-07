@@ -30,6 +30,20 @@ function makeOctokit(options) {
 }
 
 /**
+ * Trims comment for fields not defined in DraftPullRequestReviewThread.
+ *
+ * GitHub type checks the payload sent to it and fails the request if there are
+ * unknown fields.
+ *
+ * @param {import("./makeComments").Comment} comment
+ * @returns {Omit<import("./makeComments").Comment, "line_length">}
+ */
+// eslint-disable-next-line no-unused-vars
+function trimComment({ line_length, ...rest }) {
+  return rest;
+}
+
+/**
  * Submits a code review with suggestions with specified diff and options.
  * @param {string} diff
  * @param {Options} [options]
@@ -70,7 +84,7 @@ function makeReview(diff, options) {
     repo,
     pull_number: getPullRequestNumber(GITHUB_EVENT_PATH),
     event: c("COMMENT"),
-    comments,
+    comments: comments.map(trimComment),
   };
   return makeOctokit({ auth: GITHUB_TOKEN, ...options })
     .pulls.createReview(review)
