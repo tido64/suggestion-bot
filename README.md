@@ -123,9 +123,9 @@ const diff = process.argv.slice(2).reduce((diff, filepath) => {
 require("suggestion-bot")(diff);
 ```
 
-Save the script somewhere, e.g. `scripts/prettier-diff.sh`, then use it as
-follows:
+Save the script somewhere, e.g. `scripts/prettier-diff.js`, then invoke it with
+Node:
 
 ```sh
-scripts/prettier-diff.sh $(git ls-files '*.js')
+node scripts/prettier-diff.js $(git ls-files '*.js')
 ```
