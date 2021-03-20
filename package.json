@@ -1,16 +1,5 @@
 {
   "name": "suggestion-bot",
-  "license": "MIT",
-  "author": {
-    "name": "Tommy Nguyen",
-    "email": "tn0502@gmail.com"
-  },
-  "main": "src/index.js",
-  "bin": "cli.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/tido64/suggestion-bot.git"
-  },
   "version": "0.0.1-dev",
   "description": "suggestion-bot submits code reviews with suggestions based on your diffs",
   "keywords": [
@@ -22,6 +11,21 @@
     "suggestion"
   ],
   "homepage": "https://github.com/tido64/suggestion-bot",
+  "license": "MIT",
+  "author": {
+    "name": "Tommy Nguyen",
+    "email": "tn0502@gmail.com"
+  },
+  "files": [
+    "cli.js",
+    "src/"
+  ],
+  "main": "src/index.js",
+  "bin": "cli.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tido64/suggestion-bot.git"
+  },
   "scripts": {
     "format": "prettier --end-of-line auto --write $(git ls-files '*.js' '*.yml')",
     "lint": "eslint $(git ls-files '*.js')",
@@ -30,7 +34,7 @@
   "dependencies": {
     "@octokit/rest": "^18.0.0",
     "azure-devops-node-api": "^10.0.0",
-    "parse-diff": "^0.7.0"
+    "parse-diff": "^0.8.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.0",
@@ -40,7 +44,7 @@
     "eslint-plugin-jest": "^24.0.0",
     "eslint-plugin-prettier": "^3.0.0",
     "jest": "^26.0.0",
-    "prettier": "2.1.2",
+    "prettier": "2.2.1",
     "semantic-release": "^17.0.0",
     "typescript": "^4.0.0"
   },

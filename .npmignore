@@ -1,9 +1,0 @@
-*.tgz
-.editorconfig
-.gitattributes
-.github/
-.vscode/
-coverage/
-docs/
-tests/
-tsconfig.json
