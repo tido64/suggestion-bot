@@ -1,3 +1,4 @@
+*.d.ts
 *.tgz
 .DS_Store
 coverage/

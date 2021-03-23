@@ -89,6 +89,7 @@ function transformComment(
  * Submits a code review with suggestions with specified diff and options.
  * @param {string} diff
  * @param {RequestOptions} [options]
+ * @returns {Promise<unknown>}
  */
 function makeReview(diff, options) {
   const {
@@ -192,5 +193,5 @@ function makeReview(diff, options) {
     .catch((e) => console.error(e));
 }
 
-module.exports["getItemPath"] = getItemPath;
-module.exports["makeReview"] = makeReview;
+exports["getItemPath"] = getItemPath;
+exports["makeReview"] = makeReview;
