@@ -47,6 +47,7 @@ function trimComment({ line_length, ...rest }) {
  * Submits a code review with suggestions with specified diff and options.
  * @param {string} diff
  * @param {Options} [options]
+ * @returns {Promise<unknown>}
  */
 function makeReview(diff, options) {
   const { GITHUB_EVENT_PATH, GITHUB_REPOSITORY, GITHUB_TOKEN } = process.env;
@@ -94,4 +95,4 @@ function makeReview(diff, options) {
     });
 }
 
-module.exports["makeReview"] = makeReview;
+exports["makeReview"] = makeReview;

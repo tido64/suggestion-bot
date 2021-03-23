@@ -1,16 +1,5 @@
 {
   "name": "suggestion-bot",
-  "license": "MIT",
-  "author": {
-    "name": "Tommy Nguyen",
-    "email": "tn0502@gmail.com"
-  },
-  "main": "src/index.js",
-  "bin": "cli.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/tido64/suggestion-bot.git"
-  },
   "version": "0.0.1-dev",
   "description": "suggestion-bot submits code reviews with suggestions based on your diffs",
   "keywords": [
@@ -22,6 +11,21 @@
     "suggestion"
   ],
   "homepage": "https://github.com/tido64/suggestion-bot",
+  "license": "MIT",
+  "author": {
+    "name": "Tommy Nguyen",
+    "email": "tn0502@gmail.com"
+  },
+  "files": [
+    "cli.js",
+    "src/"
+  ],
+  "main": "src/index.js",
+  "bin": "cli.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tido64/suggestion-bot.git"
+  },
   "scripts": {
     "format": "prettier --end-of-line auto --write $(git ls-files '*.js' '*.yml')",
     "lint": "eslint $(git ls-files '*.js')",
