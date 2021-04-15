@@ -55,16 +55,9 @@ If your CI is hosted by Azure DevOps, replace `GITHUB_TOKEN` with
    yarn add suggestion-bot --dev
    ```
 
-2. Create a GitHub
-   [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
-
-3. Create a new
-   [secret for your repository](https://docs.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets#creating-encrypted-secrets-for-a-repository).
-   Set the name of your secret (e.g. `GH_TOKEN`), and your personal access token
-   as value.
-
-4. Configure your GitHub workflow so `suggestion-bot` can access the secret via
-   an environment variable `GITHUB_TOKEN`, e.g.:
+2. Configure your GitHub workflow so `suggestion-bot` can access the
+   `GITHUB_TOKEN` secret provided by GitHub via an environment variable with the
+   same name:
 
    ```yaml
    # .github/workflows/build.yml
@@ -83,7 +76,7 @@ If your CI is hosted by Azure DevOps, replace `GITHUB_TOKEN` with
          - name: ClangFormat
            if: ${{ github.event_name == 'pull_request' }}
            env:
-             GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
            run: scripts/clang-format-diff.sh | yarn suggestion-bot
    ```
 
