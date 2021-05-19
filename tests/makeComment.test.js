@@ -21,43 +21,48 @@ function extractChunk(...diff) {
 describe("makeComment", () => {
   const { makeComment } = require("../src/makeComments");
 
-  test("single line template", () => {
-    expect(
-      makeComment("test", {
-        content: "",
-        changes: [],
-        oldStart: 0,
-        oldLines: 1,
-        newStart: 0,
-        newLines: 0,
-      })
-    ).toEqual({
-      path: "test",
-      line: 0,
-      line_length: 0,
+  test("adds line", () => {
+    const [to, chunk] = extractChunk(
+      "diff --git a/src/Graphics/TextureAllocator.gl.h b/src/Graphics/TextureAllocator.gl.h",
+      "index 25ee722d..f17e3c88 100644",
+      "--- a/src/Graphics/TextureAllocator.gl.h",
+      "+++ b/src/Graphics/TextureAllocator.gl.h",
+      "@@ -21 +21,2 @@ namespace rainbow::graphics::gl",
+      "+        [[maybe_unused, nodiscard]]",
+      "         auto max_size() const noexcept -> size_t override;"
+    );
+    expect(makeComment(to, chunk)).toEqual({
+      path: "src/Graphics/TextureAllocator.gl.h",
+      line: 20,
+      line_length: 58,
       side: "RIGHT",
-      body: "```suggestion\n\n```\n",
+      body: concatStrings(
+        "```suggestion",
+        "        [[maybe_unused, nodiscard]]",
+        "        auto max_size() const noexcept -> size_t override;",
+        "```"
+      ),
     });
   });
 
-  test("multi line template", () => {
-    expect(
-      makeComment("test", {
-        content: "",
-        changes: [],
-        oldStart: 0,
-        oldLines: 2,
-        newStart: 0,
-        newLines: 0,
-      })
-    ).toEqual({
-      path: "test",
-      line: 1,
-      line_length: 0,
+  test("removes line", () => {
+    const [to, chunk] = extractChunk(
+      "diff --git a/src/Graphics/TextureAllocator.gl.h b/src/Graphics/TextureAllocator.gl.h",
+      "index 25ee722d..f17e3c88 100644",
+      "--- a/src/Graphics/TextureAllocator.gl.h",
+      "+++ b/src/Graphics/TextureAllocator.gl.h",
+      "@@ -21 +21,2 @@ namespace rainbow::graphics::gl",
+      "-        [[maybe_unused, nodiscard]]",
+      "-        auto max_size() const noexcept -> size_t override;"
+    );
+    expect(makeComment(to, chunk)).toEqual({
+      path: "src/Graphics/TextureAllocator.gl.h",
+      line: 22,
+      line_length: 58,
       side: "RIGHT",
-      start_line: 0,
+      start_line: 21,
       start_side: "RIGHT",
-      body: "```suggestion\n\n```\n",
+      body: concatStrings("```suggestion", "```"),
     });
   });
 

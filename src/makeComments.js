@@ -60,12 +60,70 @@ function trimContext(changes) {
  * @returns {Comment}
  */
 function makeComment(file, { changes, oldStart, oldLines }) {
+  const path = file.split("\\").join("/");
+
   const [trimmedChanges, startContext, endContext] = trimContext(changes);
   const line = oldStart + oldLines - endContext - 1;
+
+  if (changes.every((c) => c.type !== "del")) {
+    // Additions only
+    const start = changes.findIndex((c) => c.type === "add");
+    const context = start === 0 ? "bottom" : "top";
+
+    const contextChange =
+      context === "bottom"
+        ? changes.find((c) => c.type === "normal")
+        : changes[start - 1];
+    if (!contextChange) {
+      throw new Error("Cannot add lines without context");
+    }
+
+    const contextLine = contextChange.content.slice(1);
+    return {
+      path,
+      line,
+      line_length: contextLine.length,
+      side: "RIGHT",
+      body: [
+        "```suggestion",
+        ...(context === "top" ? [contextLine] : []),
+        trimmedChanges
+          .filter((line) => line.type === "add")
+          .map((line) => line.content.slice(1))
+          .join("\n"),
+        ...(context === "bottom" ? [contextLine] : []),
+        "```",
+        "",
+      ].join("\n"),
+      // @ts-ignore `position` is not required if using `comfort-fade`
+      position: undefined,
+    };
+  } else if (changes.every((c) => c.type !== "add")) {
+    // Deletions only
+    const startLine = oldStart + changes.findIndex((c) => c.type === "del");
+    const end = findLastIndex(changes, (c) => c.type === "del");
+    const line = oldStart + end;
+    return {
+      path,
+      line,
+      line_length: changes[end].content.length - 1,
+      side: "RIGHT",
+      ...(startLine !== line
+        ? {
+            start_line: startLine,
+            start_side: "RIGHT",
+          }
+        : undefined),
+      body: ["```suggestion", "```", ""].join("\n"),
+      // @ts-ignore `position` is not required if using `comfort-fade`
+      position: undefined,
+    };
+  }
+
   const startLine = oldStart + startContext;
   const lastMarkedLine = findLastIndex(trimmedChanges, (c) => c.type !== "add");
   return {
-    path: file.split("\\").join("/"),
+    path,
     line,
     line_length:
       lastMarkedLine >= 0 ? trimmedChanges[lastMarkedLine].content.length : 0,
