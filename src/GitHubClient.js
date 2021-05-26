@@ -50,7 +50,12 @@ function trimComment({ line_length, ...rest }) {
  * @returns {Promise<unknown>}
  */
 function makeReview(diff, options) {
-  const { GITHUB_EVENT_PATH, GITHUB_REPOSITORY, GITHUB_TOKEN } = process.env;
+  const {
+    GITHUB_EVENT_PATH,
+    GITHUB_REPOSITORY,
+    GITHUB_SHA,
+    GITHUB_TOKEN,
+  } = process.env;
   if (!GITHUB_EVENT_PATH || !GITHUB_REPOSITORY || !GITHUB_TOKEN) {
     if (!GITHUB_TOKEN) {
       console.error("`GITHUB_TOKEN` must be set to your GitHub access token");
@@ -79,20 +84,57 @@ function makeReview(diff, options) {
   const { c } = require("./Helpers");
 
   const [owner, repo] = GITHUB_REPOSITORY.split("/");
+  const pullRequestNumber = getPullRequestNumber(GITHUB_EVENT_PATH);
   const review = {
     accept: "application/vnd.github.comfort-fade-preview+json",
     owner,
     repo,
-    pull_number: getPullRequestNumber(GITHUB_EVENT_PATH),
+    pull_number: pullRequestNumber,
     event: c("COMMENT"),
     comments: comments.map(trimComment),
   };
-  return makeOctokit({ auth: GITHUB_TOKEN, ...options })
-    .pulls.createReview(review)
-    .catch((e) => {
-      console.error(e);
-      console.dir(review, { depth: null });
-    });
+  const octokit = makeOctokit({ auth: GITHUB_TOKEN, ...options });
+  return new Promise((resolve) => {
+    octokit.pulls
+      .createReview(review)
+      .then(resolve)
+      .catch((e) => {
+        // We'll get a 422 if we tried to post review comments to files that
+        // weren't changed in the PR. Retry with a normal comment instead.
+        if (e.name === "HttpError" && e.status === 422) {
+          octokit
+            .request(
+              `POST /repos/${owner}/${repo}/issues/${pullRequestNumber}/comments`,
+              {
+                owner,
+                repo,
+                issue_number: pullRequestNumber,
+                body: [
+                  "Changes were detected (e.g. due to formatters, linters, etc.) in the following files:",
+                  "",
+                  ...comments.map(({ path, line, start_line }) => {
+                    const lines =
+                      typeof start_line === "number"
+                        ? `${start_line}-L${line}`
+                        : line;
+                    return `- https://github.com/${owner}/${repo}/blob/${GITHUB_SHA}/${path}#L${lines}`;
+                  }),
+                ].join("\n"),
+              }
+            )
+            .then(resolve)
+            .catch((e) => {
+              console.error(e);
+              console.dir(review, { depth: null });
+              resolve(e);
+            });
+        } else {
+          console.error(e);
+          console.dir(review, { depth: null });
+          resolve(e);
+        }
+      });
+  });
 }
 
 exports["makeReview"] = makeReview;
