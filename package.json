@@ -92,6 +92,7 @@
     ]
   },
   "release": {
+    "branches": ["trunk"],
     "tagFormat": "${version}"
   }
 }
