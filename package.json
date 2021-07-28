@@ -10,7 +10,7 @@
     "review",
     "suggestion"
   ],
-  "homepage": "https://github.com/tido64/suggestion-bot",
+  "homepage": "https://github.com/tido64/suggestion-bot#readme",
   "license": "MIT",
   "author": {
     "name": "Tommy Nguyen",
@@ -87,12 +87,13 @@
       "/node_modules/"
     ],
     "roots": [
-      "<rootDir>/src/",
       "<rootDir>/tests/"
     ]
   },
   "release": {
-    "branches": ["trunk"],
+    "branches": [
+      "trunk"
+    ],
     "tagFormat": "${version}"
   }
 }
