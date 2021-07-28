@@ -1,5 +1,7 @@
 *.d.ts
 *.tgz
 .DS_Store
+.yarn/*
+!.yarn/releases/
 coverage/
 node_modules/
