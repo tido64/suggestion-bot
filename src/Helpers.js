@@ -40,6 +40,6 @@ function trimQuotes(p) {
   return p;
 }
 
-module.exports["c"] = c;
-module.exports["concatStrings"] = concatStrings;
-module.exports["trimQuotes"] = trimQuotes;
+exports.c = c;
+exports.concatStrings = concatStrings;
+exports.trimQuotes = trimQuotes;

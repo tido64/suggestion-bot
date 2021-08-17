@@ -176,5 +176,5 @@ function makeComments(diff) {
   );
 }
 
-module.exports["makeComment"] = makeComment;
-module.exports["makeComments"] = makeComments;
+exports.makeComment = makeComment;
+exports.makeComments = makeComments;

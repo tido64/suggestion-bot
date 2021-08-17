@@ -45,7 +45,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-prettier", "virtual:79801c8bbf94935d3e4c3c94c73a750239770bab32ce53a778676dcb340229904bd80c8dd19edd1f239b6e6c8325e98724d9fd3f7eb62e199ee2c84af10c02a2#npm:3.4.0"],
             ["jest", "virtual:79801c8bbf94935d3e4c3c94c73a750239770bab32ce53a778676dcb340229904bd80c8dd19edd1f239b6e6c8325e98724d9fd3f7eb62e199ee2c84af10c02a2#npm:27.0.6"],
             ["parse-diff", "npm:0.8.1"],
-            ["prettier", "npm:2.2.1"],
+            ["prettier", "npm:2.3.2"],
             ["semantic-release", "npm:17.4.4"],
             ["typescript", "patch:typescript@npm%3A4.3.5#~builtin<compat/typescript>::version=4.3.5&hash=d8b4e7"]
           ],
@@ -3745,7 +3745,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/prettier", null],
             ["eslint", "npm:7.32.0"],
             ["eslint-config-prettier", null],
-            ["prettier", "npm:2.2.1"],
+            ["prettier", "npm:2.3.2"],
             ["prettier-linter-helpers", "npm:1.0.0"]
           ],
           "packagePeers": [
@@ -7429,10 +7429,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["prettier", [
-        ["npm:2.2.1", {
-          "packageLocation": "./.yarn/cache/prettier-npm-2.2.1-e0670992f8-800de2df3d.zip/node_modules/prettier/",
+        ["npm:2.3.2", {
+          "packageLocation": "./.yarn/cache/prettier-npm-2.3.2-4467ec48dc-17ce5784ac.zip/node_modules/prettier/",
           "packageDependencies": [
-            ["prettier", "npm:2.2.1"]
+            ["prettier", "npm:2.3.2"]
           ],
           "linkType": "HARD",
         }]
@@ -8542,7 +8542,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-prettier", "virtual:79801c8bbf94935d3e4c3c94c73a750239770bab32ce53a778676dcb340229904bd80c8dd19edd1f239b6e6c8325e98724d9fd3f7eb62e199ee2c84af10c02a2#npm:3.4.0"],
             ["jest", "virtual:79801c8bbf94935d3e4c3c94c73a750239770bab32ce53a778676dcb340229904bd80c8dd19edd1f239b6e6c8325e98724d9fd3f7eb62e199ee2c84af10c02a2#npm:27.0.6"],
             ["parse-diff", "npm:0.8.1"],
-            ["prettier", "npm:2.2.1"],
+            ["prettier", "npm:2.3.2"],
             ["semantic-release", "npm:17.4.4"],
             ["typescript", "patch:typescript@npm%3A4.3.5#~builtin<compat/typescript>::version=4.3.5&hash=d8b4e7"]
           ],

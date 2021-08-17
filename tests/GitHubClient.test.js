@@ -9,7 +9,7 @@
 jest.mock("fs");
 
 /**
- * @param {{}} mocks
+ * @param {Record<string, unknown>} mocks
  * @returns {{ auth: string }}
  */
 function mock(mocks) {
@@ -182,10 +182,51 @@ describe("GitHubClient", () => {
 
     await makeReview(
       FIXTURE_UNIDIFF,
-      mock({ createReview: () => Promise.reject("test") })
+      mock({ createReview: () => Promise.reject("HttpError") })
     );
 
-    expect(errorSpy).toHaveBeenCalledWith("test");
+    expect(errorSpy).toHaveBeenCalledWith("HttpError");
+    expect(dirSpy).toHaveBeenCalledWith(FIXTURE_UNIDIFF_GH_PAYLOAD, {
+      depth: null,
+    });
+
+    dirSpy.mockRestore();
+    errorSpy.mockRestore();
+  });
+
+  test("retries with a comment when getting an error due to suggestions to unchanged files", async () => {
+    await makeReview(
+      FIXTURE_UNIDIFF,
+      mock({
+        createReview: () => Promise.reject({ name: "HttpError", status: 422 }),
+
+        /** @type {(url: string, request: Record<string, unknown>) => Promise<void>} */
+        request: (url, request) => {
+          expect(url).toEqual(expect.stringContaining("/issues/0/comments"));
+          expect(request).toEqual(
+            expect.objectContaining({
+              body: expect.stringContaining("Changes were detected"),
+            })
+          );
+          return Promise.resolve();
+        },
+      })
+    );
+  });
+
+  test("dumps the payload when retry with comment fails", async () => {
+    const dirSpy = jest.spyOn(global.console, "dir").mockImplementation();
+    const errorSpy = jest.spyOn(global.console, "error").mockImplementation();
+
+    await makeReview(
+      FIXTURE_UNIDIFF,
+      mock({
+        createReview: () => Promise.reject({ name: "HttpError", status: 422 }),
+        request: () => Promise.reject("HttpError"),
+      })
+    );
+
+    expect(errorSpy).toHaveBeenCalledWith("HttpError");
     expect(dirSpy).toHaveBeenCalledWith(FIXTURE_UNIDIFF_GH_PAYLOAD, {
       depth: null,
     });
