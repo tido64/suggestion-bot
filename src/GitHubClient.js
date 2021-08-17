@@ -50,12 +50,8 @@ function trimComment({ line_length, ...rest }) {
  * @returns {Promise<unknown>}
  */
 function makeReview(diff, options) {
-  const {
-    GITHUB_EVENT_PATH,
-    GITHUB_REPOSITORY,
-    GITHUB_SHA,
-    GITHUB_TOKEN,
-  } = process.env;
+  const { GITHUB_EVENT_PATH, GITHUB_REPOSITORY, GITHUB_SHA, GITHUB_TOKEN } =
+    process.env;
   if (!GITHUB_EVENT_PATH || !GITHUB_REPOSITORY || !GITHUB_TOKEN) {
     if (!GITHUB_TOKEN) {
       console.error("`GITHUB_TOKEN` must be set to your GitHub access token");
@@ -137,4 +133,4 @@ function makeReview(diff, options) {
   });
 }
 
-exports["makeReview"] = makeReview;
+exports.makeReview = makeReview;

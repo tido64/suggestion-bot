@@ -193,5 +193,5 @@ function makeReview(diff, options) {
     .catch((e) => console.error(e));
 }
 
-exports["getItemPath"] = getItemPath;
-exports["makeReview"] = makeReview;
+exports.getItemPath = getItemPath;
+exports.makeReview = makeReview;

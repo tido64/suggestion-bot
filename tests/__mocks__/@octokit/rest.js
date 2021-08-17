@@ -7,12 +7,13 @@
 "use strict";
 
 class Octokit {
-  constructor({ auth, createReview, setAuth }) {
+  constructor({ auth, createReview, request, setAuth }) {
     this.pulls = {
       createReview,
     };
+    this.request = request;
     setAuth && setAuth(auth);
   }
 }
 
-module.exports["Octokit"] = Octokit;
+exports.Octokit = Octokit;

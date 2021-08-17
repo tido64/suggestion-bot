@@ -60,5 +60,5 @@ class WebApi {
   }
 }
 
-module.exports["getPersonalAccessTokenHandler"] = (authToken) => authToken;
-module.exports["WebApi"] = WebApi;
+exports.getPersonalAccessTokenHandler = (authToken) => authToken;
+exports.WebApi = WebApi;
