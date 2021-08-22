@@ -7,14 +7,20 @@
 // LICENSE file in the root directory of this source tree.
 //
 
+const { program } = require("commander");
+program
+  .version(require("./package.json").version)
+  .description("submit code reviews with suggestions based on your diffs")
+  .option("-m, --message <msg>", "use the specified message as the PR comment")
+  .argument("[diff]", "the diff to create suggestions from");
+
 const suggest = require("./src/index");
 if (process.stdin.isTTY) {
-  const { [1]: command, [2]: diff } = process.argv;
+  const { [0]: diff } = program.parse(process.argv).args;
   if (diff) {
-    suggest(diff);
+    suggest(diff, program.opts());
   } else {
-    const path = require("path");
-    console.log(`usage: ${path.basename(command)} <diff>`);
+    program.help();
   }
 } else {
   let data = "";
@@ -23,5 +29,5 @@ if (process.stdin.isTTY) {
   stdin.on("data", (chunk) => {
     data += chunk;
   });
-  stdin.on("end", () => suggest(data));
+  stdin.on("end", () => suggest(data, program.parse(process.argv).opts()));
 }
