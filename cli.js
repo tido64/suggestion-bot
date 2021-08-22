@@ -12,7 +12,22 @@ program
   .version(require("./package.json").version)
   .description("submit code reviews with suggestions based on your diffs")
   .option("-m, --message <msg>", "use the specified message as the PR comment")
-  .argument("[diff]", "the diff to create suggestions from");
+  .argument("[diff]", "the diff to create suggestions from")
+  .addHelpText(
+    "after",
+    [
+      "",
+      "Examples:",
+      "  # Submit current changes as suggestions",
+      '  GITHUB_TOKEN=<secret> suggestion-bot "$(git diff)"',
+      "",
+      "  # Alternatively, pipe to suggestion-bot",
+      "  # to avoid escape character issues",
+      "  git diff | GITHUB_TOKEN=<secret> suggestion-bot",
+      "",
+      "If your CI is hosted by Azure DevOps, replace `GITHUB_TOKEN` with `AZURE_PERSONAL_ACCESS_TOKEN`.",
+    ].join("\n")
+  );
 
 const suggest = require("./src/index");
 if (process.stdin.isTTY) {

@@ -29,8 +29,8 @@
   "scripts": {
     "build": "yarn clean && yarn lint && tsc",
     "clean": "git clean -dfqx -- src/ test/",
-    "format": "prettier --end-of-line auto --write $(git ls-files '*.js' '*.yml')",
-    "lint": "eslint $(git ls-files '*.js')",
+    "format": "prettier --end-of-line auto --write $(git ls-files '*.js' '*.yml' ':!:.yarn/**/*.js')",
+    "lint": "eslint $(git ls-files '*.js' ':!:.yarn/**/*.js')",
     "test": "jest"
   },
   "dependencies": {

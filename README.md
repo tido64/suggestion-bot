@@ -11,19 +11,26 @@
 
 ## Usage
 
-```sh
-suggestion-bot <diff>
 ```
+Usage: suggestion-bot [options] [diff]
 
-Example:
+submit code reviews with suggestions based on your diffs
 
-```sh
-# Submit current changes as suggestions
-GITHUB_TOKEN=<secret> suggestion-bot "$(git diff)"
+Arguments:
+  diff                 the diff to create suggestions from
 
-# Alternatively, pipe to suggestion-bot
-# to avoid escape character issues
-git diff | GITHUB_TOKEN=<secret> suggestion-bot
+Options:
+  -V, --version        output the version number
+  -m, --message <msg>  use the specified message as the PR comment
+  -h, --help           display help for command
+
+Examples:
+  # Submit current changes as suggestions
+  GITHUB_TOKEN=<secret> suggestion-bot "$(git diff)"
+
+  # Alternatively, pipe to suggestion-bot
+  # to avoid escape character issues
+  git diff | GITHUB_TOKEN=<secret> suggestion-bot
 ```
 
 If your CI is hosted by Azure DevOps, replace `GITHUB_TOKEN` with
