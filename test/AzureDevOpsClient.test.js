@@ -307,13 +307,13 @@ describe("getItemPath", () => {
 
   test("trims leading '/' from item path", () => {
     expect(
-      getItemPath({ item: { path: "tests/AzureDevOpsClient.test.js" } })
-    ).toBe("tests/AzureDevOpsClient.test.js");
+      getItemPath({ item: { path: "test/AzureDevOpsClient.test.js" } })
+    ).toBe("test/AzureDevOpsClient.test.js");
     expect(
-      getItemPath({ item: { path: "/tests/AzureDevOpsClient.test.js" } })
-    ).toBe("tests/AzureDevOpsClient.test.js");
+      getItemPath({ item: { path: "/test/AzureDevOpsClient.test.js" } })
+    ).toBe("test/AzureDevOpsClient.test.js");
     expect(
-      getItemPath({ item: { path: "//tests/AzureDevOpsClient.test.js" } })
-    ).toBe("/tests/AzureDevOpsClient.test.js");
+      getItemPath({ item: { path: "//test/AzureDevOpsClient.test.js" } })
+    ).toBe("/test/AzureDevOpsClient.test.js");
   });
 });

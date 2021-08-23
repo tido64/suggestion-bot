@@ -195,17 +195,18 @@ describe("GitHubClient", () => {
   });
 
   test("retries with a comment when getting an error due to suggestions to unchanged files", async () => {
+    const message = "Changes were made in the following files:";
     await makeReview(
       FIXTURE_UNIDIFF,
       mock({
+        message,
         createReview: () => Promise.reject({ name: "HttpError", status: 422 }),
-
         /** @type {(url: string, request: Record<string, unknown>) => Promise<void>} */
         request: (url, request) => {
           expect(url).toEqual(expect.stringContaining("/issues/0/comments"));
           expect(request).toEqual(
             expect.objectContaining({
-              body: expect.stringContaining("Changes were detected"),
+              body: expect.stringContaining(message),
             })
           );
           return Promise.resolve();

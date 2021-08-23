@@ -25,10 +25,9 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install
         run: yarn
-      - name: Lint
+      - name: Build
         run: |
-          yarn lint
-          yarn tsc
+          yarn build
       - name: Test
         run: yarn test --coverage
       - name: Upload coverage report

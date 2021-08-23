@@ -6,7 +6,7 @@
 //
 // @ts-check
 
-/** @typedef {{ auth: string; }} Options */
+/** @typedef {import("./index").Options} Options */
 
 /**
  * Returns the pull request number of the current build.
@@ -46,10 +46,10 @@ function trimComment({ line_length, ...rest }) {
 /**
  * Submits a code review with suggestions with specified diff and options.
  * @param {string} diff
- * @param {Options} [options]
+ * @param {Options=} options
  * @returns {Promise<unknown>}
  */
-function makeReview(diff, options) {
+function makeReview(diff, { message, ...options } = {}) {
   const { GITHUB_EVENT_PATH, GITHUB_REPOSITORY, GITHUB_SHA, GITHUB_TOKEN } =
     process.env;
   if (!GITHUB_EVENT_PATH || !GITHUB_REPOSITORY || !GITHUB_TOKEN) {
@@ -106,7 +106,7 @@ function makeReview(diff, options) {
                 repo,
                 issue_number: pullRequestNumber,
                 body: [
-                  "Changes were detected (e.g. due to formatters, linters, etc.) in the following files:",
+                  message,
                   "",
                   ...comments.map(({ path, line, start_line }) => {
                     const lines =

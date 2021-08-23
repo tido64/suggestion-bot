@@ -27,13 +27,16 @@
     "url": "https://github.com/tido64/suggestion-bot.git"
   },
   "scripts": {
-    "format": "prettier --end-of-line auto --write $(git ls-files '*.js' '*.yml')",
-    "lint": "eslint $(git ls-files '*.js')",
+    "build": "yarn clean && yarn lint && tsc",
+    "clean": "git clean -dfqx -- src/ test/",
+    "format": "prettier --end-of-line auto --write $(git ls-files '*.js' '*.yml' ':!:.yarn/**/*.js')",
+    "lint": "eslint $(git ls-files '*.js' ':!:.yarn/**/*.js')",
     "test": "jest"
   },
   "dependencies": {
     "@octokit/rest": "^18.0.0",
     "azure-devops-node-api": "^10.0.0",
+    "commander": "^8.1.0",
     "parse-diff": "^0.8.0"
   },
   "devDependencies": {
@@ -83,11 +86,11 @@
   },
   "jest": {
     "coveragePathIgnorePatterns": [
-      "/__fixtures__",
+      "/__fixtures__/",
       "/node_modules/"
     ],
     "roots": [
-      "<rootDir>/tests/"
+      "test/"
     ]
   },
   "release": {
