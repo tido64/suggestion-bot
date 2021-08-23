@@ -199,7 +199,7 @@ describe("GitHubClient", () => {
         },
       })
     );
-    expect(errorSpy).not.toBeCalled();
+    expect(errorSpy).not.toHaveBeenCalled();
   });
 
   test("retries with a comment when getting a server internal error", async () => {
@@ -221,7 +221,7 @@ describe("GitHubClient", () => {
         },
       })
     );
-    expect(errorSpy).not.toBeCalled();
+    expect(errorSpy).not.toHaveBeenCalled();
   });
 
   test("dumps the payload when retry with comment fails", async () => {
