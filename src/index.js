@@ -28,9 +28,9 @@ function getClient() {
 /**
  * Submits a code review with suggestions with specified diff.
  * @param {string} diff
- * @param {Options} options
+ * @param {Options=} options
  */
-function suggest(diff, options) {
+function suggest(diff, options = {}) {
   const { makeReview } = getClient();
   return makeReview(diff, {
     ...options,
