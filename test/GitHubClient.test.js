@@ -30,6 +30,9 @@ describe("GitHubClient", () => {
 
   const { GITHUB_EVENT_PATH, GITHUB_REPOSITORY } = process.env;
 
+  const dirSpy = jest.spyOn(global.console, "dir");
+  const errorSpy = jest.spyOn(global.console, "error");
+
   beforeEach(() => {
     const { env } = process;
     env["GITHUB_TOKEN"] = "auth-token";
@@ -48,9 +51,12 @@ describe("GitHubClient", () => {
     env["GITHUB_REPOSITORY"] = GITHUB_REPOSITORY;
   });
 
-  test("rejects if `GITHUB_EVENT_PATH` is missing", async () => {
-    const errorSpy = jest.spyOn(global.console, "error").mockImplementation();
+  afterEach(() => {
+    dirSpy.mockReset();
+    errorSpy.mockReset();
+  });
 
+  test("rejects if `GITHUB_EVENT_PATH` is missing", async () => {
     delete process.env["GITHUB_EVENT_PATH"];
     await expect(makeReview("")).rejects.toThrow(
       "One or several environment variables are missing"
@@ -58,13 +64,9 @@ describe("GitHubClient", () => {
     expect(errorSpy).toHaveBeenCalledWith(
       "`GITHUB_EVENT_PATH` should've been defined by GitHub Actions"
     );
-
-    errorSpy.mockRestore();
   });
 
   test("rejects if `GITHUB_REPOSITORY` is missing", async () => {
-    const errorSpy = jest.spyOn(global.console, "error").mockImplementation();
-
     delete process.env["GITHUB_REPOSITORY"];
     await expect(makeReview("")).rejects.toThrow(
       "One or several environment variables are missing"
@@ -72,13 +74,9 @@ describe("GitHubClient", () => {
     expect(errorSpy).toHaveBeenCalledWith(
       "`GITHUB_REPOSITORY` should've been defined by GitHub Actions"
     );
-
-    errorSpy.mockRestore();
   });
 
   test("rejects if `GITHUB_TOKEN` is missing", async () => {
-    const errorSpy = jest.spyOn(global.console, "error").mockImplementation();
-
     delete process.env["GITHUB_TOKEN"];
     await expect(makeReview("")).rejects.toThrow(
       "One or several environment variables are missing"
@@ -86,13 +84,9 @@ describe("GitHubClient", () => {
     expect(errorSpy).toHaveBeenCalledWith(
       "`GITHUB_TOKEN` must be set to your GitHub access token"
     );
-
-    errorSpy.mockRestore();
   });
 
   test("rejects if multiple environment variables are missing", async () => {
-    const errorSpy = jest.spyOn(global.console, "error").mockImplementation();
-
     delete process.env["GITHUB_EVENT_PATH"];
     delete process.env["GITHUB_REPOSITORY"];
     delete process.env["GITHUB_TOKEN"];
@@ -109,8 +103,6 @@ describe("GitHubClient", () => {
     expect(errorSpy).toHaveBeenCalledWith(
       "`GITHUB_TOKEN` must be set to your GitHub access token"
     );
-
-    errorSpy.mockRestore();
   });
 
   test("fetches auth token from environment variable", async () => {
@@ -177,9 +169,6 @@ describe("GitHubClient", () => {
   });
 
   test("dumps the payload on failure", async () => {
-    const dirSpy = jest.spyOn(global.console, "dir").mockImplementation();
-    const errorSpy = jest.spyOn(global.console, "error").mockImplementation();
-
     await makeReview(
       FIXTURE_UNIDIFF,
       mock({ createReview: () => Promise.reject("HttpError") })
@@ -189,9 +178,6 @@ describe("GitHubClient", () => {
     expect(dirSpy).toHaveBeenCalledWith(FIXTURE_UNIDIFF_GH_PAYLOAD, {
       depth: null,
     });
-
-    dirSpy.mockRestore();
-    errorSpy.mockRestore();
   });
 
   test("retries with a comment when getting an error due to suggestions to unchanged files", async () => {
@@ -213,12 +199,32 @@ describe("GitHubClient", () => {
         },
       })
     );
+    expect(errorSpy).not.toBeCalled();
+  });
+
+  test("retries with a comment when getting a server internal error", async () => {
+    const message = "Changes were made in the following files:";
+    await makeReview(
+      FIXTURE_UNIDIFF,
+      mock({
+        message,
+        createReview: () => Promise.reject({ name: "HttpError", status: 500 }),
+        /** @type {(url: string, request: Record<string, unknown>) => Promise<void>} */
+        request: (url, request) => {
+          expect(url).toEqual(expect.stringContaining("/issues/0/comments"));
+          expect(request).toEqual(
+            expect.objectContaining({
+              body: expect.stringContaining(message),
+            })
+          );
+          return Promise.resolve();
+        },
+      })
+    );
+    expect(errorSpy).not.toBeCalled();
   });
 
   test("dumps the payload when retry with comment fails", async () => {
-    const dirSpy = jest.spyOn(global.console, "dir").mockImplementation();
-    const errorSpy = jest.spyOn(global.console, "error").mockImplementation();
-
     await makeReview(
       FIXTURE_UNIDIFF,
       mock({
@@ -231,8 +237,5 @@ describe("GitHubClient", () => {
     expect(dirSpy).toHaveBeenCalledWith(FIXTURE_UNIDIFF_GH_PAYLOAD, {
       depth: null,
     });
-
-    dirSpy.mockRestore();
-    errorSpy.mockRestore();
   });
 });

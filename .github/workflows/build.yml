@@ -25,6 +25,12 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install
         run: yarn
+      - name: Format
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          yarn format
+          git diff | yarn node cli.js
       - name: Build
         run: |
           yarn build
