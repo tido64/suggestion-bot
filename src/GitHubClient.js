@@ -97,7 +97,7 @@ function makeReview(diff, { message, ...options } = {}) {
       .catch((e) => {
         // We'll get a 422 if we tried to post review comments to files that
         // weren't changed in the PR. Retry with a normal comment instead.
-        if (e.name === "HttpError" && e.status === 422) {
+        if (e.name === "HttpError" && (e.status === 422 || e.status === 500)) {
           octokit
             .request(
               `POST /repos/${owner}/${repo}/issues/${pullRequestNumber}/comments`,
