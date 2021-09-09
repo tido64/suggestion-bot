@@ -1,0 +1,7 @@
+{
+  "extends": ["config:base", "schedule:earlyMondays"],
+  "labels": ["dependencies"],
+  "pin": false,
+  "postUpdateOptions": ["yarnDedupeHighest"],
+  "timezone": "Europe/Oslo"
+}
