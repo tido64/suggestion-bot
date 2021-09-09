@@ -2,6 +2,6 @@
   "extends": ["config:base", "schedule:earlyMondays"],
   "labels": ["dependencies"],
   "postUpdateOptions": ["yarnDedupeHighest"],
-  "rangeStrategy": "replace",
+  "rangeStrategy": "update-lockfile",
   "timezone": "Europe/Oslo"
 }
