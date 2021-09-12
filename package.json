@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@octokit/rest": "^18.0.0",
-    "azure-devops-node-api": "^10.0.0",
+    "azure-devops-node-api": "^11.0.0",
     "commander": "^8.1.0",
     "parse-diff": "^0.8.0"
   },

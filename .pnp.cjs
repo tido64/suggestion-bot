@@ -38,7 +38,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@octokit/rest", "npm:18.10.0"],
             ["@types/jest", "npm:27.0.1"],
             ["@types/node", "npm:14.17.15"],
-            ["azure-devops-node-api", "npm:10.2.2"],
+            ["azure-devops-node-api", "npm:11.0.1"],
             ["codecov", "npm:3.8.3"],
             ["commander", "npm:8.1.0"],
             ["eslint", "npm:7.32.0"],
@@ -2395,10 +2395,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["azure-devops-node-api", [
-        ["npm:10.2.2", {
-          "packageLocation": "./.yarn/cache/azure-devops-node-api-npm-10.2.2-9fa8b37da9-5741660bf5.zip/node_modules/azure-devops-node-api/",
+        ["npm:11.0.1", {
+          "packageLocation": "./.yarn/cache/azure-devops-node-api-npm-11.0.1-2e6931719b-a899e1094d.zip/node_modules/azure-devops-node-api/",
           "packageDependencies": [
-            ["azure-devops-node-api", "npm:10.2.2"],
+            ["azure-devops-node-api", "npm:11.0.1"],
             ["tunnel", "npm:0.0.6"],
             ["typed-rest-client", "npm:1.8.6"]
           ],
@@ -8545,7 +8545,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@octokit/rest", "npm:18.10.0"],
             ["@types/jest", "npm:27.0.1"],
             ["@types/node", "npm:14.17.15"],
-            ["azure-devops-node-api", "npm:10.2.2"],
+            ["azure-devops-node-api", "npm:11.0.1"],
             ["codecov", "npm:3.8.3"],
             ["commander", "npm:8.1.0"],
             ["eslint", "npm:7.32.0"],
