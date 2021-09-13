@@ -1715,13 +1715,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"azure-devops-node-api@npm:^10.0.0":
-  version: 10.2.2
-  resolution: "azure-devops-node-api@npm:10.2.2"
+"azure-devops-node-api@npm:^11.0.0":
+  version: 11.0.1
+  resolution: "azure-devops-node-api@npm:11.0.1"
   dependencies:
     tunnel: 0.0.6
     typed-rest-client: ^1.8.4
-  checksum: 5741660bf539bd96e738c267ce1290e95f4d6696244128dc389b5554056d326e689ef9e061fcd8c0c7dcd44ea4212e07b8a256d5a4da2d0f1292ea2c33682e7d
+  checksum: a899e1094dc32c215370e62cb17943929139f24b24cbe739446d3187133f55c6a48f525bd7686239b20529789f70f1cd0920ae3f16fda41fdfd9f91813c5e1ce
   languageName: node
   linkType: hard
 
@@ -7136,7 +7136,7 @@ fsevents@^2.3.2:
     "@octokit/rest": ^18.0.0
     "@types/jest": ^27.0.0
     "@types/node": ^14.0.0
-    azure-devops-node-api: ^10.0.0
+    azure-devops-node-api: ^11.0.0
     codecov: ^3.0.0
     commander: ^8.1.0
     eslint: ^7.0.0
