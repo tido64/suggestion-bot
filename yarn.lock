@@ -896,11 +896,11 @@ __metadata:
   linkType: hard
 
 "@octokit/auth-token@npm:^2.4.4":
-  version: 2.4.5
-  resolution: "@octokit/auth-token@npm:2.4.5"
+  version: 2.5.0
+  resolution: "@octokit/auth-token@npm:2.5.0"
   dependencies:
     "@octokit/types": ^6.0.3
-  checksum: 49620119949870e63d5758be4f9065167a617b4ff343d2bf17f89497dffe17dad2a158e8a3311afc25157a83757a19835f01d66ae53a3583ccf425b60a20968b
+  checksum: 45949296c09abcd6beb4c3f69d45b0c1f265f9581d2a9683cf4d1800c4cf8259c2f58d58e44c16c20bffb85a0282a176c0d51f4af300e428b863f27b910e6297
   languageName: node
   linkType: hard
 
@@ -949,13 +949,13 @@ __metadata:
   linkType: hard
 
 "@octokit/plugin-paginate-rest@npm:^2.16.0":
-  version: 2.16.0
-  resolution: "@octokit/plugin-paginate-rest@npm:2.16.0"
+  version: 2.16.5
+  resolution: "@octokit/plugin-paginate-rest@npm:2.16.5"
   dependencies:
-    "@octokit/types": ^6.26.0
+    "@octokit/types": ^6.31.0
   peerDependencies:
     "@octokit/core": ">=2"
-  checksum: db366cb5810005caf96862f8b8f0032aa183f4d8f8e18b8d2cdac952abf768c5e8580948eacf3b3754bfba2745fbb3101adfe893ffe3c3512640ca06db40ee89
+  checksum: dba2b22e8da063b8fb7809ecc096c60e2733622b1924592f3b1aa33d0de3e0082aab586ce5c7dcfbfeab9663e2999bc4889e3cf2be5db828633905523b3318bf
   languageName: node
   linkType: hard
 
@@ -1017,7 +1017,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/types@npm:^6.0.3, @octokit/types@npm:^6.16.1, @octokit/types@npm:^6.26.0, @octokit/types@npm:^6.31.1":
+"@octokit/types@npm:^6.0.3, @octokit/types@npm:^6.16.1, @octokit/types@npm:^6.31.0, @octokit/types@npm:^6.31.1":
   version: 6.31.1
   resolution: "@octokit/types@npm:6.31.1"
   dependencies:
