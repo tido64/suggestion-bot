@@ -948,7 +948,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/plugin-paginate-rest@npm:^2.16.0":
+"@octokit/plugin-paginate-rest@npm:^2.16.4":
   version: 2.16.5
   resolution: "@octokit/plugin-paginate-rest@npm:2.16.5"
   dependencies:
@@ -1006,14 +1006,14 @@ __metadata:
   linkType: hard
 
 "@octokit/rest@npm:^18.0.0":
-  version: 18.11.2
-  resolution: "@octokit/rest@npm:18.11.2"
+  version: 18.11.3
+  resolution: "@octokit/rest@npm:18.11.3"
   dependencies:
     "@octokit/core": ^3.5.1
-    "@octokit/plugin-paginate-rest": ^2.16.0
+    "@octokit/plugin-paginate-rest": ^2.16.4
     "@octokit/plugin-request-log": ^1.0.4
     "@octokit/plugin-rest-endpoint-methods": 5.11.3
-  checksum: 259e371588ce41844ac74d1ef3499130e2d8d3f199e2744f7c7ada288bfb6588f2b7a47523436ca4af680864d27bb8300d64f1013e45bae4f082ca225a461590
+  checksum: e5d2dd15364521d51705eed55fc50990a5d9a2b4ba08fa12ba13f882882398f1d8ffaf84d0fe7f86195d352d9119e75a7acec0983be5c09952054c3522f280ce
   languageName: node
   linkType: hard
 
