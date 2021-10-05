@@ -121,7 +121,10 @@ function makeComment(file, { changes, oldStart, oldLines }) {
   }
 
   const startLine = oldStart + startContext;
-  const lastMarkedLine = findLastIndex(trimmedChanges, (c) => c.type !== "add");
+  const lastMarkedLine = findLastIndex(
+    trimmedChanges,
+    (c) => c.type !== "add" && !c.content.match(/ No newline at end of file$/)
+  );
   return {
     path,
     line,
