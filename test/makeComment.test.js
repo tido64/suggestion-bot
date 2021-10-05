@@ -280,4 +280,31 @@ describe("makeComment", () => {
       ),
     });
   });
+
+  test("diff with no new line at the end", () => {
+    const [to, chunk] = extractChunk(
+      "diff --git a/src/index.ts", 
+      "index 3f8c7c6e0..59c31a76c 100644",
+      "--- a/src/index.ts", 
+      "+++ b/index.ts",
+      "@@ -1 +1 @@",
+      `-export { default as EmployeesAlsoAsked } from "./EAAAccordion";`, 
+      `\ No newline at end of file`,
+      `+export { default as EmployeesAlsoAsked } from "./EAAAccordion";`
+    );
+
+    expect(makeComment(to,chunk)).toEqual({
+      path: 'index.ts',
+      line: 1,
+      line_length: 64,
+      side: 'RIGHT',
+      position: undefined,
+      body: concatStrings(
+        "```suggestion",
+        `No newline at end of file`,
+        `export { default as EmployeesAlsoAsked } from "./EAAAccordion";`,
+        "```"
+      ),
+    })
+  })
 });
