@@ -40,7 +40,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:14.17.29"],
             ["azure-devops-node-api", "npm:11.0.1"],
             ["codecov", "npm:3.8.3"],
-            ["commander", "npm:8.2.0"],
+            ["commander", "npm:8.3.0"],
             ["eslint", "npm:8.1.0"],
             ["eslint-plugin-jest", "virtual:79801c8bbf94935d3e4c3c94c73a750239770bab32ce53a778676dcb340229904bd80c8dd19edd1f239b6e6c8325e98724d9fd3f7eb62e199ee2c84af10c02a2#npm:25.2.2"],
             ["eslint-plugin-prettier", "virtual:79801c8bbf94935d3e4c3c94c73a750239770bab32ce53a778676dcb340229904bd80c8dd19edd1f239b6e6c8325e98724d9fd3f7eb62e199ee2c84af10c02a2#npm:4.0.0"],
@@ -3039,10 +3039,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["commander", [
-        ["npm:8.2.0", {
-          "packageLocation": "./.yarn/cache/commander-npm-8.2.0-c925691796-e868805bc2.zip/node_modules/commander/",
+        ["npm:8.3.0", {
+          "packageLocation": "./.yarn/cache/commander-npm-8.3.0-c0d18c66d5-0f82321821.zip/node_modules/commander/",
           "packageDependencies": [
-            ["commander", "npm:8.2.0"]
+            ["commander", "npm:8.3.0"]
           ],
           "linkType": "HARD",
         }]
@@ -8519,7 +8519,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:14.17.29"],
             ["azure-devops-node-api", "npm:11.0.1"],
             ["codecov", "npm:3.8.3"],
-            ["commander", "npm:8.2.0"],
+            ["commander", "npm:8.3.0"],
             ["eslint", "npm:8.1.0"],
             ["eslint-plugin-jest", "virtual:79801c8bbf94935d3e4c3c94c73a750239770bab32ce53a778676dcb340229904bd80c8dd19edd1f239b6e6c8325e98724d9fd3f7eb62e199ee2c84af10c02a2#npm:25.2.2"],
             ["eslint-plugin-prettier", "virtual:79801c8bbf94935d3e4c3c94c73a750239770bab32ce53a778676dcb340229904bd80c8dd19edd1f239b6e6c8325e98724d9fd3f7eb62e199ee2c84af10c02a2#npm:4.0.0"],
