@@ -120,10 +120,12 @@ function makeComment(file, { changes, oldStart, oldLines }) {
     };
   }
 
+  const noNewlineMarker = /^\\ No newline at end of file$/m;
+
   const startLine = oldStart + startContext;
   const lastMarkedLine = findLastIndex(
     trimmedChanges,
-    (c) => c.type !== "add" && !c.content.match(/ No newline at end of file$/)
+    (c) => c.type !== "add" && !noNewlineMarker.test(c.content)
   );
   return {
     path,
@@ -140,7 +142,9 @@ function makeComment(file, { changes, oldStart, oldLines }) {
     body: [
       "```suggestion",
       trimmedChanges
-        .filter((line) => line.type !== "del")
+        .filter(
+          (line) => line.type !== "del" && !noNewlineMarker.test(line.content)
+        )
         .map((line) => line.content.slice(1))
         .join("\n"),
       "```",

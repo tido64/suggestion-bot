@@ -289,7 +289,7 @@ describe("makeComment", () => {
       "+++ b/index.ts",
       "@@ -1 +1 @@",
       `-export { default as EmployeesAlsoAsked } from "./EAAAccordion";`,
-      `\ No newline at end of file`, // eslint-disable-line
+      `\\ No newline at end of file`,
       `+export { default as EmployeesAlsoAsked } from "./EAAAccordion";`
     );
 
@@ -301,7 +301,6 @@ describe("makeComment", () => {
       position: undefined,
       body: concatStrings(
         "```suggestion",
-        `No newline at end of file`,
         `export { default as EmployeesAlsoAsked } from "./EAAAccordion";`,
         "```"
       ),
