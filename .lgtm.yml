@@ -1,4 +1,5 @@
 path_classifiers:
   generated:
     - ".pnp.cjs"
+    - ".pnp.loader.mjs"
     - ".yarn/releases"
