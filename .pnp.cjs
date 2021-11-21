@@ -36,7 +36,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",
           "packageDependencies": [
             ["@octokit/rest", "npm:18.12.0"],
-            ["@types/jest", "npm:27.0.2"],
+            ["@types/jest", "npm:27.0.3"],
             ["@types/node", "npm:14.17.33"],
             ["azure-devops-node-api", "npm:11.0.1"],
             ["codecov", "npm:3.8.2"],
@@ -1824,10 +1824,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@types/jest", [
-        ["npm:27.0.2", {
-          "packageLocation": "./.yarn/cache/@types-jest-npm-27.0.2-f9ba43c7f9-814ad5f5d2.zip/node_modules/@types/jest/",
+        ["npm:27.0.3", {
+          "packageLocation": "./.yarn/cache/@types-jest-npm-27.0.3-c4c49cbce2-3683a99458.zip/node_modules/@types/jest/",
           "packageDependencies": [
-            ["@types/jest", "npm:27.0.2"],
+            ["@types/jest", "npm:27.0.3"],
             ["jest-diff", "npm:27.3.1"],
             ["pretty-format", "npm:27.3.1"]
           ],
@@ -3713,7 +3713,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["eslint-plugin-jest", "virtual:79801c8bbf94935d3e4c3c94c73a750239770bab32ce53a778676dcb340229904bd80c8dd19edd1f239b6e6c8325e98724d9fd3f7eb62e199ee2c84af10c02a2#npm:25.2.4"],
             ["@types/eslint", null],
-            ["@types/jest", "npm:27.0.2"],
+            ["@types/jest", "npm:27.0.3"],
             ["@types/typescript-eslint__eslint-plugin", null],
             ["@typescript-eslint/eslint-plugin", null],
             ["@typescript-eslint/experimental-utils", "virtual:0e9c3042fe69647a278b3128aa56ecbb1e74a6b8908f56a411a4d995066874c99dd7b6250352da741e3883d6b4a47da842683b21547dd1a6ad2faf747f2a97e2#npm:5.3.0"],
@@ -8503,7 +8503,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["suggestion-bot", "workspace:."],
             ["@octokit/rest", "npm:18.12.0"],
-            ["@types/jest", "npm:27.0.2"],
+            ["@types/jest", "npm:27.0.3"],
             ["@types/node", "npm:14.17.33"],
             ["azure-devops-node-api", "npm:11.0.1"],
             ["codecov", "npm:3.8.2"],
