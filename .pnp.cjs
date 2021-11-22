@@ -37,7 +37,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@octokit/rest", "npm:18.12.0"],
             ["@types/jest", "npm:27.0.3"],
-            ["@types/node", "npm:14.17.33"],
+            ["@types/node", "npm:14.17.34"],
             ["azure-devops-node-api", "npm:11.0.1"],
             ["codecov", "npm:3.8.2"],
             ["commander", "npm:8.3.0"],
@@ -1853,10 +1853,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@types/node", [
-        ["npm:14.17.33", {
-          "packageLocation": "./.yarn/cache/@types-node-npm-14.17.33-ac058936d4-47ee8d5a39.zip/node_modules/@types/node/",
+        ["npm:14.17.34", {
+          "packageLocation": "./.yarn/cache/@types-node-npm-14.17.34-1d7f20f643-803a7532b6.zip/node_modules/@types/node/",
           "packageDependencies": [
-            ["@types/node", "npm:14.17.33"]
+            ["@types/node", "npm:14.17.34"]
           ],
           "linkType": "HARD",
         }],
@@ -8504,7 +8504,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["suggestion-bot", "workspace:."],
             ["@octokit/rest", "npm:18.12.0"],
             ["@types/jest", "npm:27.0.3"],
-            ["@types/node", "npm:14.17.33"],
+            ["@types/node", "npm:14.17.34"],
             ["azure-devops-node-api", "npm:11.0.1"],
             ["codecov", "npm:3.8.2"],
             ["commander", "npm:8.3.0"],
