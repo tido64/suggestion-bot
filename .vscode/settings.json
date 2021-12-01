@@ -1,6 +1,5 @@
 {
   "search.exclude": {
-    "**/.pnp.*": true,
     "**/.yarn": true
   },
   "eslint.nodePath": ".yarn/sdks",
