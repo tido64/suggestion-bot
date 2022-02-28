@@ -1705,12 +1705,12 @@ __metadata:
   linkType: hard
 
 "azure-devops-node-api@npm:^11.0.0":
-  version: 11.1.0
-  resolution: "azure-devops-node-api@npm:11.1.0"
+  version: 11.1.1
+  resolution: "azure-devops-node-api@npm:11.1.1"
   dependencies:
     tunnel: 0.0.6
     typed-rest-client: ^1.8.4
-  checksum: 2b465407a5704e4faa4786ef7c4937c70eb608bc967b29a9b0d956b9babbd7ae18d95535f544cd443c855005861a6e71187d9cd21ab16311bdcf29ab5909ecd4
+  checksum: 4a62262c9e1e2153f8cb926103b730edad3a3d252ae5acb681d217018a315baa7b863eadde4db5a042139eafe841e7f4d2defa83e286aed267611c0e8083080a
   languageName: node
   linkType: hard
 
