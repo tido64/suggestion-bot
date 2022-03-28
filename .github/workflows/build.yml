@@ -17,7 +17,7 @@ jobs:
       - name: Deduplicate packages
         run: yarn dedupe --check
       - name: Cache /.yarn/cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: .yarn/cache
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
