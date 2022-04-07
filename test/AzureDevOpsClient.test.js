@@ -310,7 +310,8 @@ describe("AzureDevOpsClient", () => {
 
     await expect(task).rejects.toBe("test");
 
-    expect(errorSpy).not.toHaveBeenCalled();
+    expect(errorSpy).toHaveBeenCalledWith("test");
+
     errorSpy.mockRestore();
   });
 });

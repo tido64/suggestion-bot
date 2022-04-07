@@ -191,10 +191,10 @@ function makeReview(diff, { fail, ...options } = {}) {
         })
     )
     .catch((e) => {
+      console.error(e);
       if (fail) {
         throw e;
       }
-      console.error(e);
     });
 }
 
