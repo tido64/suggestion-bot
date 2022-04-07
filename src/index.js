@@ -6,7 +6,7 @@
 //
 // @ts-check
 
-/** @typedef {{ auth?: string; message?: string; }} Options */
+/** @typedef {{ auth?: string; fail?: boolean; message?: string; }} Options */
 
 /**
  * Returns the appropriate client for the provided access token.

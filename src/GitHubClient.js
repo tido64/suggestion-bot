@@ -49,7 +49,7 @@ function trimComment({ line_length, ...rest }) {
  * @param {Options=} options
  * @returns {Promise<unknown>}
  */
-function makeReview(diff, { message, ...options } = {}) {
+function makeReview(diff, { fail, message, ...options } = {}) {
   const { GITHUB_EVENT_PATH, GITHUB_REPOSITORY, GITHUB_SHA, GITHUB_TOKEN } =
     process.env;
   if (!GITHUB_EVENT_PATH || !GITHUB_REPOSITORY || !GITHUB_TOKEN) {
@@ -90,7 +90,7 @@ function makeReview(diff, { message, ...options } = {}) {
     comments: comments.map(trimComment),
   };
   const octokit = makeOctokit({ auth: GITHUB_TOKEN, ...options });
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     octokit.pulls
       .createReview(review)
       .then(resolve)
@@ -122,12 +122,20 @@ function makeReview(diff, { message, ...options } = {}) {
             .catch((e) => {
               console.error(e);
               console.dir(review, { depth: null });
-              resolve(e);
+              if (fail) {
+                reject(e);
+              } else {
+                resolve(e);
+              }
             });
         } else {
           console.error(e);
           console.dir(review, { depth: null });
-          resolve(e);
+          if (fail) {
+            reject(e);
+          } else {
+            resolve(e);
+          }
         }
       });
   });

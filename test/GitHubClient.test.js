@@ -238,4 +238,36 @@ describe("GitHubClient", () => {
       depth: null,
     });
   });
+
+  test("throw on failure", async () => {
+    const task = makeReview(
+      FIXTURE_UNIDIFF,
+      mock({ createReview: () => Promise.reject("HttpError"), fail: true })
+    );
+
+    await expect(task).rejects.toBe("HttpError");
+
+    expect(errorSpy).toHaveBeenCalledWith("HttpError");
+    expect(dirSpy).toHaveBeenCalledWith(FIXTURE_UNIDIFF_GH_PAYLOAD, {
+      depth: null,
+    });
+  });
+
+  test("throws when retry with comment fails", async () => {
+    const task = makeReview(
+      FIXTURE_UNIDIFF,
+      mock({
+        createReview: () => Promise.reject({ name: "HttpError", status: 422 }),
+        request: () => Promise.reject("HttpError"),
+        fail: true,
+      })
+    );
+
+    await expect(task).rejects.toBe("HttpError");
+
+    expect(errorSpy).toHaveBeenCalledWith("HttpError");
+    expect(dirSpy).toHaveBeenCalledWith(FIXTURE_UNIDIFF_GH_PAYLOAD, {
+      depth: null,
+    });
+  });
 });
