@@ -294,6 +294,26 @@ describe("AzureDevOpsClient", () => {
 
     errorSpy.mockRestore();
   });
+
+  test("throws on failure", async () => {
+    const errorSpy = jest.spyOn(global.console, "error").mockImplementation();
+
+    const task = makeReview(
+      FIXTURE_UNIDIFF,
+      mock({
+        createThread: () => Promise.reject("test"),
+        getPullRequestIterationChanges: () =>
+          Promise.resolve(FIXTURE_UNIDIFF_ADO_ITERATION_CHANGES),
+        fail: true,
+      })
+    );
+
+    await expect(task).rejects.toBe("test");
+
+    expect(errorSpy).toHaveBeenCalledWith("test");
+
+    errorSpy.mockRestore();
+  });
 });
 
 describe("getItemPath", () => {

@@ -88,10 +88,10 @@ function transformComment(
 /**
  * Submits a code review with suggestions with specified diff and options.
  * @param {string} diff
- * @param {RequestOptions} [options]
+ * @param {import("./index").Options & RequestOptions=} options
  * @returns {Promise<unknown>}
  */
-function makeReview(diff, options) {
+function makeReview(diff, { fail, ...options } = {}) {
   const {
     AZURE_PERSONAL_ACCESS_TOKEN: authToken,
     BUILD_REPOSITORY_ID: repositoryId,
@@ -190,7 +190,12 @@ function makeReview(diff, options) {
             });
         })
     )
-    .catch((e) => console.error(e));
+    .catch((e) => {
+      console.error(e);
+      if (fail) {
+        throw e;
+      }
+    });
 }
 
 exports.getItemPath = getItemPath;

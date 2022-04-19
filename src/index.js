@@ -6,7 +6,7 @@
 //
 // @ts-check
 
-/** @typedef {{ auth?: string; message?: string; }} Options */
+/** @typedef {{ auth?: string; fail?: boolean; message?: string; }} Options */
 
 /**
  * Returns the appropriate client for the provided access token.
@@ -29,15 +29,20 @@ function getClient() {
  * Submits a code review with suggestions with specified diff.
  * @param {string} diff
  * @param {Options=} options
+ * @returns {Promise<void>}
  */
-function suggest(diff, options = {}) {
+async function suggest(diff, options = {}) {
   const { makeReview } = getClient();
-  return makeReview(diff, {
-    ...options,
-    message:
-      options.message ||
-      "Changes were made (e.g. by formatters, linters, etc.) in the following files:",
-  });
+  try {
+    await makeReview(diff, {
+      ...options,
+      message:
+        options.message ||
+        "Changes were made (e.g. by formatters, linters, etc.) in the following files:",
+    });
+  } catch (_) {
+    process.exit(1);
+  }
 }
 
 module.exports = suggest;

@@ -12,6 +12,7 @@ program
   .version(require("./package.json").version)
   .description("submit code reviews with suggestions based on your diffs")
   .option("-m, --message <msg>", "use the specified message as the PR comment")
+  .option("-f, --fail", "fail if comments could not be posted")
   .argument("[diff]", "the diff to create suggestions from")
   .addHelpText(
     "after",
