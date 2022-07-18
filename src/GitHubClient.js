@@ -22,11 +22,12 @@ function getPullRequestNumber(eventPath) {
 /**
  * Creates an Octokit instance.
  * @param {Options} options
- * @returns {import("@octokit/rest").Octokit}
  */
 function makeOctokit(options) {
-  const { Octokit } = require("@octokit/rest");
-  return new Octokit(options);
+  const { Octokit } = require("@octokit/core");
+  const { restEndpointMethods } = require("@octokit/plugin-rest-endpoint-methods");
+  const RestClient = Octokit.plugin(restEndpointMethods);
+  return new RestClient(options);
 }
 
 /**
@@ -91,7 +92,7 @@ function makeReview(diff, { fail, message, ...options } = {}) {
   };
   const octokit = makeOctokit({ auth: GITHUB_TOKEN, ...options });
   return new Promise((resolve, reject) => {
-    octokit.pulls
+    octokit.rest.pulls
       .createReview(review)
       .then(resolve)
       .catch((e) => {
