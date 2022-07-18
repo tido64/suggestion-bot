@@ -8,12 +8,14 @@
 
 class Octokit {
   constructor({ auth, createReview, request, setAuth }) {
-    this.pulls = {
-      createReview,
+    this.rest = {
+      pulls: {
+        createReview,
+      },
     };
     this.request = request;
     setAuth && setAuth(auth);
   }
 }
 
-exports.Octokit = Octokit;
+exports.Octokit = { plugin: () => Octokit };
