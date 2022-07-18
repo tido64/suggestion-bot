@@ -25,7 +25,9 @@ function getPullRequestNumber(eventPath) {
  */
 function makeOctokit(options) {
   const { Octokit } = require("@octokit/core");
-  const { restEndpointMethods } = require("@octokit/plugin-rest-endpoint-methods");
+  const {
+    restEndpointMethods,
+  } = require("@octokit/plugin-rest-endpoint-methods");
   const RestClient = Octokit.plugin(restEndpointMethods);
   return new RestClient(options);
 }
