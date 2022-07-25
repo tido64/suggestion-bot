@@ -1053,14 +1053,14 @@ __metadata:
   linkType: hard
 
 "@octokit/plugin-rest-endpoint-methods@npm:^6.0.0":
-  version: 6.1.0
-  resolution: "@octokit/plugin-rest-endpoint-methods@npm:6.1.0"
+  version: 6.1.2
+  resolution: "@octokit/plugin-rest-endpoint-methods@npm:6.1.2"
   dependencies:
     "@octokit/types": ^6.40.0
     deprecation: ^2.3.1
   peerDependencies:
     "@octokit/core": ">=3"
-  checksum: 2615476dee64da2a7901a99b3e1aa29e72753bf1375d901cd2527d61ef922319e0a8b2accf53b49b796bec95dc6629c2777d8a56901ad99216b6064a714e0bae
+  checksum: 88ba028da00f73cf8a0471e9ffe0da2ba61c15b91fbaf252e33863bd4115db7dcd3bd426f22a01c7492affe89e37117fc3f0d15569cd5cf5a4b978f1bc22738b
   languageName: node
   linkType: hard
 
