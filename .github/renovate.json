@@ -1,6 +1,12 @@
 {
   "extends": ["config:base", "schedule:earlyMondays"],
   "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "groupName": "Octokit",
+      "matchPackagePrefixes": ["@octokit/"]
+    }
+  ],
   "postUpdateOptions": ["yarnDedupeHighest"],
   "rangeStrategy": "update-lockfile",
   "stabilityDays": 7,
