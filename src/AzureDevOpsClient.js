@@ -88,7 +88,7 @@ function transformComment(
 /**
  * Submits a code review with suggestions with specified diff and options.
  * @param {string} diff
- * @param {import("./index").Options & RequestOptions=} options
+ * @param {import("./index").Options & RequestOptions} options
  * @returns {Promise<unknown>}
  */
 function makeReview(diff, { fail, ...options } = {}) {
