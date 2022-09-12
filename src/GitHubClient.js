@@ -49,7 +49,7 @@ function trimComment({ line_length, ...rest }) {
 /**
  * Submits a code review with suggestions with specified diff and options.
  * @param {string} diff
- * @param {Options=} options
+ * @param {Options} options
  * @returns {Promise<unknown>}
  */
 function makeReview(diff, { fail, message, ...options } = {}) {
