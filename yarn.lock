@@ -2248,10 +2248,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^8.1.0":
-  version: 8.3.0
-  resolution: "commander@npm:8.3.0"
-  checksum: 0f82321821fc27b83bd409510bb9deeebcfa799ff0bf5d102128b500b7af22872c0c92cb6a0ebc5a4cf19c6b550fba9cedfa7329d18c6442a625f851377bacf0
+"commander@npm:^9.0.0":
+  version: 9.4.1
+  resolution: "commander@npm:9.4.1"
+  checksum: bfb18e325a5bdf772763c2213d5c7d9e77144d944124e988bcd8e5e65fb6d45d5d4e86b09155d0f2556c9a59c31e428720e57968bcd050b2306e910a0bf3cf13
   languageName: node
   linkType: hard
 
@@ -6568,7 +6568,7 @@ __metadata:
     "@types/node": ^18.0.0
     azure-devops-node-api: ^11.0.0
     codecov: ^3.0.0
-    commander: ^8.1.0
+    commander: ^9.0.0
     eslint: ^8.0.0
     eslint-plugin-jest: ^27.0.0
     eslint-plugin-prettier: ^4.0.0
