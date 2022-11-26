@@ -1,13 +1,11 @@
 name: "CodeQL"
-
 on:
   push:
-    branches: [ "trunk" ]
+    branches:
+      - trunk
   pull_request:
-    branches: [ "trunk" ]
   schedule:
-    - cron: "14 13 * * 0"
-
+    - cron: 14 13 * * 0
 jobs:
   analyze:
     name: Analyze
@@ -16,25 +14,20 @@ jobs:
       actions: read
       contents: read
       security-events: write
-
     strategy:
       fail-fast: false
       matrix:
-        language: [ javascript ]
-
+        language: [javascript]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
         with:
           languages: ${{ matrix.language }}
           queries: +security-and-quality
-
       - name: Autobuild
         uses: github/codeql-action/autobuild@v2
-
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
         with:
