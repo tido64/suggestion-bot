@@ -7,7 +7,7 @@
 // @ts-check
 
 const parse = require("parse-diff");
-const { concatStrings } = require("../src/Helpers");
+const { concatStrings } = require("../src/helpers");
 
 /**
  * @param  {...string} diff

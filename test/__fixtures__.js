@@ -6,7 +6,7 @@
 //
 // @ts-check
 
-const { concatStrings } = require("../src/Helpers");
+const { concatStrings } = require("../src/helpers");
 
 exports.FIXTURE_PIPED = concatStrings(
   `--- "src/GitHubClient.js"      2020-07-26 20:24:35.497737700 +0200`,

@@ -7,7 +7,7 @@
 // @ts-check
 
 describe("trimQuotes", () => {
-  const { trimQuotes } = require("../src/Helpers");
+  const { trimQuotes } = require("../src/helpers");
 
   test("trims only leading and trailing quotes", () => {
     expect(trimQuotes('""')).toBe("");
