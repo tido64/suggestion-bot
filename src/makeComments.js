@@ -166,7 +166,7 @@ function makeComments(diff) {
     return [];
   }
 
-  const { trimQuotes } = require("./Helpers");
+  const { trimQuotes } = require("./helpers");
   return files.reduce(
     /** @type {(comments: Comment[], file: File) => Comment[]} */
     (comments, file) => {

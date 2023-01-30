@@ -80,7 +80,7 @@ function makeReview(diff, { fail, message, ...options } = {}) {
     return Promise.resolve();
   }
 
-  const { c } = require("./Helpers");
+  const { c } = require("./helpers");
 
   const [owner, repo] = GITHUB_REPOSITORY.split("/");
   const pullRequestNumber = getPullRequestNumber(GITHUB_EVENT_PATH);
