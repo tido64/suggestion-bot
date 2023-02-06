@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@octokit/core": "^4.0.0",
-    "@octokit/plugin-rest-endpoint-methods": "^6.0.0",
+    "@octokit/plugin-rest-endpoint-methods": "^7.0.0",
     "azure-devops-node-api": "^11.0.0",
     "commander": "^8.1.0",
     "parse-diff": "^0.10.0"
