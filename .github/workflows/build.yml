@@ -1,4 +1,4 @@
-name: build
+name: ci
 on:
   push:
     branches:
@@ -6,6 +6,36 @@ on:
   pull_request:
 jobs:
   build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v3.6.0
+        with:
+          node-version: 16
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Cache /.yarn/cache
+        uses: actions/cache@v3
+        with:
+          path: .yarn/cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install
+        run: yarn
+      - name: Build
+        run: |
+          yarn build
+      - name: Test
+        run: yarn test --coverage
+      - name: Upload coverage report
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: yarn codecov --token="$CODECOV_TOKEN" --disable=gcov
+  review:
+    permissions:
+      issues: write
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - name: Set up Node.js
@@ -30,16 +60,31 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn format
-          git diff | yarn node cli.js
-      - name: Build
-        run: |
-          yarn build
-      - name: Test
-        run: yarn test --coverage
-      - name: Upload coverage report
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        run: yarn codecov --token="$CODECOV_TOKEN" --disable=gcov
+          if [[ -n "$GITHUB_TOKEN" ]]; then
+            git diff | yarn suggestion-bot
+          fi
+          git diff --exit-code
+  release:
+    permissions:
+      contents: write
+    needs: [build, review]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v3.6.0
+        with:
+          node-version: 16
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Cache /.yarn/cache
+        uses: actions/cache@v3
+        with:
+          path: .yarn/cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install
+        run: yarn
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
