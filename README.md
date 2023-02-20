@@ -39,8 +39,9 @@ If your CI is hosted by Azure DevOps, replace `GITHUB_TOKEN` with
 ## Requirements
 
 - Host your code on [GitHub](https://github.com/)
-- A GitHub
-  [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
+- `GITHUB_TOKEN` permissions:
+  - `pull-requests: write` — required for creating code reviews
+  - `issues: write` — fallback in case creating a review fails
 
 -- or --
 
