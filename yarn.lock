@@ -1728,13 +1728,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"azure-devops-node-api@npm:^11.0.0":
-  version: 11.2.0
-  resolution: "azure-devops-node-api@npm:11.2.0"
+"azure-devops-node-api@npm:^12.0.0":
+  version: 12.0.0
+  resolution: "azure-devops-node-api@npm:12.0.0"
   dependencies:
     tunnel: 0.0.6
     typed-rest-client: ^1.8.4
-  checksum: 52e84379b4ce71ad8a79470ba89e1d1217b28ee3670c7e484e1b1d9c210acf406ab09132c241cb481f78354df701dae7752ba3c4e3d28b2b6c0b0ff2d9eb7199
+  checksum: a6e142c61f71ace9cd3fd814607d47d68b443065e50735b596c4d5057de16345f1eb40f4e2b5bcae2b60497483cf54fc7d9c4136a3568c01345cc34165e9b8ef
   languageName: node
   linkType: hard
 
@@ -6527,7 +6527,7 @@ __metadata:
     "@octokit/plugin-rest-endpoint-methods": ^7.0.0
     "@types/jest": ^29.0.0
     "@types/node": ^18.0.0
-    azure-devops-node-api: ^11.0.0
+    azure-devops-node-api: ^12.0.0
     codecov: ^3.0.0
     commander: ^8.1.0
     eslint: ^8.0.0
