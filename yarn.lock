@@ -5572,10 +5572,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"parse-diff@npm:^0.10.0":
-  version: 0.10.0
-  resolution: "parse-diff@npm:0.10.0"
-  checksum: c5add658a58ce802d13dddd129873a0c3a675c5e7140fae374f7fcbb22f60f1c0a30ae322e3e2b066ef456f71cfcf85332028f7c21e0c3ec3f84037b4e13e967
+"parse-diff@npm:^0.11.0":
+  version: 0.11.1
+  resolution: "parse-diff@npm:0.11.1"
+  checksum: d904b37596c6957ac4c9709b79cd383eeb6188beeaf2032ed4d4a3ca76e05ac9315030d0d88999dde9d032347bbc4fbd58c4e85169ce34ddf31e701fc8ea1329
   languageName: node
   linkType: hard
 
@@ -6530,7 +6530,7 @@ __metadata:
     eslint: ^8.0.0
     eslint-plugin-jest: ^27.0.0
     jest: ^29.0.0
-    parse-diff: ^0.10.0
+    parse-diff: ^0.11.0
     prettier: ^3.0.0
     semantic-release: ^19.0.3
     typescript: ^5.0.0
