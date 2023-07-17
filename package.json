@@ -29,7 +29,7 @@
   "scripts": {
     "build": "yarn clean && yarn lint && tsc",
     "clean": "git clean -dfqx -- src/ test/",
-    "format": "prettier --end-of-line auto --write $(git ls-files '*.js' '*.yml' ':!:.yarn/**/*.js')",
+    "format": "prettier --write $(git ls-files '*.js' '*.md' '*.yml' ':!:.yarn/**/*.js')",
     "lint": "eslint $(git ls-files '*.js' ':!:.yarn/**/*.js')",
     "suggest": "suggestion-bot",
     "test": "jest"
@@ -82,6 +82,20 @@
     ],
     "roots": [
       "test/"
+    ]
+  },
+  "prettier": {
+    "endOfLine": "auto",
+    "trailingComma": "es5",
+    "overrides": [
+      {
+        "files": [
+          "*.md"
+        ],
+        "options": {
+          "proseWrap": "always"
+        }
+      }
     ]
   },
   "release": {
