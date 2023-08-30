@@ -52,7 +52,7 @@
     "semantic-release": "^19.0.3",
     "typescript": "^5.0.0"
   },
-  "packageManager": "yarn@3.4.1",
+  "packageManager": "yarn@3.6.3",
   "eslintConfig": {
     "env": {
       "es6": true,
