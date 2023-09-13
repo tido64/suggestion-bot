@@ -13,7 +13,7 @@ jobs:
         with:
           node-version: 18
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Cache /.yarn/cache
         uses: actions/cache@v3
         with:
@@ -43,7 +43,7 @@ jobs:
         with:
           node-version: 18
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Deduplicate packages
         run: yarn dedupe --check
       - name: Cache /.yarn/cache
@@ -75,7 +75,7 @@ jobs:
         with:
           node-version: 18
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Cache /.yarn/cache
         uses: actions/cache@v3
         with:
