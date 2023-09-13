@@ -6,7 +6,16 @@
 //
 // @ts-check
 
-/** @typedef {{ auth?: string; fail?: boolean; message?: string; }} Options */
+/**
+ * @typedef {{
+ *   auth?: string;
+ *   fail?: boolean;
+ *   message?: string;
+ *   fs?: typeof import("node:fs");
+ *   azdev?: typeof import("azure-devops-node-api");
+ *   octokit?: typeof import("@octokit/core");
+ * }} Options
+ */
 
 /**
  * Returns the appropriate client for the provided access token.

@@ -11,11 +11,11 @@
 /**
  * Returns the pull request number of the current build.
  * @param {string} eventPath Path of the file with the complete webhook event payload.
+ * @param {Options} options
  * @returns {number}
  */
-function getPullRequestNumber(eventPath) {
-  const fs = require("fs");
-  const e = JSON.parse(fs.readFileSync(eventPath, "utf8"));
+function getPullRequestNumber(eventPath, { fs = require("fs") }) {
+  const e = JSON.parse(fs.readFileSync(eventPath, { encoding: "utf-8" }));
   return e.pull_request.number;
 }
 
@@ -23,8 +23,8 @@ function getPullRequestNumber(eventPath) {
  * Creates an Octokit instance.
  * @param {Options} options
  */
-function makeOctokit(options) {
-  const { Octokit } = require("@octokit/core");
+function makeOctokit({ octokit, ...options }) {
+  const { Octokit } = octokit || require("@octokit/core");
   const {
     restEndpointMethods,
   } = require("@octokit/plugin-rest-endpoint-methods");
@@ -83,7 +83,7 @@ function makeReview(diff, { fail, message, ...options } = {}) {
   const { c } = require("./helpers");
 
   const [owner, repo] = GITHUB_REPOSITORY.split("/");
-  const pullRequestNumber = getPullRequestNumber(GITHUB_EVENT_PATH);
+  const pullRequestNumber = getPullRequestNumber(GITHUB_EVENT_PATH, options);
   const review = {
     accept: "application/vnd.github.comfort-fade-preview+json",
     owner,

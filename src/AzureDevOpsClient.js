@@ -7,12 +7,13 @@
 // @ts-check
 
 /**
- * @typedef {import("azure-devops-node-api/interfaces/common/VsoBaseInterfaces").IRequestOptions} RequestOptions
+ * @typedef {import("azure-devops-node-api/interfaces/common/VsoBaseInterfaces").IRequestOptions} IRequestOptions
  * @typedef {import("azure-devops-node-api/interfaces/GitInterfaces").GitPullRequestChange} GitPullRequestChange
  * @typedef {import("azure-devops-node-api/interfaces/GitInterfaces").GitPullRequestCommentThread} GitPullRequestCommentThread
  * @typedef {import("./makeComments").Comment} Comment
  * @typedef {{ [filePath: string]: number }} ChangeTrackingIdMap
  * @typedef {(changes: ChangeTrackingIdMap, change: GitPullRequestChange) => (ChangeTrackingIdMap)} ChangeTrackingIdMapReducer
+ * @typedef {IRequestOptions & { azdev?: typeof import("azure-devops-node-api"); }} RequestOptions
  */
 /**
  * @template U
@@ -24,10 +25,13 @@
  * Establishes a connection to Azure DevOps instance.
  * @param {string} serverUrl
  * @param {string} authToken
- * @param {RequestOptions} [options]
+ * @param {RequestOptions} options
  */
-function connect(serverUrl, authToken, options) {
-  const azdev = require("azure-devops-node-api");
+function connect(
+  serverUrl,
+  authToken,
+  { azdev = require("azure-devops-node-api"), ...options }
+) {
   const authHandler = azdev.getPersonalAccessTokenHandler(authToken);
   const vsts = new azdev.WebApi(serverUrl, authHandler, options);
   return vsts.connect().then(() => vsts.getGitApi());

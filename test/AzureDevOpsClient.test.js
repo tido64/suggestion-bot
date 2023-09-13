@@ -7,15 +7,89 @@
 // @ts-check
 
 /**
+ * @typedef {import("azure-devops-node-api/GitApi").GitApi} GitApi
  * @typedef {import("azure-devops-node-api/interfaces/GitInterfaces").GitPullRequestCommentThread} GitPullRequestCommentThread
+ * @typedef {import("azure-devops-node-api/interfaces/common/VsoBaseInterfaces").IRequestHandler} IRequestHandler
+ * @typedef {import("azure-devops-node-api/interfaces/common/VsoBaseInterfaces").IRequestOptions} IRequestOptions
+ * @typedef {Partial<GitApi> & {
+ *   setAuthToken: (handler: IRequestHandler) => void;
+ *   setServerUrl: (url: string) => void;
+ * }} GitApiMock
  */
+
+class WebApi {
+  constructor(
+    /** @type {string} */ serverUrl,
+    /** @type {IRequestHandler} */ authHandler,
+    /** @type {GitApiMock} */ {
+      createThread,
+      getPullRequestIterationChanges,
+      getPullRequestIterations,
+      setAuthToken,
+      setServerUrl,
+    }
+  ) {
+    this._getPullRequestIterationChanges = getPullRequestIterationChanges;
+    this._getPullRequestIterations = getPullRequestIterations;
+    this.createThread = createThread;
+    setAuthToken && setAuthToken(authHandler);
+    setServerUrl && setServerUrl(serverUrl);
+  }
+
+  connect() {
+    return Promise.resolve();
+  }
+
+  getGitApi() {
+    return this;
+  }
+
+  /** @type {GitApi["getPullRequestIterationChanges"]} */
+  getPullRequestIterationChanges(repositoryId, pullRequestId, iterationId) {
+    if (!this._getPullRequestIterationChanges) {
+      // @ts-expect-error For mocking purposes only
+      return Promise.resolve([1]);
+    }
+
+    return this._getPullRequestIterationChanges(
+      repositoryId,
+      pullRequestId,
+      iterationId
+    );
+  }
+
+  /** @type {GitApi["getPullRequestIterations"]} */
+  getPullRequestIterations(
+    repositoryId,
+    pullRequestId,
+    project,
+    includeCommits
+  ) {
+    return this._getPullRequestIterations
+      ? this._getPullRequestIterations(
+          repositoryId,
+          pullRequestId,
+          project,
+          includeCommits
+        )
+      : Promise.resolve([{ id: 1 }]);
+  }
+}
 
 /**
  * @param {{}} mocks
- * @returns {{}}
+ * @returns {import("../src/AzureDevOpsClient").RequestOptions}
  */
 function mock(mocks) {
-  return mocks;
+  return {
+    ...mocks,
+    azdev: {
+      // @ts-expect-error For mocking purposes only
+      getPersonalAccessTokenHandler: (authToken) => authToken,
+      // @ts-expect-error For mocking purposes only
+      WebApi,
+    },
+  };
 }
 
 describe("AzureDevOpsClient", () => {

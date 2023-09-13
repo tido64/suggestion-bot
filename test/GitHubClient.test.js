@@ -6,15 +6,36 @@
 //
 // @ts-check
 
-jest.mock("fs");
+/**
+ * @typedef {import("@octokit/core/dist-types/types").OctokitOptions} OctokitOptions
+ */
+class Octokit {
+  constructor(
+    /** @type {OctokitOptions} */ { auth, createReview, request, setAuth }
+  ) {
+    this.rest = { pulls: { createReview } };
+    this.request = request;
+    setAuth && setAuth(auth);
+  }
+}
 
 /**
  * @param {Record<string, unknown>} mocks
  * @returns {{ auth: string }}
  */
 function mock(mocks) {
-  // @ts-ignore
-  return mocks;
+  return {
+    ...mocks,
+    // @ts-expect-error For mocking purposes only
+    fs: {
+      readFileSync: () => '{ "pull_request": { "number": 0 } }',
+    },
+    octokit: {
+      Octokit: {
+        plugin: () => Octokit,
+      },
+    },
+  };
 }
 
 describe("GitHubClient", () => {
@@ -38,11 +59,6 @@ describe("GitHubClient", () => {
     env["GITHUB_TOKEN"] = "auth-token";
     env["GITHUB_EVENT_PATH"] = "/github/workflow/event.json";
     env["GITHUB_REPOSITORY"] = "tido64/suggestion-bot";
-
-    // @ts-ignore
-    require("fs").__setMockFiles({
-      "/github/workflow/event.json": '{ "pull_request": { "number": 0 } }',
-    });
   });
 
   afterAll(() => {
@@ -242,7 +258,10 @@ describe("GitHubClient", () => {
   test("throw on failure", async () => {
     const task = makeReview(
       FIXTURE_UNIDIFF,
-      mock({ createReview: () => Promise.reject("HttpError"), fail: true })
+      mock({
+        createReview: () => Promise.reject("HttpError"),
+        fail: true,
+      })
     );
 
     await expect(task).rejects.toBe("HttpError");
