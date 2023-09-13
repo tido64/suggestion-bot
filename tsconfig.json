@@ -1,15 +1,27 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "allowJs": true,
-    "checkJs": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
     "declaration": true,
     "emitDeclarationOnly": true,
-    "strict": true,
-    "moduleResolution": "Node",
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true
+    "allowJs": true,
+    "checkJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "target": "ES2019",
+    "pretty": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true
   },
   "include": ["src/*.js", "test/*.js"]
 }

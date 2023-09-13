@@ -29,8 +29,8 @@
   "scripts": {
     "build": "yarn clean && yarn lint && tsc",
     "clean": "git clean -dfqx -- src/ test/",
-    "format": "prettier --write $(git ls-files '*.cjs' '*.js' '*.json' '*.md' '*.yml' ':!:.yarn/**/*.cjs')",
-    "lint": "eslint $(git ls-files '*.js' ':!:.yarn/**/*.js')",
+    "format": "prettier --write $(git ls-files '*.js' '*.json' '*.md' '*.yml' ':!:.yarn/**/*.cjs')",
+    "lint": "eslint $(git ls-files '*.js' ':!:*.config.js' ':!:.yarn/**/*.js')",
     "suggest": "suggestion-bot",
     "test": "jest"
   },
@@ -60,12 +60,12 @@
     "@semantic-release/npm/npm": "link:."
   },
   "eslintConfig": {
-    "extends": "./.github/eslintrc.cjs"
+    "extends": "./.github/eslint.config.js"
   },
   "jest": {
     "preset": "./.github/jest.config.json"
   },
-  "prettier": "./.github/prettierrc.cjs",
+  "prettier": "./.github/prettierrc.json",
   "release": {
     "extends": "./.github/semantic-release.json"
   }
