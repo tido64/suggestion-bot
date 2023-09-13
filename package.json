@@ -29,7 +29,7 @@
   "scripts": {
     "build": "yarn clean && yarn lint && tsc",
     "clean": "git clean -dfqx -- src/ test/",
-    "format": "prettier --write $(git ls-files '*.js' '*.md' '*.yml' ':!:.yarn/**/*.js')",
+    "format": "prettier --write $(git ls-files '*.cjs' '*.js' '*.md' '*.yml' ':!:.yarn/**/*.cjs')",
     "lint": "eslint $(git ls-files '*.js' ':!:.yarn/**/*.js')",
     "suggest": "suggestion-bot",
     "test": "jest"
@@ -60,26 +60,7 @@
     "@semantic-release/npm/npm": "link:."
   },
   "eslintConfig": {
-    "env": {
-      "es6": true,
-      "node": true
-    },
-    "extends": [
-      "eslint:recommended",
-      "plugin:jest/recommended",
-      "plugin:jest/style"
-    ],
-    "globals": {
-      "Atomics": "readonly",
-      "SharedArrayBuffer": "readonly"
-    },
-    "parserOptions": {
-      "ecmaFeatures": {
-        "jsx": true
-      },
-      "ecmaVersion": 2018,
-      "sourceType": "module"
-    }
+    "extends": "./.github/eslintrc.cjs"
   },
   "jest": {
     "coveragePathIgnorePatterns": [
