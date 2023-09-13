@@ -11,8 +11,5 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true
   },
-  "include": [
-    "src/*.js",
-    "test/*.js"
-  ]
+  "include": ["src/*.js", "test/*.js"]
 }

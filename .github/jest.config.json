@@ -1,0 +1,4 @@
+{
+  "coveragePathIgnorePatterns": ["/__fixtures__/", "/node_modules/"],
+  "roots": ["test/"]
+}
