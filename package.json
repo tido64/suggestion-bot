@@ -29,90 +29,44 @@
   "scripts": {
     "build": "yarn clean && yarn lint && tsc",
     "clean": "git clean -dfqx -- src/ test/",
-    "format": "prettier --write $(git ls-files '*.js' '*.md' '*.yml' ':!:.yarn/**/*.js')",
+    "format": "prettier --write $(git ls-files '*.cjs' '*.js' '*.json' '*.md' '*.yml' ':!:.yarn/**/*.cjs')",
     "lint": "eslint $(git ls-files '*.js' ':!:.yarn/**/*.js')",
     "suggest": "suggestion-bot",
     "test": "jest"
   },
   "dependencies": {
-    "@octokit/core": "^4.0.0",
-    "@octokit/plugin-rest-endpoint-methods": "^7.0.0",
-    "azure-devops-node-api": "^12.0.0",
-    "commander": "^8.1.0",
-    "parse-diff": "^0.10.0"
+    "@octokit/core": "^5.0",
+    "@octokit/plugin-rest-endpoint-methods": "^9.0",
+    "azure-devops-node-api": "^12.0",
+    "commander": "^8.1",
+    "parse-diff": "^0.11"
   },
   "devDependencies": {
-    "@types/jest": "^29.0.0",
-    "@types/node": "^18.0.0",
-    "codecov": "^3.0.0",
-    "eslint": "^8.0.0",
-    "eslint-plugin-jest": "^27.0.0",
-    "jest": "^29.0.0",
-    "prettier": "^3.0.0",
-    "semantic-release": "^19.0.3",
-    "typescript": "^5.0.0"
+    "@types/jest": "^29.0",
+    "@types/node": "^18.0",
+    "codecov": "^3.0",
+    "eslint": "^8.0",
+    "eslint-plugin-jest": "^27.0",
+    "jest": "^29.0",
+    "prettier": "^3.0",
+    "semantic-release": "^21.0",
+    "typescript": "^5.0"
   },
-  "packageManager": "yarn@3.4.1",
+  "engines": {
+    "node": ">=18.12"
+  },
+  "packageManager": "yarn@3.6.3",
+  "resolutions": {
+    "@semantic-release/npm/npm": "link:."
+  },
   "eslintConfig": {
-    "env": {
-      "es6": true,
-      "node": true
-    },
-    "extends": [
-      "eslint:recommended",
-      "plugin:jest/recommended",
-      "plugin:jest/style"
-    ],
-    "globals": {
-      "Atomics": "readonly",
-      "SharedArrayBuffer": "readonly"
-    },
-    "parserOptions": {
-      "ecmaFeatures": {
-        "jsx": true
-      },
-      "ecmaVersion": 2018,
-      "sourceType": "module"
-    }
+    "extends": "./.github/eslintrc.cjs"
   },
   "jest": {
-    "coveragePathIgnorePatterns": [
-      "/__fixtures__/",
-      "/node_modules/"
-    ],
-    "roots": [
-      "test/"
-    ]
+    "preset": "./.github/jest.config.json"
   },
-  "prettier": {
-    "endOfLine": "auto",
-    "trailingComma": "es5",
-    "overrides": [
-      {
-        "files": [
-          "*.md"
-        ],
-        "options": {
-          "proseWrap": "always"
-        }
-      }
-    ]
-  },
+  "prettier": "./.github/prettierrc.cjs",
   "release": {
-    "branches": [
-      "trunk"
-    ],
-    "tagFormat": "${version}",
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      "@semantic-release/npm",
-      [
-        "@semantic-release/github",
-        {
-          "successComment": false
-        }
-      ]
-    ]
+    "extends": "./.github/semantic-release.json"
   }
 }
