@@ -1,7 +1,6 @@
 # suggestion-bot
 
 [![build](https://github.com/tido64/suggestion-bot/actions/workflows/build.yml/badge.svg)](https://github.com/tido64/suggestion-bot/actions/workflows/build.yml)
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/tido64/suggestion-bot.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/tido64/suggestion-bot/context:javascript)
 [![codecov](https://codecov.io/gh/tido64/suggestion-bot/branch/trunk/graph/badge.svg)](https://codecov.io/gh/tido64/suggestion-bot)
 [![npm version](https://img.shields.io/npm/v/suggestion-bot)](https://www.npmjs.com/package/suggestion-bot)
 
