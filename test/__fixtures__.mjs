@@ -5,6 +5,7 @@
 // LICENSE file in the root directory of this source tree.
 //
 // @ts-check
+/* node:coverage disable */
 
 import { concatStrings } from "../src/helpers.js";
 
