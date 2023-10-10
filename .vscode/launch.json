@@ -28,19 +28,6 @@
         "GITHUB_SHA": "f3ddadcc488fe0d4ac650a0b3a5aeb72a8cb30cb",
         "GITHUB_TOKEN": "githubToken"
       }
-    },
-    {
-      "name": "Debug Jest Tests",
-      "type": "node",
-      "request": "launch",
-      "runtimeArgs": [
-        "--inspect-brk",
-        "${workspaceRoot}/node_modules/.bin/jest",
-        "--runInBand"
-      ],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "port": 9229
     }
   ]
 }

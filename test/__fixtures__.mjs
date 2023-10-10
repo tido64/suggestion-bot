@@ -6,9 +6,9 @@
 //
 // @ts-check
 
-const { concatStrings } = require("../src/helpers");
+import { concatStrings } from "../src/helpers.js";
 
-exports.FIXTURE_PIPED = concatStrings(
+export const FIXTURE_PIPED = concatStrings(
   `--- "src/GitHubClient.js"      2020-07-26 20:24:35.497737700 +0200`,
   "+++ -   2020-07-26 20:25:43.893994400 +0200",
   "@@ -92,7 +92,7 @@",
@@ -22,7 +22,7 @@ exports.FIXTURE_PIPED = concatStrings(
   "   }, []);"
 );
 
-exports.FIXTURE_PIPED_WINDOWS = concatStrings(
+export const FIXTURE_PIPED_WINDOWS = concatStrings(
   `--- "src\\GitHubClient.js"      2020-07-26 20:24:35.497737700 +0200`,
   "+++ -   2020-07-26 20:25:43.893994400 +0200",
   "@@ -92,7 +92,7 @@",
@@ -36,7 +36,7 @@ exports.FIXTURE_PIPED_WINDOWS = concatStrings(
   "   }, []);"
 );
 
-exports.FIXTURE_PIPED_ADO_ITERATION_CHANGES = {
+export const FIXTURE_PIPED_ADO_ITERATION_CHANGES = {
   changeEntries: [
     {
       changeTrackingId: 1,
@@ -45,7 +45,7 @@ exports.FIXTURE_PIPED_ADO_ITERATION_CHANGES = {
   ],
 };
 
-exports.FIXTURE_PIPED_ADO_PAYLOAD = [
+export const FIXTURE_PIPED_ADO_PAYLOAD = [
   {
     comments: [
       {
@@ -70,7 +70,7 @@ exports.FIXTURE_PIPED_ADO_PAYLOAD = [
   },
 ];
 
-exports.FIXTURE_PIPED_GH_PAYLOAD = {
+export const FIXTURE_PIPED_GH_PAYLOAD = {
   accept: "application/vnd.github.comfort-fade-preview+json",
   owner: "tido64",
   repo: "suggestion-bot",
@@ -79,6 +79,7 @@ exports.FIXTURE_PIPED_GH_PAYLOAD = {
   comments: [
     {
       path: "src/GitHubClient.js",
+      position: undefined,
       line: 95,
       side: "RIGHT",
       body: concatStrings(
@@ -90,7 +91,7 @@ exports.FIXTURE_PIPED_GH_PAYLOAD = {
   ],
 };
 
-exports.FIXTURE_UNIDIFF = concatStrings(
+export const FIXTURE_UNIDIFF = concatStrings(
   "diff --git a/src/Graphics/TextureAllocator.gl.h b/src/Graphics/TextureAllocator.gl.h",
   "index 366b30f7..f17e3c88 100644",
   "--- a/src/Graphics/TextureAllocator.gl.h",
@@ -124,7 +125,7 @@ exports.FIXTURE_UNIDIFF = concatStrings(
   " #ifdef USE_VERTEX_ARRAY_OBJECT"
 );
 
-exports.FIXTURE_UNIDIFF_ADO_ITERATION_CHANGES = {
+export const FIXTURE_UNIDIFF_ADO_ITERATION_CHANGES = {
   changeEntries: [
     {
       changeTrackingId: 1,
@@ -137,7 +138,7 @@ exports.FIXTURE_UNIDIFF_ADO_ITERATION_CHANGES = {
   ],
 };
 
-exports.FIXTURE_UNIDIFF_ADO_PAYLOAD = [
+export const FIXTURE_UNIDIFF_ADO_PAYLOAD = [
   {
     comments: [
       {
@@ -184,7 +185,7 @@ exports.FIXTURE_UNIDIFF_ADO_PAYLOAD = [
   },
 ];
 
-exports.FIXTURE_UNIDIFF_GH_PAYLOAD = {
+export const FIXTURE_UNIDIFF_GH_PAYLOAD = {
   accept: "application/vnd.github.comfort-fade-preview+json",
   owner: "tido64",
   repo: "suggestion-bot",
@@ -193,6 +194,7 @@ exports.FIXTURE_UNIDIFF_GH_PAYLOAD = {
   comments: [
     {
       path: "src/Graphics/TextureAllocator.gl.h",
+      position: undefined,
       line: 22,
       side: "RIGHT",
       start_line: 21,
@@ -206,6 +208,7 @@ exports.FIXTURE_UNIDIFF_GH_PAYLOAD = {
     },
     {
       path: "src/Graphics/VertexArray.h",
+      position: undefined,
       line: 56,
       side: "RIGHT",
       start_line: 53,
