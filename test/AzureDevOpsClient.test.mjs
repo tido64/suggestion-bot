@@ -6,6 +6,19 @@
 //
 // @ts-check
 
+import { deepEqual, equal, fail, rejects } from "node:assert/strict";
+import { after, beforeEach, describe, it } from "node:test";
+import { getItemPath, makeReview } from "../src/AzureDevOpsClient.js";
+import {
+  FIXTURE_PIPED,
+  FIXTURE_PIPED_ADO_ITERATION_CHANGES,
+  FIXTURE_PIPED_ADO_PAYLOAD,
+  FIXTURE_PIPED_WINDOWS,
+  FIXTURE_UNIDIFF,
+  FIXTURE_UNIDIFF_ADO_ITERATION_CHANGES,
+  FIXTURE_UNIDIFF_ADO_PAYLOAD,
+} from "./__fixtures__.mjs";
+
 /**
  * @typedef {import("azure-devops-node-api/GitApi").GitApi} GitApi
  * @typedef {import("azure-devops-node-api/interfaces/GitInterfaces").GitPullRequestCommentThread} GitPullRequestCommentThread
@@ -92,19 +105,16 @@ function mock(mocks) {
   };
 }
 
+/**
+ * @typedef {{ mock: { calls: { arguments: string[] }[] }}} Mock
+ * @param {unknown} obj
+ * @returns {Mock["mock"]}
+ */
+function spy(obj) {
+  return /** @type {Mock} */ (obj).mock;
+}
+
 describe("AzureDevOpsClient", () => {
-  const {
-    FIXTURE_PIPED_ADO_ITERATION_CHANGES,
-    FIXTURE_PIPED_ADO_PAYLOAD,
-    FIXTURE_PIPED_WINDOWS,
-    FIXTURE_PIPED,
-    FIXTURE_UNIDIFF_ADO_ITERATION_CHANGES,
-    FIXTURE_UNIDIFF_ADO_PAYLOAD,
-    FIXTURE_UNIDIFF,
-  } = require("./__fixtures__");
-
-  const { makeReview } = require("../src/AzureDevOpsClient");
-
   const {
     AZURE_PERSONAL_ACCESS_TOKEN: ACCESS_TOKEN,
     BUILD_REPOSITORY_ID: REPOSITORY_ID,
@@ -123,7 +133,7 @@ describe("AzureDevOpsClient", () => {
     env["SYSTEM_TEAMPROJECTID"] = "tido64";
   });
 
-  afterAll(() => {
+  after(() => {
     const { env } = process;
     env["AZURE_PERSONAL_ACCESS_TOKEN"] = ACCESS_TOKEN;
     env["BUILD_REPOSITORY_ID"] = REPOSITORY_ID;
@@ -132,78 +142,98 @@ describe("AzureDevOpsClient", () => {
     env["SYSTEM_TEAMPROJECTID"] = PROJECT_ID;
   });
 
-  test("rejects if `AZURE_PERSONAL_ACCESS_TOKEN` is missing", async () => {
-    const errorSpy = jest.spyOn(global.console, "error").mockImplementation();
+  it("rejects if `AZURE_PERSONAL_ACCESS_TOKEN` is missing", async (t) => {
+    t.mock.method(console, "error", () => null);
 
     delete process.env["AZURE_PERSONAL_ACCESS_TOKEN"];
-    await expect(makeReview("")).rejects.toThrow(
-      "One or several environment variables are missing"
-    );
-    expect(errorSpy).toHaveBeenCalledWith(
-      "`AZURE_PERSONAL_ACCESS_TOKEN` must be set to your Azure DevOps access token"
-    );
 
-    errorSpy.mockRestore();
+    await rejects(makeReview(""), (err) => {
+      if (!(err instanceof Error)) {
+        fail("Expected an Error");
+      }
+      equal(err.message, "One or several environment variables are missing");
+      equal(
+        spy(console.error).calls[0].arguments[0],
+        "`AZURE_PERSONAL_ACCESS_TOKEN` must be set to your Azure DevOps access token"
+      );
+      return true;
+    });
   });
 
-  test("rejects if `BUILD_REPOSITORY_ID` is missing", async () => {
-    const errorSpy = jest.spyOn(global.console, "error").mockImplementation();
+  it("rejects if `BUILD_REPOSITORY_ID` is missing", async (t) => {
+    t.mock.method(console, "error", () => null);
 
     delete process.env["BUILD_REPOSITORY_ID"];
-    await expect(makeReview("")).rejects.toThrow(
-      "One or several environment variables are missing"
-    );
-    expect(errorSpy).toHaveBeenCalledWith(
-      "`BUILD_REPOSITORY_ID` should've been defined by Azure Pipelines"
-    );
 
-    errorSpy.mockRestore();
+    await rejects(makeReview(""), (err) => {
+      if (!(err instanceof Error)) {
+        fail("Expected an Error");
+      }
+      equal(err.message, "One or several environment variables are missing");
+      equal(
+        spy(console.error).calls[0].arguments[0],
+        "`BUILD_REPOSITORY_ID` should've been defined by Azure Pipelines"
+      );
+      return true;
+    });
   });
 
-  test("rejects if `SYSTEM_PULLREQUEST_PULLREQUESTID` is missing", async () => {
-    const errorSpy = jest.spyOn(global.console, "error").mockImplementation();
+  it("rejects if `SYSTEM_PULLREQUEST_PULLREQUESTID` is missing", async (t) => {
+    t.mock.method(console, "error", () => null);
 
     delete process.env["SYSTEM_PULLREQUEST_PULLREQUESTID"];
-    await expect(makeReview("")).rejects.toThrow(
-      "One or several environment variables are missing"
-    );
-    expect(errorSpy).toHaveBeenCalledWith(
-      "`SYSTEM_PULLREQUEST_PULLREQUESTID` should've been defined by Azure Pipelines"
-    );
 
-    errorSpy.mockRestore();
+    await rejects(makeReview(""), (err) => {
+      if (!(err instanceof Error)) {
+        fail("Expected an Error");
+      }
+      equal(err.message, "One or several environment variables are missing");
+      equal(
+        spy(console.error).calls[0].arguments[0],
+        "`SYSTEM_PULLREQUEST_PULLREQUESTID` should've been defined by Azure Pipelines"
+      );
+      return true;
+    });
   });
 
-  test("rejects if `SYSTEM_TEAMFOUNDATIONCOLLECTIONURI` is missing", async () => {
-    const errorSpy = jest.spyOn(global.console, "error").mockImplementation();
+  it("rejects if `SYSTEM_TEAMFOUNDATIONCOLLECTIONURI` is missing", async (t) => {
+    t.mock.method(console, "error", () => null);
 
     delete process.env["SYSTEM_TEAMFOUNDATIONCOLLECTIONURI"];
-    await expect(makeReview("")).rejects.toThrow(
-      "One or several environment variables are missing"
-    );
-    expect(errorSpy).toHaveBeenCalledWith(
-      "`SYSTEM_TEAMFOUNDATIONCOLLECTIONURI` should've been defined by Azure Pipelines"
-    );
 
-    errorSpy.mockRestore();
+    await rejects(makeReview(""), (err) => {
+      if (!(err instanceof Error)) {
+        fail("Expected an Error");
+      }
+      equal(err.message, "One or several environment variables are missing");
+      equal(
+        spy(console.error).calls[0].arguments[0],
+        "`SYSTEM_TEAMFOUNDATIONCOLLECTIONURI` should've been defined by Azure Pipelines"
+      );
+      return true;
+    });
   });
 
-  test("rejects if `SYSTEM_TEAMPROJECTID` is missing", async () => {
-    const errorSpy = jest.spyOn(global.console, "error").mockImplementation();
+  it("rejects if `SYSTEM_TEAMPROJECTID` is missing", async (t) => {
+    t.mock.method(console, "error", () => null);
 
     delete process.env["SYSTEM_TEAMPROJECTID"];
-    await expect(makeReview("")).rejects.toThrow(
-      "One or several environment variables are missing"
-    );
-    expect(errorSpy).toHaveBeenCalledWith(
-      "`SYSTEM_TEAMPROJECTID` should've been defined by Azure Pipelines"
-    );
 
-    errorSpy.mockRestore();
+    await rejects(makeReview(""), (err) => {
+      if (!(err instanceof Error)) {
+        fail("Expected an Error");
+      }
+      equal(err.message, "One or several environment variables are missing");
+      equal(
+        spy(console.error).calls[0].arguments[0],
+        "`SYSTEM_TEAMPROJECTID` should've been defined by Azure Pipelines"
+      );
+      return true;
+    });
   });
 
-  test("rejects if multiple environment variables are missing", async () => {
-    const errorSpy = jest.spyOn(global.console, "error").mockImplementation();
+  it("rejects if multiple environment variables are missing", async (t) => {
+    t.mock.method(console, "error", () => null);
 
     delete process.env["AZURE_PERSONAL_ACCESS_TOKEN"];
     delete process.env["BUILD_REPOSITORY_ID"];
@@ -211,29 +241,36 @@ describe("AzureDevOpsClient", () => {
     delete process.env["SYSTEM_TEAMFOUNDATIONCOLLECTIONURI"];
     delete process.env["SYSTEM_TEAMPROJECTID"];
 
-    await expect(makeReview("")).rejects.toThrow(
-      "One or several environment variables are missing"
-    );
-    expect(errorSpy).toHaveBeenCalledWith(
-      "`AZURE_PERSONAL_ACCESS_TOKEN` must be set to your Azure DevOps access token"
-    );
-    expect(errorSpy).toHaveBeenCalledWith(
-      "`BUILD_REPOSITORY_ID` should've been defined by Azure Pipelines"
-    );
-    expect(errorSpy).toHaveBeenCalledWith(
-      "`SYSTEM_PULLREQUEST_PULLREQUESTID` should've been defined by Azure Pipelines"
-    );
-    expect(errorSpy).toHaveBeenCalledWith(
-      "`SYSTEM_TEAMFOUNDATIONCOLLECTIONURI` should've been defined by Azure Pipelines"
-    );
-    expect(errorSpy).toHaveBeenCalledWith(
-      "`SYSTEM_TEAMPROJECTID` should've been defined by Azure Pipelines"
-    );
-
-    errorSpy.mockRestore();
+    await rejects(makeReview(""), (err) => {
+      if (!(err instanceof Error)) {
+        fail("Expected an Error");
+      }
+      equal(err.message, "One or several environment variables are missing");
+      equal(
+        spy(console.error).calls[0].arguments[0],
+        "`AZURE_PERSONAL_ACCESS_TOKEN` must be set to your Azure DevOps access token"
+      );
+      equal(
+        spy(console.error).calls[1].arguments[0],
+        "`BUILD_REPOSITORY_ID` should've been defined by Azure Pipelines"
+      );
+      equal(
+        spy(console.error).calls[2].arguments[0],
+        "`SYSTEM_PULLREQUEST_PULLREQUESTID` should've been defined by Azure Pipelines"
+      );
+      equal(
+        spy(console.error).calls[3].arguments[0],
+        "`SYSTEM_TEAMFOUNDATIONCOLLECTIONURI` should've been defined by Azure Pipelines"
+      );
+      equal(
+        spy(console.error).calls[4].arguments[0],
+        "`SYSTEM_TEAMPROJECTID` should've been defined by Azure Pipelines"
+      );
+      return true;
+    });
   });
 
-  test("fetches environment variables", async () => {
+  it("fetches environment variables", async () => {
     let azureAccessToken = "";
     let buildRepositoryId = "";
     let prPullRequestId = "";
@@ -272,16 +309,14 @@ describe("AzureDevOpsClient", () => {
       SYSTEM_TEAMPROJECTID,
       SYSTEM_TEAMFOUNDATIONCOLLECTIONURI,
     } = process.env;
-    expect(azureAccessToken).toBe(AZURE_PERSONAL_ACCESS_TOKEN);
-    expect(buildRepositoryId).toBe(BUILD_REPOSITORY_ID);
-    expect(prPullRequestId).toBe(
-      parseInt(SYSTEM_PULLREQUEST_PULLREQUESTID || "")
-    );
-    expect(projectId).toBe(SYSTEM_TEAMPROJECTID);
-    expect(tfCollectionUri).toBe(SYSTEM_TEAMFOUNDATIONCOLLECTIONURI);
+    equal(azureAccessToken, AZURE_PERSONAL_ACCESS_TOKEN);
+    equal(buildRepositoryId, BUILD_REPOSITORY_ID);
+    equal(prPullRequestId, Number(SYSTEM_PULLREQUEST_PULLREQUESTID || ""));
+    equal(projectId, SYSTEM_TEAMPROJECTID);
+    equal(tfCollectionUri, SYSTEM_TEAMFOUNDATIONCOLLECTIONURI);
   });
 
-  test("skips invalid diffs", async () => {
+  it("skips invalid diffs", async () => {
     let payload = undefined;
     const mocks = mock({
       createThread: (/** @type {GitPullRequestCommentThread} */ review) => {
@@ -291,16 +326,16 @@ describe("AzureDevOpsClient", () => {
     });
 
     await makeReview("", mocks);
-    expect(payload).toBeUndefined();
+    equal(payload, undefined);
 
     await makeReview(
       "diff --git a/src/Graphics/TextureAllocator.gl.h b/src/Graphics/TextureAllocator.gl.h",
       mocks
     );
-    expect(payload).toBeUndefined();
+    equal(payload, undefined);
   });
 
-  test("supports unified diffs", async () => {
+  it("supports unified diffs", async () => {
     /** @type {GitPullRequestCommentThread[]} */
     let payloads = [];
     const mocks = mock({
@@ -312,10 +347,10 @@ describe("AzureDevOpsClient", () => {
         Promise.resolve(FIXTURE_UNIDIFF_ADO_ITERATION_CHANGES),
     });
     await makeReview(FIXTURE_UNIDIFF, mocks);
-    expect(payloads).toEqual(FIXTURE_UNIDIFF_ADO_PAYLOAD);
+    deepEqual(payloads, FIXTURE_UNIDIFF_ADO_PAYLOAD);
   });
 
-  test("supports piped diffs", async () => {
+  it("supports piped diffs", async () => {
     /** @type {GitPullRequestCommentThread[]} */
     let payload = [];
     const mocks = mock({
@@ -328,15 +363,15 @@ describe("AzureDevOpsClient", () => {
     });
 
     await makeReview(FIXTURE_PIPED, mocks);
-    expect(payload).toEqual(FIXTURE_PIPED_ADO_PAYLOAD);
+    deepEqual(payload, FIXTURE_PIPED_ADO_PAYLOAD);
 
     payload = [];
 
     await makeReview(FIXTURE_PIPED_WINDOWS, mocks);
-    expect(payload).toEqual(FIXTURE_PIPED_ADO_PAYLOAD);
+    deepEqual(payload, FIXTURE_PIPED_ADO_PAYLOAD);
   });
 
-  test("ignores files not in latest iteration", async () => {
+  it("ignores files not in latest iteration", async () => {
     /** @type {GitPullRequestCommentThread[]} */
     let payloads = [];
     await makeReview(
@@ -349,11 +384,11 @@ describe("AzureDevOpsClient", () => {
         getPullRequestIterationChanges: () => Promise.resolve({}),
       })
     );
-    expect(payloads).toHaveLength(0);
+    equal(payloads.length, 0);
   });
 
-  test("dumps the exception on failure", async () => {
-    const errorSpy = jest.spyOn(global.console, "error").mockImplementation();
+  it("dumps the exception on failure", async (t) => {
+    t.mock.method(console, "error", () => null);
 
     await makeReview(
       FIXTURE_UNIDIFF,
@@ -364,13 +399,11 @@ describe("AzureDevOpsClient", () => {
       })
     );
 
-    expect(errorSpy).toHaveBeenCalledWith("test");
-
-    errorSpy.mockRestore();
+    equal(spy(console.error).calls[0].arguments[0], "test");
   });
 
-  test("throws on failure", async () => {
-    const errorSpy = jest.spyOn(global.console, "error").mockImplementation();
+  it("throws on failure", async (t) => {
+    t.mock.method(console, "error", () => null);
 
     const task = makeReview(
       FIXTURE_UNIDIFF,
@@ -382,32 +415,32 @@ describe("AzureDevOpsClient", () => {
       })
     );
 
-    await expect(task).rejects.toBe("test");
-
-    expect(errorSpy).toHaveBeenCalledWith("test");
-
-    errorSpy.mockRestore();
+    await rejects(task, (err) => {
+      equal(err, "test");
+      return true;
+    });
   });
 });
 
 describe("getItemPath", () => {
-  const { getItemPath } = require("../src/AzureDevOpsClient");
-
-  test("returns `undefined` when missing item path", () => {
-    expect(getItemPath({})).toBeUndefined();
-    expect(getItemPath({ item: {} })).toBeUndefined();
-    expect(getItemPath({ item: { path: "" } })).toBeUndefined();
+  it("returns `undefined` when missing item path", () => {
+    equal(getItemPath({}), undefined);
+    equal(getItemPath({ item: {} }), undefined);
+    equal(getItemPath({ item: { path: "" } }), undefined);
   });
 
-  test("trims leading '/' from item path", () => {
-    expect(
-      getItemPath({ item: { path: "test/AzureDevOpsClient.test.js" } })
-    ).toBe("test/AzureDevOpsClient.test.js");
-    expect(
-      getItemPath({ item: { path: "/test/AzureDevOpsClient.test.js" } })
-    ).toBe("test/AzureDevOpsClient.test.js");
-    expect(
-      getItemPath({ item: { path: "//test/AzureDevOpsClient.test.js" } })
-    ).toBe("/test/AzureDevOpsClient.test.js");
+  it("trims leading '/' from item path", () => {
+    equal(
+      getItemPath({ item: { path: "test/AzureDevOpsClient.test.js" } }),
+      "test/AzureDevOpsClient.test.js"
+    );
+    equal(
+      getItemPath({ item: { path: "/test/AzureDevOpsClient.test.js" } }),
+      "test/AzureDevOpsClient.test.js"
+    );
+    equal(
+      getItemPath({ item: { path: "//test/AzureDevOpsClient.test.js" } }),
+      "/test/AzureDevOpsClient.test.js"
+    );
   });
 });

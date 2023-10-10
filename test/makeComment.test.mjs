@@ -6,8 +6,11 @@
 //
 // @ts-check
 
-const parse = require("parse-diff");
-const { concatStrings } = require("../src/helpers");
+import { deepEqual } from "node:assert/strict";
+import { describe, it } from "node:test";
+import parse from "parse-diff";
+import { concatStrings } from "../src/helpers.js";
+import { makeComment } from "../src/makeComments.js";
 
 /**
  * @param  {...string} diff
@@ -19,9 +22,7 @@ function extractChunk(...diff) {
 }
 
 describe("makeComment", () => {
-  const { makeComment } = require("../src/makeComments");
-
-  test("adds line", () => {
+  it("adds line", () => {
     const [to, chunk] = extractChunk(
       "diff --git a/src/Graphics/TextureAllocator.gl.h b/src/Graphics/TextureAllocator.gl.h",
       "index 25ee722d..f17e3c88 100644",
@@ -31,8 +32,9 @@ describe("makeComment", () => {
       "+        [[maybe_unused, nodiscard]]",
       "         auto max_size() const noexcept -> size_t override;"
     );
-    expect(makeComment(to, chunk)).toEqual({
+    deepEqual(makeComment(to, chunk), {
       path: "src/Graphics/TextureAllocator.gl.h",
+      position: undefined,
       line: 20,
       line_length: 58,
       side: "RIGHT",
@@ -45,7 +47,7 @@ describe("makeComment", () => {
     });
   });
 
-  test("removes line", () => {
+  it("removes line", () => {
     const [to, chunk] = extractChunk(
       "diff --git a/src/Graphics/TextureAllocator.gl.h b/src/Graphics/TextureAllocator.gl.h",
       "index 25ee722d..f17e3c88 100644",
@@ -55,8 +57,9 @@ describe("makeComment", () => {
       "-        [[maybe_unused, nodiscard]]",
       "-        auto max_size() const noexcept -> size_t override;"
     );
-    expect(makeComment(to, chunk)).toEqual({
+    deepEqual(makeComment(to, chunk), {
       path: "src/Graphics/TextureAllocator.gl.h",
+      position: undefined,
       line: 22,
       line_length: 58,
       side: "RIGHT",
@@ -66,7 +69,7 @@ describe("makeComment", () => {
     });
   });
 
-  test("single line change with context", () => {
+  it("single line change with context", () => {
     const [to, chunk] = extractChunk(
       "diff --git a/src/Common/Algorithm.h b/src/Common/Algorithm.h",
       "index d30d6e11..d138ef04 100644",
@@ -82,8 +85,9 @@ describe("makeComment", () => {
       "         std::swap(*pos, container.back());",
       "         container.pop_back();"
     );
-    expect(makeComment(to, chunk)).toEqual({
+    deepEqual(makeComment(to, chunk), {
       path: "src/Common/Algorithm.h",
+      position: undefined,
       line: 136,
       line_length: 61,
       side: "RIGHT",
@@ -95,7 +99,7 @@ describe("makeComment", () => {
     });
   });
 
-  test("single line change without context", () => {
+  it("single line change without context", () => {
     const [to, chunk] = extractChunk(
       "diff --git a/src/Common/Algorithm.h b/src/Common/Algorithm.h",
       "index d30d6e11..d138ef04 100644",
@@ -105,8 +109,9 @@ describe("makeComment", () => {
       "-    void quick_erase(T &container, typename T::iterator pos)",
       "+    void quick_erase(T& container, typename T::iterator pos)"
     );
-    expect(makeComment(to, chunk)).toEqual({
+    deepEqual(makeComment(to, chunk), {
       path: "src/Common/Algorithm.h",
+      position: undefined,
       line: 136,
       line_length: 61,
       side: "RIGHT",
@@ -118,7 +123,7 @@ describe("makeComment", () => {
     });
   });
 
-  test("break line", () => {
+  it("break line", () => {
     const [to, chunk] = extractChunk(
       "diff --git a/src/Graphics/TextureAllocator.gl.h b/src/Graphics/TextureAllocator.gl.h",
       "index 25ee722d..f17e3c88 100644",
@@ -129,8 +134,9 @@ describe("makeComment", () => {
       "+        [[maybe_unused, nodiscard]] auto max_size() const noexcept",
       "+            -> size_t override;"
     );
-    expect(makeComment(to, chunk)).toEqual({
+    deepEqual(makeComment(to, chunk), {
       path: "src/Graphics/TextureAllocator.gl.h",
+      position: undefined,
       line: 21,
       line_length: 87,
       side: "RIGHT",
@@ -143,7 +149,7 @@ describe("makeComment", () => {
     });
   });
 
-  test("change on last line with context", () => {
+  it("change on last line with context", () => {
     const [to, chunk] = extractChunk(
       "--- example/windows/ReactTestAppTests/pch.cpp	(before formatting)",
       "+++ example/windows/ReactTestAppTests/pch.cpp	(after formatting)",
@@ -155,8 +161,9 @@ describe("makeComment", () => {
       "+// When you are using pre-compiled headers, this source file is necessary for compilation to",
       "+// succeed."
     );
-    expect(makeComment(to, chunk)).toEqual({
+    deepEqual(makeComment(to, chunk), {
       path: "example/windows/ReactTestAppTests/pch.cpp",
+      position: undefined,
       line: 5,
       line_length: 102,
       side: "RIGHT",
@@ -169,7 +176,7 @@ describe("makeComment", () => {
     });
   });
 
-  test("concatenate lines", () => {
+  it("concatenate lines", () => {
     const [to, chunk] = extractChunk(
       "diff --git a/src/Graphics/VertexArray.h b/src/Graphics/VertexArray.h",
       "index 31e66c01..8bc6fc35 100644",
@@ -188,8 +195,9 @@ describe("makeComment", () => {
       "     private:",
       " #ifdef USE_VERTEX_ARRAY_OBJECT"
     );
-    expect(makeComment(to, chunk)).toEqual({
+    deepEqual(makeComment(to, chunk), {
       path: "src/Graphics/VertexArray.h",
+      position: undefined,
       line: 56,
       line_length: 10,
       side: "RIGHT",
@@ -203,7 +211,7 @@ describe("makeComment", () => {
     });
   });
 
-  test("move lines down", () => {
+  it("move lines down", () => {
     const [to, chunk] = extractChunk(
       "diff --git a/src/Config.cpp b/src/Config.cpp",
       "index d0a84e17..c73dd760 100644",
@@ -223,8 +231,9 @@ describe("makeComment", () => {
       " using namespace std::literals::string_view_literals;",
       " "
     );
-    expect(makeComment(to, chunk)).toEqual({
+    deepEqual(makeComment(to, chunk), {
       path: "src/Config.cpp",
+      position: undefined,
       line: 19,
       line_length: 29,
       side: "RIGHT",
@@ -242,7 +251,7 @@ describe("makeComment", () => {
     });
   });
 
-  test("move lines up", () => {
+  it("move lines up", () => {
     const [to, chunk] = extractChunk(
       "diff --git a/src/Config.cpp b/src/Config.cpp",
       "index d0a84e17..c73dd760 100644",
@@ -262,8 +271,9 @@ describe("makeComment", () => {
       " using namespace std::literals::string_view_literals;",
       " "
     );
-    expect(makeComment(to, chunk)).toEqual({
+    deepEqual(makeComment(to, chunk), {
       path: "src/Config.cpp",
+      position: undefined,
       line: 19,
       line_length: 30,
       side: "RIGHT",
@@ -281,7 +291,7 @@ describe("makeComment", () => {
     });
   });
 
-  test("diff with no new line at the end", () => {
+  it("diff with no new line at the end", () => {
     const [to, chunk] = extractChunk(
       "diff --git a/src/index.ts",
       "index 3f8c7c6e0..59c31a76c 100644",
@@ -293,12 +303,12 @@ describe("makeComment", () => {
       `+export { default as EmployeesAlsoAsked } from "./EAAAccordion";`
     );
 
-    expect(makeComment(to, chunk)).toEqual({
+    deepEqual(makeComment(to, chunk), {
       path: "index.ts",
+      position: undefined,
       line: 1,
       line_length: 64,
       side: "RIGHT",
-      position: undefined,
       body: concatStrings(
         "```suggestion",
         `export { default as EmployeesAlsoAsked } from "./EAAAccordion";`,

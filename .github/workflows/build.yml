@@ -27,7 +27,9 @@ jobs:
         run: |
           yarn build
       - name: Test
-        run: yarn test --coverage
+        env:
+          NODE_V8_COVERAGE: coverage
+        run: yarn test
       - name: Upload coverage report
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
