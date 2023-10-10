@@ -32,7 +32,7 @@
     "format": "prettier --write $(git ls-files '*.js' '*.json' '*.md' '*.mjs' '*.yml' ':!:.yarn/**/*.cjs')",
     "lint": "eslint $(git ls-files '*.js' '*.mjs' ':!:*.config.js' ':!:.yarn/**/*.js')",
     "suggest": "suggestion-bot",
-    "test": "node --test --experimental-test-coverage $(git ls-files 'test/*.mjs')"
+    "test": "node --test --experimental-test-coverage $(git ls-files 'test/*.test.mjs')"
   },
   "dependencies": {
     "@octokit/core": "^5.0",
