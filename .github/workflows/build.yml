@@ -27,6 +27,8 @@ jobs:
         run: |
           yarn build
       - name: Test
+        env:
+          NODE_V8_COVERAGE: coverage
         run: yarn test
       - name: Upload coverage report
         env:
