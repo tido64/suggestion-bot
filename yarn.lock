@@ -406,10 +406,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.0":
-  version: 18.18.6
-  resolution: "@types/node@npm:18.18.6"
-  checksum: a847639b8455fd3dfa6dbc2917274c82c9db789f1d41aaf69f94ac6c9e54c3c1dd29be6e1e1ccd7c17e54db3d78d7011bc4e70544c6447ceca253dccc0a187e1
+"@types/node@npm:^20.0.0":
+  version: 20.8.9
+  resolution: "@types/node@npm:20.8.9"
+  dependencies:
+    undici-types: ~5.26.4
+  checksum: 0c05f3502a9507ff27e91dd6fd574fa6f391b3fafedcfe8e0c8d33351fb22d02c0121f854e5b6b3ecb9a8a468407ddf6e7ac0029fb236d4c7e1361ffc758a01f
   languageName: node
   linkType: hard
 
@@ -2908,7 +2910,7 @@ __metadata:
   dependencies:
     "@octokit/core": ^5.0
     "@octokit/plugin-rest-endpoint-methods": ^10.0
-    "@types/node": ^18.0
+    "@types/node": ^20.0.0
     azure-devops-node-api: ^12.0
     codecov: ^3.0
     commander: ^8.1
@@ -3121,6 +3123,13 @@ __metadata:
   version: 1.13.1
   resolution: "underscore@npm:1.13.1"
   checksum: 69bb4e6dd92c387ad322dd5b105f496fa64896d92ff1eea987610920d452667a12bca0938def4c4d60acd12da62410540fd268e7ca4f2480d89324498382fcac
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~5.26.4":
+  version: 5.26.5
+  resolution: "undici-types@npm:5.26.5"
+  checksum: 3192ef6f3fd5df652f2dc1cd782b49d6ff14dc98e5dced492aa8a8c65425227da5da6aafe22523c67f035a272c599bb89cfe803c1db6311e44bed3042fc25487
   languageName: node
   linkType: hard
 
