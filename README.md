@@ -11,17 +11,18 @@
 ## Usage
 
 ```
-Usage: suggestion-bot [options] [diff]
+Usage: cli.js [options] [diff]
 
-submit code reviews with suggestions based on your diffs
+Submit code reviews with suggestions based on your diffs
 
 Arguments:
   diff                 the diff to create suggestions from
 
 Options:
-  -V, --version        output the version number
-  -m, --message <msg>  use the specified message as the PR comment
   -h, --help           display help for command
+  -v, --version        output the version number
+  -m, --message <msg>  use the specified message as the PR comment
+  -f, --fail           fail if comments could not be posted
 
 Examples:
   # Submit current changes as suggestions
@@ -75,7 +76,7 @@ If your CI is hosted by Azure DevOps, replace `GITHUB_TOKEN` with
          - name: Set up Node.js
            uses: actions/setup-node@v1
            with:
-             node-version: 12
+             node-version: 18
          - name: Checkout
            uses: actions/checkout@v2
          - name: Install
@@ -108,8 +109,8 @@ output to `diff` so we can feed it to `suggestion-bot` later.
 ```js
 #!/usr/bin/env node
 
-const { spawnSync } = require("child_process");
-const fs = require("fs");
+const { spawnSync } = require("node:child_process");
+const fs = require("node:fs");
 const prettier = require("prettier");
 
 const diff = process.argv.slice(2).reduce((diff, filepath) => {
