@@ -31,7 +31,7 @@ function getClient() {
     return require("./GitHubClient");
   }
 
-  throw "No access token was set";
+  throw new Error("No access token was set");
 }
 
 /**

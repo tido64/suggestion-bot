@@ -7,16 +7,24 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-const { program } = require("commander");
-program
-  .version(require("./package.json").version)
-  .description("submit code reviews with suggestions based on your diffs")
-  .option("-m, --message <msg>", "use the specified message as the PR comment")
-  .option("-f, --fail", "fail if comments could not be posted")
-  .argument("[diff]", "the diff to create suggestions from")
-  .addHelpText(
-    "after",
+const path = require("node:path");
+const { parseArgs } = require("node:util");
+
+function printHelp() {
+  console.log(
     [
+      `Usage: ${path.basename(__filename)} [options] [diff]`,
+      "",
+      "Submit code reviews with suggestions based on your diffs",
+      "",
+      "Arguments:",
+      "  diff                 the diff to create suggestions from",
+      "",
+      "Options:",
+      "  -h, --help           display help for command",
+      "  -v, --version        output the version number",
+      "  -m, --message <msg>  use the specified message as the PR comment",
+      "  -f, --fail           fail if comments could not be posted",
       "",
       "Examples:",
       "  # Submit current changes as suggestions",
@@ -29,21 +37,52 @@ program
       "If your CI is hosted by Azure DevOps, replace `GITHUB_TOKEN` with `AZURE_PERSONAL_ACCESS_TOKEN`.",
     ].join("\n")
   );
+}
 
-const suggest = require("./src/index");
-if (process.stdin.isTTY) {
-  const { [0]: diff } = program.parse(process.argv).args;
-  if (diff) {
-    suggest(diff, program.opts());
-  } else {
-    program.help();
-  }
+const { values, positionals } = parseArgs({
+  args: process.argv.slice(2),
+  options: {
+    help: {
+      type: "boolean",
+      short: "h",
+    },
+    version: {
+      type: "boolean",
+      short: "v",
+    },
+    message: {
+      type: "string",
+      short: "m",
+    },
+    fail: {
+      type: "boolean",
+      short: "f",
+    },
+  },
+  allowPositionals: true,
+});
+
+if (values.help) {
+  printHelp();
+} else if (values.version) {
+  const { name, version } = require("./package.json");
+  console.log(name, version);
 } else {
-  let data = "";
-  const stdin = process.openStdin();
-  stdin.setEncoding("utf8");
-  stdin.on("data", (chunk) => {
-    data += chunk;
-  });
-  stdin.on("end", () => suggest(data, program.parse(process.argv).opts()));
+  const suggest = require("./src/index");
+  if (process.stdin.isTTY) {
+    const diff = positionals[0];
+    if (diff) {
+      suggest(diff, values);
+    } else {
+      printHelp();
+    }
+  } else {
+    let data = "";
+    const stdin = process.openStdin();
+    stdin.setEncoding("utf8");
+    stdin.on("data", (chunk) => {
+      data += chunk;
+    });
+    stdin.on("end", () => suggest(data, values));
+  }
 }
