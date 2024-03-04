@@ -3,6 +3,10 @@
   "labels": ["dependencies"],
   "packageRules": [
     {
+      "groupName": "ESLint",
+      "matchSourceUrlPrefixes": ["https://github.com/eslint/eslint"]
+    },
+    {
       "groupName": "Octokit",
       "matchPackagePrefixes": ["@octokit/"]
     }
