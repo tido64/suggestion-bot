@@ -7,24 +7,25 @@
 // LICENSE file in the root directory of this source tree.
 //
 
+const fs = require("node:fs");
 const path = require("node:path");
 const { parseArgs } = require("node:util");
 
 function printHelp() {
   console.log(
     [
-      `Usage: ${path.basename(__filename)} [options] [diff]`,
+      `Usage: ${path.basename(__filename)} [options] [diff | file]`,
       "",
       "Submit code reviews with suggestions based on your diffs",
       "",
       "Arguments:",
-      "  diff                 the diff to create suggestions from",
+      "  diff | file            the diff or file containing diff to create suggestions from",
       "",
       "Options:",
-      "  -h, --help           display help for command",
-      "  -v, --version        output the version number",
-      "  -m, --message <msg>  use the specified message as the PR comment",
-      "  -f, --fail           fail if comments could not be posted",
+      "  -h, --help             display this help message",
+      "  -v, --version          display version number",
+      "  -m, --message <msg>    use the specified message as the PR comment",
+      "  -f, --fail             fail if comments could not be posted",
       "",
       "Examples:",
       "  # Submit current changes as suggestions",
@@ -69,20 +70,20 @@ if (values.help) {
   console.log(name, version);
 } else {
   const suggest = require("./src/index");
-  if (process.stdin.isTTY) {
-    const diff = positionals[0];
-    if (diff) {
-      suggest(diff, values);
-    } else {
-      printHelp();
-    }
-  } else {
+  if (positionals.length > 0) {
+    const diffOrFile = positionals[0];
+    const diff = fs.existsSync(diffOrFile)
+      ? fs.readFileSync(diffOrFile, { encoding: "utf-8" })
+      : diffOrFile;
+    suggest(diff, values);
+  } else if (!process.stdin.isTTY) {
     let data = "";
     const stdin = process.openStdin();
     stdin.setEncoding("utf8");
-    stdin.on("data", (chunk) => {
-      data += chunk;
-    });
+    stdin.on("data", (chunk) => (data += chunk));
     stdin.on("end", () => suggest(data, values));
+  } else {
+    process.exitCode = 1;
+    printHelp();
   }
 }
