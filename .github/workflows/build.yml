@@ -11,7 +11,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4.0.2
         with:
-          node-version: 18
+          node-version: 20
       - name: Checkout
         uses: actions/checkout@v4
       - name: Cache /.yarn/cache
@@ -43,7 +43,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4.0.2
         with:
-          node-version: 18
+          node-version: 20
       - name: Checkout
         uses: actions/checkout@v4
       - name: Deduplicate packages
@@ -75,7 +75,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4.0.2
         with:
-          node-version: 18
+          node-version: 20
       - name: Checkout
         uses: actions/checkout@v4
       - name: Cache /.yarn/cache
