@@ -11,18 +11,18 @@
 ## Usage
 
 ```
-Usage: cli.js [options] [diff]
+Usage: cli.js [options] [diff | file]
 
 Submit code reviews with suggestions based on your diffs
 
 Arguments:
-  diff                 the diff to create suggestions from
+  diff | file            the diff or file containing diff to create suggestions from
 
 Options:
-  -h, --help           display help for command
-  -v, --version        output the version number
-  -m, --message <msg>  use the specified message as the PR comment
-  -f, --fail           fail if comments could not be posted
+  -h, --help             display this help message
+  -v, --version          display version number
+  -m, --message <msg>    use the specified message as the PR comment
+  -f, --fail             fail if comments could not be posted
 
 Examples:
   # Submit current changes as suggestions
