@@ -20,15 +20,15 @@
 /**
  * Returns the appropriate client for the provided access token.
  */
-function getClient() {
+async function getClient() {
   const { AZURE_PERSONAL_ACCESS_TOKEN, GITHUB_TOKEN } = process.env;
 
   if (AZURE_PERSONAL_ACCESS_TOKEN) {
-    return require("./AzureDevOpsClient");
+    return import("./AzureDevOpsClient.js");
   }
 
   if (GITHUB_TOKEN) {
-    return require("./GitHubClient");
+    return import("./GitHubClient.js");
   }
 
   throw new Error("No access token was set");
@@ -40,8 +40,8 @@ function getClient() {
  * @param {Options=} options
  * @returns {Promise<void>}
  */
-async function suggest(diff, options = {}) {
-  const { makeReview } = getClient();
+export default async function suggest(diff, options = {}) {
+  const { makeReview } = await getClient();
   try {
     await makeReview(diff, {
       ...options,
@@ -53,5 +53,3 @@ async function suggest(diff, options = {}) {
     process.exit(1);
   }
 }
-
-module.exports = suggest;

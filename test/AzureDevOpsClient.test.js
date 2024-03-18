@@ -17,13 +17,13 @@ import {
   FIXTURE_UNIDIFF,
   FIXTURE_UNIDIFF_ADO_ITERATION_CHANGES,
   FIXTURE_UNIDIFF_ADO_PAYLOAD,
-} from "./__fixtures__.mjs";
+} from "./__fixtures__.js";
 
 /**
- * @typedef {import("azure-devops-node-api/GitApi").GitApi} GitApi
- * @typedef {import("azure-devops-node-api/interfaces/GitInterfaces").GitPullRequestCommentThread} GitPullRequestCommentThread
- * @typedef {import("azure-devops-node-api/interfaces/common/VsoBaseInterfaces").IRequestHandler} IRequestHandler
- * @typedef {import("azure-devops-node-api/interfaces/common/VsoBaseInterfaces").IRequestOptions} IRequestOptions
+ * @typedef {import("azure-devops-node-api/GitApi.js").GitApi} GitApi
+ * @typedef {import("azure-devops-node-api/interfaces/GitInterfaces.js").GitPullRequestCommentThread} GitPullRequestCommentThread
+ * @typedef {import("azure-devops-node-api/interfaces/common/VsoBaseInterfaces.js").IRequestHandler} IRequestHandler
+ * @typedef {import("azure-devops-node-api/interfaces/common/VsoBaseInterfaces.js").IRequestOptions} IRequestOptions
  * @typedef {Partial<GitApi> & {
  *   setAuthToken: (handler: IRequestHandler) => void;
  *   setServerUrl: (url: string) => void;
@@ -91,7 +91,7 @@ class WebApi {
 
 /**
  * @param {{}} mocks
- * @returns {import("../src/AzureDevOpsClient").RequestOptions}
+ * @returns {import("../src/AzureDevOpsClient.js").RequestOptions}
  */
 function mock(mocks) {
   return {

@@ -5,12 +5,14 @@
 // LICENSE file in the root directory of this source tree.
 //
 // @ts-check
+import * as azdevapi from "azure-devops-node-api";
+import { makeComments } from "./makeComments.js";
 
 /**
- * @typedef {import("azure-devops-node-api/interfaces/common/VsoBaseInterfaces").IRequestOptions} IRequestOptions
- * @typedef {import("azure-devops-node-api/interfaces/GitInterfaces").GitPullRequestChange} GitPullRequestChange
- * @typedef {import("azure-devops-node-api/interfaces/GitInterfaces").GitPullRequestCommentThread} GitPullRequestCommentThread
- * @typedef {import("./makeComments").Comment} Comment
+ * @typedef {import("azure-devops-node-api/interfaces/common/VsoBaseInterfaces.js").IRequestOptions} IRequestOptions
+ * @typedef {import("azure-devops-node-api/interfaces/GitInterfaces.js").GitPullRequestChange} GitPullRequestChange
+ * @typedef {import("azure-devops-node-api/interfaces/GitInterfaces.js").GitPullRequestCommentThread} GitPullRequestCommentThread
+ * @typedef {import("./makeComments.js").Comment} Comment
  * @typedef {{ [filePath: string]: number }} ChangeTrackingIdMap
  * @typedef {(changes: ChangeTrackingIdMap, change: GitPullRequestChange) => (ChangeTrackingIdMap)} ChangeTrackingIdMapReducer
  * @typedef {IRequestOptions & { azdev?: typeof import("azure-devops-node-api"); }} RequestOptions
@@ -27,11 +29,7 @@
  * @param {string} authToken
  * @param {RequestOptions} options
  */
-function connect(
-  serverUrl,
-  authToken,
-  { azdev = require("azure-devops-node-api"), ...options }
-) {
+function connect(serverUrl, authToken, { azdev = azdevapi, ...options }) {
   const authHandler = azdev.getPersonalAccessTokenHandler(authToken);
   const vsts = new azdev.WebApi(serverUrl, authHandler, options);
   return vsts.connect().then(() => vsts.getGitApi());
@@ -43,7 +41,7 @@ function connect(
  * @param {GitPullRequestChange} change
  * @returns {string | undefined}
  */
-function getItemPath(change) {
+export function getItemPath(change) {
   if (!change.item || !change.item.path) {
     return undefined;
   }
@@ -92,10 +90,10 @@ function transformComment(
 /**
  * Submits a code review with suggestions with specified diff and options.
  * @param {string} diff
- * @param {import("./index").Options & RequestOptions} options
+ * @param {import("./index.js").Options & RequestOptions} options
  * @returns {Promise<unknown>}
  */
-function makeReview(diff, { fail, ...options } = {}) {
+export function makeReview(diff, { fail, ...options } = {}) {
   const {
     AZURE_PERSONAL_ACCESS_TOKEN: authToken,
     BUILD_REPOSITORY_ID: repositoryId,
@@ -140,7 +138,6 @@ function makeReview(diff, { fail, ...options } = {}) {
     );
   }
 
-  const { makeComments } = require("./makeComments");
   const comments = makeComments(diff);
   if (comments.length === 0) {
     return Promise.resolve();
@@ -201,6 +198,3 @@ function makeReview(diff, { fail, ...options } = {}) {
       }
     });
 }
-
-exports.getItemPath = getItemPath;
-exports.makeReview = makeReview;

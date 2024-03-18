@@ -5,6 +5,8 @@
 // LICENSE file in the root directory of this source tree.
 //
 // @ts-check
+import parseDiff from "parse-diff";
+import { trimQuotes } from "./helpers.js";
 
 /**
  * @typedef {import("parse-diff").Change} Change
@@ -59,7 +61,7 @@ function trimContext(changes) {
  * @param {Chunk} chunk
  * @returns {Comment}
  */
-function makeComment(file, { changes, oldStart, oldLines }) {
+export function makeComment(file, { changes, oldStart, oldLines }) {
   const path = file.split("\\").join("/");
 
   const [trimmedChanges, startContext, endContext] = trimContext(changes);
@@ -160,13 +162,12 @@ function makeComment(file, { changes, oldStart, oldLines }) {
  * @param {string} diff
  * @returns {Comment[]}
  */
-function makeComments(diff) {
-  const files = require("parse-diff")(diff);
+export function makeComments(diff) {
+  const files = parseDiff(diff);
   if (files.length <= 0) {
     return [];
   }
 
-  const { trimQuotes } = require("./helpers");
   return files.reduce(
     /** @type {(comments: Comment[], file: File) => Comment[]} */
     (comments, file) => {
@@ -182,6 +183,3 @@ function makeComments(diff) {
     []
   );
 }
-
-exports.makeComment = makeComment;
-exports.makeComments = makeComments;

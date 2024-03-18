@@ -18,10 +18,21 @@
   },
   "files": [
     "cli.js",
-    "src/"
+    "src/**/*.d.ts",
+    "src/**/*.js"
   ],
   "main": "src/index.js",
   "bin": "cli.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.js"
+    },
+    "./cli.js": {
+      "default": "./cli.js"
+    },
+    "./package.json": "./package.json"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/tido64/suggestion-bot.git"
@@ -29,24 +40,25 @@
   "scripts": {
     "build": "yarn clean && yarn lint && tsc",
     "clean": "git clean -dfqx -- src/ test/",
-    "format": "prettier --write $(git ls-files '*.js' '*.json' '*.md' '*.mjs' '*.yml' ':!:.yarn/**/*.cjs')",
-    "lint": "eslint $(git ls-files '*.js' '*.mjs' ':!:*.config.js' ':!:.yarn/**/*.js')",
+    "format": "prettier --write $(git ls-files '*.js' '*.json' '*.md' '*.yml' ':!:.yarn/**/*.cjs')",
+    "lint": "eslint $(git ls-files '*.js' ':!:*.config.js' ':!:.yarn/**/*.js')",
     "suggest": "suggestion-bot",
-    "test": "node --test --experimental-test-coverage $(git ls-files 'test/*.test.mjs')"
+    "test": "node --test --experimental-test-coverage $(git ls-files 'test/*.test.js')"
   },
   "dependencies": {
-    "@octokit/core": "^5.0",
-    "@octokit/plugin-rest-endpoint-methods": "^10.0",
+    "@octokit/core": "^6.0",
+    "@octokit/plugin-rest-endpoint-methods": "^11.0",
     "azure-devops-node-api": "^12.0",
     "parse-diff": "^0.11"
   },
   "devDependencies": {
     "@eslint/js": "^8.56",
-    "@types/node": "^20.0.0",
+    "@rnx-kit/tsconfig": "^1.0",
+    "@types/node": "^20.0",
     "codecov": "^3.0",
     "eslint": "^8.56",
     "prettier": "^3.0",
-    "semantic-release": "23.0.0",
+    "semantic-release": "^23.0",
     "typescript": "^5.0"
   },
   "engines": {
