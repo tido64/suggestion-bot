@@ -12,7 +12,7 @@
  * @param {T} v
  * @return {T}
  */
-function c(v) {
+export function c(v) {
   return v;
 }
 
@@ -21,7 +21,7 @@ function c(v) {
  * @param {string[]} strings
  * @returns {string}
  */
-function concatStrings(...strings) {
+export function concatStrings(...strings) {
   return strings.concat("").join("\n");
 }
 
@@ -30,7 +30,7 @@ function concatStrings(...strings) {
  * @param {string} p
  * @returns {string}
  */
-function trimQuotes(p) {
+export function trimQuotes(p) {
   if (
     (p.startsWith('"') && p.endsWith('"')) ||
     (p.startsWith("'") && p.endsWith("'"))
@@ -39,7 +39,3 @@ function trimQuotes(p) {
   }
   return p;
 }
-
-exports.c = c;
-exports.concatStrings = concatStrings;
-exports.trimQuotes = trimQuotes;

@@ -7,14 +7,16 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-const fs = require("node:fs");
-const path = require("node:path");
-const { parseArgs } = require("node:util");
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { fileURLToPath, URL } from "node:url";
+import { parseArgs } from "node:util";
+import suggest from "./src/index.js";
 
 function printHelp() {
   console.log(
     [
-      `Usage: ${path.basename(__filename)} [options] [diff | file]`,
+      `Usage: ${path.basename(process.argv[1])} [options] [diff | file]`,
       "",
       "Submit code reviews with suggestions based on your diffs",
       "",
@@ -66,10 +68,11 @@ const { values, positionals } = parseArgs({
 if (values.help) {
   printHelp();
 } else if (values.version) {
-  const { name, version } = require("./package.json");
+  const p = fileURLToPath(new URL("package.json", import.meta.url));
+  const manifest = fs.readFileSync(p, { encoding: "utf-8" });
+  const { name, version } = JSON.parse(manifest);
   console.log(name, version);
 } else {
-  const suggest = require("./src/index");
   if (positionals.length > 0) {
     const diffOrFile = positionals[0];
     const diff = fs.existsSync(diffOrFile)

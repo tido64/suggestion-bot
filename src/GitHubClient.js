@@ -5,8 +5,13 @@
 // LICENSE file in the root directory of this source tree.
 //
 // @ts-check
+import * as octokit_core from "@octokit/core";
+import { restEndpointMethods } from "@octokit/plugin-rest-endpoint-methods";
+import * as nodefs from "node:fs";
+import { c } from "./helpers.js";
+import { makeComments } from "./makeComments.js";
 
-/** @typedef {import("./index").Options} Options */
+/** @typedef {import("./index.js").Options} Options */
 
 /**
  * Returns the pull request number of the current build.
@@ -14,7 +19,7 @@
  * @param {Options} options
  * @returns {number}
  */
-function getPullRequestNumber(eventPath, { fs = require("fs") }) {
+function getPullRequestNumber(eventPath, { fs = nodefs }) {
   const e = JSON.parse(fs.readFileSync(eventPath, { encoding: "utf-8" }));
   return e.pull_request.number;
 }
@@ -23,11 +28,8 @@ function getPullRequestNumber(eventPath, { fs = require("fs") }) {
  * Creates an Octokit instance.
  * @param {Options} options
  */
-function makeOctokit({ octokit, ...options }) {
-  const { Octokit } = octokit || require("@octokit/core");
-  const {
-    restEndpointMethods,
-  } = require("@octokit/plugin-rest-endpoint-methods");
+function makeOctokit({ octokit = octokit_core, ...options }) {
+  const { Octokit } = octokit;
   const RestClient = Octokit.plugin(restEndpointMethods);
   return new RestClient(options);
 }
@@ -38,8 +40,8 @@ function makeOctokit({ octokit, ...options }) {
  * GitHub type checks the payload sent to it and fails the request if there are
  * unknown fields.
  *
- * @param {import("./makeComments").Comment} comment
- * @returns {Omit<import("./makeComments").Comment, "line_length">}
+ * @param {import("./makeComments.js").Comment} comment
+ * @returns {Omit<import("./makeComments.js").Comment, "line_length">}
  */
 // eslint-disable-next-line no-unused-vars
 function trimComment({ line_length, ...rest }) {
@@ -52,7 +54,7 @@ function trimComment({ line_length, ...rest }) {
  * @param {Options} options
  * @returns {Promise<unknown>}
  */
-function makeReview(diff, { fail, message, ...options } = {}) {
+export function makeReview(diff, { fail, message, ...options } = {}) {
   const { GITHUB_EVENT_PATH, GITHUB_REPOSITORY, GITHUB_SHA, GITHUB_TOKEN } =
     process.env;
   if (!GITHUB_EVENT_PATH || !GITHUB_REPOSITORY || !GITHUB_TOKEN) {
@@ -74,13 +76,10 @@ function makeReview(diff, { fail, message, ...options } = {}) {
     );
   }
 
-  const { makeComments } = require("./makeComments");
   const comments = makeComments(diff);
   if (comments.length === 0) {
     return Promise.resolve();
   }
-
-  const { c } = require("./helpers");
 
   const [owner, repo] = GITHUB_REPOSITORY.split("/");
   const pullRequestNumber = getPullRequestNumber(GITHUB_EVENT_PATH, options);
@@ -143,5 +142,3 @@ function makeReview(diff, { fail, message, ...options } = {}) {
       });
   });
 }
-
-exports.makeReview = makeReview;

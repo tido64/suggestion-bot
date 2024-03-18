@@ -1,4 +1,5 @@
 *.d.ts
+*.d.ts.map
 *.tgz
 .DS_Store
 .yarn/*

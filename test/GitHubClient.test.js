@@ -14,11 +14,11 @@ import {
   FIXTURE_PIPED,
   FIXTURE_UNIDIFF_GH_PAYLOAD,
   FIXTURE_UNIDIFF,
-} from "./__fixtures__.mjs";
+} from "./__fixtures__.js";
 import { makeReview } from "../src/GitHubClient.js";
 
 /**
- * @typedef {import("@octokit/core/dist-types/types").OctokitOptions} OctokitOptions
+ * @typedef {import("@octokit/core").OctokitOptions} OctokitOptions
  */
 class Octokit {
   constructor(
