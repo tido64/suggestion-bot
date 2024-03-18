@@ -109,9 +109,10 @@ output to `diff` so we can feed it to `suggestion-bot` later.
 ```js
 #!/usr/bin/env node
 
-const { spawnSync } = require("node:child_process");
-const fs = require("node:fs");
-const prettier = require("prettier");
+import { spawnSync } from "node:child_process";
+import * as fs from "node:fs";
+import * as prettier from "prettier";
+import suggest from "suggestion-bot";
 
 const diff = process.argv.slice(2).reduce((diff, filepath) => {
   const source = fs.readFileSync(filepath, { encoding: "utf8" });
@@ -122,12 +123,12 @@ const diff = process.argv.slice(2).reduce((diff, filepath) => {
   return diff + stdout;
 }, "");
 
-require("suggestion-bot")(diff);
+suggest(diff);
 ```
 
-Save the script somewhere, e.g. `scripts/prettier-diff.js`, then invoke it with
+Save the script somewhere, e.g. `scripts/prettier-diff.mjs`, then invoke it with
 Node:
 
 ```sh
-node scripts/prettier-diff.js $(git ls-files '*.js')
+node scripts/prettier-diff.mjs $(git ls-files '*.js')
 ```
