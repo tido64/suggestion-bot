@@ -205,7 +205,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/core@npm:^6.0, @octokit/core@npm:^6.0.0":
+"@octokit/core@npm:^6.0.0":
   version: 6.1.5
   resolution: "@octokit/core@npm:6.1.5"
   dependencies:
@@ -256,37 +256,37 @@ __metadata:
   linkType: hard
 
 "@octokit/plugin-paginate-rest@npm:^11.0.0":
-  version: 11.4.2
-  resolution: "@octokit/plugin-paginate-rest@npm:11.4.2"
-  dependencies:
-    "@octokit/types": "npm:^13.7.0"
-  peerDependencies:
-    "@octokit/core": ">=6"
-  checksum: 10c0/e2da83bb8ddec64e4a2e752483aee929618bef6ade312c20cb2e510c5bf532ced4ff25115e9a71843eb04ba7f770ec5afc7ae0b8d43e227e0f795a7f554d92fd
-  languageName: node
-  linkType: hard
-
-"@octokit/plugin-rest-endpoint-methods@npm:^13.0":
-  version: 13.5.0
-  resolution: "@octokit/plugin-rest-endpoint-methods@npm:13.5.0"
+  version: 11.6.0
+  resolution: "@octokit/plugin-paginate-rest@npm:11.6.0"
   dependencies:
     "@octokit/types": "npm:^13.10.0"
   peerDependencies:
     "@octokit/core": ">=6"
-  checksum: 10c0/0dd5fcdc01ac82abeab26fa32fd1c504732918bc70ad8e16924dd4d155dfd4bc8b57f2326c5012276885b9d59be3eb1e8d0b2576f5915a3b3343f26359cdba5e
+  checksum: 10c0/f5c8751a1cd08f972a84d0e0534d1f72c178648c64ec2b57f8d924a04b81cc616338e397fb1400c02d7ffda7b6147835cbdbae07a2673f963217d2d59768daaa
+  languageName: node
+  linkType: hard
+
+"@octokit/plugin-rest-endpoint-methods@npm:^14.0.0":
+  version: 14.0.0
+  resolution: "@octokit/plugin-rest-endpoint-methods@npm:14.0.0"
+  dependencies:
+    "@octokit/types": "npm:^14.0.0"
+  peerDependencies:
+    "@octokit/core": ">=6"
+  checksum: 10c0/c3f26c5277d4aa0c898d8fdbf84326943ea80496e6f60ae34834415384ab629e1e3702d1ed82d40c31a7370edfcb5fa9fe434b0357b302b3be309879bad1d4e6
   languageName: node
   linkType: hard
 
 "@octokit/plugin-retry@npm:^7.0.0":
-  version: 7.1.0
-  resolution: "@octokit/plugin-retry@npm:7.1.0"
+  version: 7.2.1
+  resolution: "@octokit/plugin-retry@npm:7.2.1"
   dependencies:
-    "@octokit/request-error": "npm:^6.0.0"
-    "@octokit/types": "npm:^13.0.0"
+    "@octokit/request-error": "npm:^6.1.8"
+    "@octokit/types": "npm:^14.0.0"
     bottleneck: "npm:^2.15.3"
   peerDependencies:
     "@octokit/core": ">=6"
-  checksum: 10c0/560ac5ebe1695b2617ed39e328f7d1bfd9cee3893139c276cc69f204650725d11c60696a718299e2fc2cd55fab149c0e975db8a196daa67e2982b230d1659382
+  checksum: 10c0/0cac8aa32bfe9612cbaba36f51382c69c882ef7927e1deb4b166fe664959887e952205adbf8b9ff461e0128ac3e1bd807ca58e38041a55ddb3214397584f0406
   languageName: node
   linkType: hard
 
@@ -302,7 +302,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/request-error@npm:^6.0.0, @octokit/request-error@npm:^6.1.8":
+"@octokit/request-error@npm:^6.1.8":
   version: 6.1.8
   resolution: "@octokit/request-error@npm:6.1.8"
   dependencies:
@@ -324,7 +324,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/types@npm:^13.0.0, @octokit/types@npm:^13.10.0, @octokit/types@npm:^13.7.0":
+"@octokit/types@npm:^13.0.0, @octokit/types@npm:^13.10.0":
   version: 13.10.0
   resolution: "@octokit/types@npm:13.10.0"
   dependencies:
@@ -409,8 +409,8 @@ __metadata:
   linkType: hard
 
 "@semantic-release/github@npm:^11.0.0":
-  version: 11.0.0
-  resolution: "@semantic-release/github@npm:11.0.0"
+  version: 11.0.1
+  resolution: "@semantic-release/github@npm:11.0.1"
   dependencies:
     "@octokit/core": "npm:^6.0.0"
     "@octokit/plugin-paginate-rest": "npm:^11.0.0"
@@ -430,7 +430,7 @@ __metadata:
     url-join: "npm:^5.0.0"
   peerDependencies:
     semantic-release: ">=24.1.0"
-  checksum: 10c0/e64a6f0e8061ecdb7c382a0595c2a6597a511c16b2c291649a11a5cb8a47e1a4aad714bb41bf429aa3bcc6a4490a59b8393f591ee6ad0f2f282927fd358d0fc1
+  checksum: 10c0/6bcac6f20e6326ddae5085bee1963b5d3fc6571b163e8d31d0485260e51472d2d1a695b6bc4042dcaa1de45c81d0d0c2f82d6cb614abe78af0a6374ef891f76b
   languageName: node
   linkType: hard
 
@@ -2337,7 +2337,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"parse-diff@npm:^0.11":
+"parse-diff@npm:^0.11.0":
   version: 0.11.1
   resolution: "parse-diff@npm:0.11.1"
   checksum: 10c0/b8a488039f535e0ddaf1cfd4a13c2adc6d142f4e6263de6dc603f9762b59da89703a8f0dc8aacb7c7c66cdbdd2d075a57c63813fb74f66c9b8f5fe8ad2e89689
@@ -2481,7 +2481,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.0":
+"prettier@npm:^3.0.0":
   version: 3.5.3
   resolution: "prettier@npm:3.5.3"
   bin:
@@ -2915,16 +2915,16 @@ __metadata:
   resolution: "suggestion-bot@workspace:."
   dependencies:
     "@eslint/js": "npm:^9.0.0"
-    "@octokit/core": "npm:^6.0"
-    "@octokit/plugin-rest-endpoint-methods": "npm:^13.0"
+    "@octokit/core": "npm:^6.0.0"
+    "@octokit/plugin-rest-endpoint-methods": "npm:^14.0.0"
     "@rnx-kit/tsconfig": "npm:^2.0.0"
     "@types/node": "npm:^22.0.0"
     azure-devops-node-api: "npm:^13.0.0"
     eslint: "npm:^9.0.0"
-    parse-diff: "npm:^0.11"
-    prettier: "npm:^3.0"
+    parse-diff: "npm:^0.11.0"
+    prettier: "npm:^3.0.0"
     semantic-release: "npm:^24.0.0"
-    typescript: "npm:^5.0"
+    typescript: "npm:^5.0.0"
   bin:
     suggestion-bot: cli.js
   languageName: unknown
@@ -3095,7 +3095,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.0":
+"typescript@npm:^5.0.0":
   version: 5.8.3
   resolution: "typescript@npm:5.8.3"
   bin:
