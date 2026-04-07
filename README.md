@@ -1,3 +1,8 @@
+> [!CAUTION]
+>
+> This package has been moved into rnx-kit:
+> https://github.com/microsoft/rnx-kit/tree/main/packages/suggestion-bot
+
 # suggestion-bot
 
 [![build](https://github.com/tido64/suggestion-bot/actions/workflows/build.yml/badge.svg)](https://github.com/tido64/suggestion-bot/actions/workflows/build.yml)
